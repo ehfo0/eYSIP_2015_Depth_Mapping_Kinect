@@ -1,0 +1,36 @@
+Site referred: http://stackoverflow.com/questions/15790501/why-cv2-so-missing-after-opencv-installed
+
+How to install opencv(cv2) with python bindings in Linux - Ubuntu/Fedora
+
+  Install gcc, g++/gcc-c++, cmake (apt-get or yum, in case of yum use gcc-c++)
+
+    apt-get install gcc, g++, cmake
+
+    Downlaod latest opencv from openCV's website
+
+    Untar it with
+
+    tar -xvf opencv-*
+
+    Inside the untarred folder make a new folder called release
+
+    mkdir release
+    cd release
+
+    (or any folder name) and run this command in it
+
+    cmake -D
+    CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D
+    BUILD_NEW_PYTHON_SUPPORT=ON -D BUILD_EXAMPLES=ON ..
+
+    the .. will pull files from the parents folder and will get the system ready for installation on your platform.
+
+    in the release folder run
+
+    make
+
+    After about 2-3 mins of make processing when its finished run
+
+    make install
+
+
