@@ -1,3 +1,5 @@
+__author__ = 'aniket'
+
 import freenect
 import cv2
 import numpy as np
@@ -12,14 +14,15 @@ def grayscale():
     a >>= 2
     a = a.astype(np.uint8)
     median = cv2.medianBlur(a,5)
-    ret,mask = cv2.threshold(median,254,255,cv2.THRESH_BINARY)
+    ret,mask = cv2.threshold(median,254,255,cv2.THRESH_BINARY_INV)
     mask = mask/255
     ab = freenect.sync_get_video()[0]
-
+    ab = cv2.cvtColor(ab, cv2.COLOR_BGR2RGB)
     for i in range(3):
         maske[:,:,i] = mask[:,:]
-    abc = ab * maske
-    print abc
+    maske = maske/255
+    abc = np.multiply(ab,maske)
+    #print abc
     return abc
 
 def colored():
@@ -31,3 +34,5 @@ while(True):
     #cv2.imshow('color',colored())
     if cv2.waitKey(10) == 27:
         break
+
+cv2.destroyAllWindows()
