@@ -26,7 +26,7 @@ import freenect, cv2, numpy as np
 
 '''
 * Function Name:	convert_depth
-* Input:		depth-> A freenect 				object                        
+* Input:		depth-> A freenect object                        
 * Output:		A freenect object in a different format.
 * Logic:		This function accepts a freenect object and 
 			converts it into a format which can be 
@@ -44,10 +44,10 @@ def convert_depth(depth):
 
 '''
 * Function Name:	return_left_edges
-* Input:		depth-> A freenect 				object                        
+* Input:		depth-> A freenect object                        
 * Output:		A freenect object which contains information about left edges of the obstacles.
 * Logic:		This function accepts a freenect object and 
-			subtracts consecutive pixels. This will give 				the edges of obstacle.
+			subtracts consecutive pixels. This will give the edges of obstacle.
 *                       
 * Example Call:	return_left_edges(depth)
 *
@@ -62,10 +62,10 @@ def return_left_edges(depth):
 
 '''
 * Function Name:	return_right_edges
-* Input:		depth-> A freenect 				object                        
+* Input:		depth-> A freenect object                        
 * Output:		A freenect object which contains information about right edges of the obstacles.
 * Logic:		This function accepts a freenect object and 
-			subtracts consecutive pixels. This will give 				the edges of obstacle.
+			subtracts consecutive pixels. This will give the edges of obstacle.
 *                       
 * Example Call:	return_right_edges(depth)
 *
