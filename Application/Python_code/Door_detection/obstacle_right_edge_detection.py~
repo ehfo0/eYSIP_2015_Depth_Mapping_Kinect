@@ -56,7 +56,7 @@ def convert_depth(depth):
 def return_left_edges(depth):
 	a = depth
 	b = np.roll(a,2)
-	res = np.subtract(a,b)
+	res = np.subtract(b,a)
 	res = np.multiply(res,255)
 	return res
 
@@ -74,7 +74,7 @@ def return_left_edges(depth):
 def return_right_edges(depth):
 	a = depth
 	b = np.roll(a,2)
-	res = np.subtract(b,a)
+	res = np.subtract(a,b)
 	res = np.multiply(res,255)
 	return res
 
@@ -119,7 +119,7 @@ depth = cv2.imread('feed.jpg',0)	#took a feed from Kinect, which is a sample ima
 
 d2 = cv2.bilateralFilter(depth, 10,50,100)	#bilateral filter is applied to remove noise.
 
-res = return_right_edges(d2)
+res = return_left_edges(d2)
 res = cv2.medianBlur(res,5)	#median blur to remove salt and pepper noise
 
 contours = return_contours(res)
