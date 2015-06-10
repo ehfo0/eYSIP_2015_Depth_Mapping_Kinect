@@ -8,7 +8,7 @@ import time
 from matplotlib import pyplot as plt
 
 kernel = np.ones((5,5),np.uint8)
-#ser = serial.Serial('/dev/ttyUSB1')
+ser = serial.Serial('/dev/ttyUSB0')
 
 def get_depth():
     a = freenect.sync_get_depth()[0]
@@ -35,11 +35,13 @@ def return_mean(a):
 
 #freenect.close_device(dev)
 i=0
-frame=[]
+tp = 51
 while(True):
     np.set_printoptions(threshold=np.nan)
     a = get_depth()
+    z = a
     a = cv2.bilateralFilter(a, 10, 50, 100)
+    a = cv2.erode(a,kernel,iterations = 1)
     original = a
     mean = return_mean(a)
     b = np.roll(a,2)
@@ -50,15 +52,27 @@ while(True):
     resc = np.multiply(resc, 255)
     res = cv2.medianBlur(res,5)
     resc = cv2.medianBlur(resc, 5)
-    if mean > 230:
-        t=1
- #          ser.write("\x38")
+    ret, mask = cv2.threshold(a,230,255,cv2.THRESH_BINARY)
+    NONzeros = cv2.countNonZero(mask)
+    #print NONzeros
+    middlearea = z[0:479,200:439]
+    middleval = middlearea.mean()
+    if NONzeros > 100000 and middleval > 230:
+        ser.write("\x38")
     else:
-        #frame.append(a)
-        i=i+1
-        #while(return_mean(get_depth())<232):
-        #    t=1
-            # ser.write("\x36")
+        leftarea = z[0:479,0:100]
+        rightarea = z[0:479,539:639]
+        if tp > 50:
+            leftval = leftarea.mean()
+            rightval = rightarea.mean()
+            tp = 0
+        tp+=1
+        if leftval > rightval:
+            ser.write("\x34")
+        else:
+            ser.write("\x36")
+
+
     ret,th3 = cv2.threshold(res,50,255,cv2.THRESH_BINARY)
     ret,th2 = cv2.threshold(resc,50,255,cv2.THRESH_BINARY)
     count = 0
@@ -79,8 +93,16 @@ while(True):
             x2 = rightmost[0]
             y1 = topmost[1]
             y2 = bottommost[1]
+            w = 50
             if (y2 - y1 > ys) and (abs(x2 - x1) < xs):
-                cv2.line(original,topmost,bottommost,(0,255,0),5)
+                pts1 = np.float32([[topmost[0]-w,y1],[topmost[0],y1],[bottommost[0]-w,y2],[bottommost[0],y2]])
+                pts2 = np.float32([[0,0],[w,0],[0,y2-y1],[w,y2-y1]])
+                M = cv2.getPerspectiveTransform(pts1,pts2)
+                dst = cv2.warpPerspective(z,M,(w,y2-y1))
+                meandst = dst.mean()
+                #print meandst
+                if meandst > 240:
+                    cv2.line(original,topmost,bottommost,(0,255,0),5)
         count+=1
     count = 0
     for c in contoursc:
@@ -94,14 +116,23 @@ while(True):
             x2 = rightmost[0]
             y1 = topmost[1]
             y2 = bottommost[1]
+            w = 50
             if (y2 - y1 > ys) and (abs(x2 - x1) < xs):
-                cv2.line(original,topmost,bottommost,(0,255,0),5)
+                pts1 = np.float32([[topmost[0],y1],[topmost[0]+w,y1],[bottommost[0],y2],[bottommost[0]+w,y2]])
+                pts2 = np.float32([[0,0],[w,0],[0,y2-y1],[w,y2-y1]])
+                M = cv2.getPerspectiveTransform(pts1,pts2)
+                dst = cv2.warpPerspective(z,M,(w,y2-y1))
+                meandst = dst.mean()
+                #print meandst
+                if meandst > 240:
+                    cv2.line(original,topmost,bottommost,(0,255,0),5)
         count+=1
+
 
     cv2.imshow('gray',a)
     if cv2.waitKey(1)!=-1:
-        #ser.write('\x35')
-        #ser.close()
+        ser.write('\x35')
+        ser.close()
         freenect.Kill
         break
 
