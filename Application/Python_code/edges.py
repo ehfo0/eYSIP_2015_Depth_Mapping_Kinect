@@ -1,14 +1,43 @@
-__author__ = 'aniket'
+'''
+*
+*                  ================================
+*
+*  Author List: Aniket P, Mukesh P
+*  Filename: 		edges.py
+*  Date:                June 11, 2015
+*  Functions:   get_depth()
+                return_mean(a)
+                contours_return(a,num)
+                regular_movement(z)
+                doorway_movement(lb,lt,rb,rt,cxr,cxl)
+                left_right_lines(contoursright,contoursleft,z)
+*  Global Variables:    tp
+                        eli
+*  Dependent library files:     numpy, freenect, cv2, serial, time
+*
+*  e-Yantra - An MHRD project under National Mission on Education using
+*  ICT(NMEICT)
+*
+**************************************************************************
+*
+*
+*
+'''
 
 import freenect
 import cv2
 import numpy as np
 import serial
 import time
-from matplotlib import pyplot as plt
 
 kernel = np.ones((5,5),np.uint8)
 ser = serial.Serial('/dev/ttyUSB0')
+global tp
+tp = 51
+global eli
+eli = 0
+global pb
+pb = 0
 
 def get_depth():
     a = freenect.sync_get_depth()[0]
@@ -28,61 +57,81 @@ def return_mean(a):
 #dev = freenect.open_device(ctx, freenect.num_devices(ctx) - 1)
 
 #freenect.set_tilt_degs(dev, 15)
-#time.sleep(1)
-
-#freenect.set_tilt_degs(dev, 0)
-#time.sleep(1)
-
 #freenect.close_device(dev)
-i=0
-tp = 51
-while(True):
-    np.set_printoptions(threshold=np.nan)
-    a = get_depth()
-    z = a
-    a = cv2.bilateralFilter(a, 10, 50, 100)
-    a = cv2.erode(a,kernel,iterations = 1)
-    original = a
-    mean = return_mean(a)
-    b = np.roll(a,2)
-    c = np.roll(a,-2)
+def contours_return(a,num):
+    b = np.roll(a,num)
     res = np.subtract(b,a)
-    resc = np.subtract(c,a)
     res = np.multiply(res,255)
-    resc = np.multiply(resc, 255)
     res = cv2.medianBlur(res,5)
-    resc = cv2.medianBlur(resc, 5)
-    ret, mask = cv2.threshold(a,230,255,cv2.THRESH_BINARY)
-    NONzeros = cv2.countNonZero(mask)
-    #print NONzeros
-    middlearea = z[0:479,200:439]
+    ret,th3 = cv2.threshold(res,50,255,cv2.THRESH_BINARY)
+    contours, hierarchy = cv2.findContours(th3,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+    return contours
+
+def regular_movement(z):
+    global tp
+    global eli
+    global pb
+    middlearea = z[200:479,200:439]
     middleval = middlearea.mean()
-    if NONzeros > 100000 and middleval > 230:
-        ser.write("\x38")
-    else:
-        leftarea = z[0:479,0:100]
-        rightarea = z[0:479,539:639]
-        if tp > 50:
-            leftval = leftarea.mean()
-            rightval = rightarea.mean()
-            tp = 0
-        tp+=1
-        if leftval > rightval:
+    leftarea = z[0:479,0:100]
+    rightarea = z[0:479,539:639]
+    leftval = leftarea.mean()
+    rightval = rightarea.mean()
+
+    if eli == 0:
+        if middleval > 220:
+            print "forward"
+            ser.write("\x38")
+            pb = 0
+            time.sleep(0.1)
+        else:
+            if tp > 40:
+                tp = 0
+            tp+=1
+            if leftval - rightval > pb:
+                print "left"
+                pb+=1
+                ser.write("\x34")
+            else:
+                print "right"
+                ser.write("\x36")
+                pb+=1
+    if leftval < 175:
+        print "righta"
+        ser.write("\x36")
+        pb+=1
+    elif rightval < 175:
+            print "lefta"
+            ser.write("\x34")
+            pb+=1
+
+def doorway_movement(lb,lt,rb,rt,cxr,cxl):
+    global eli
+    diffl = lb[1]-lt[1]
+    diffr = rb[1]-rt[1]
+    if abs(diffl - diffr) < 50 and (cxr - cxl) > 50:
+        eli = 1
+        mid = (cxr + cxl)/2
+        print "haha"
+        if mid < 500 and mid > 200:
+            print "forward"
+            ser.write("\x38")
+        elif mid < 200:
+            print "left"
             ser.write("\x34")
         else:
+            print "right"
             ser.write("\x36")
+    else : eli = 0
 
-
-    ret,th3 = cv2.threshold(res,50,255,cv2.THRESH_BINARY)
-    ret,th2 = cv2.threshold(resc,50,255,cv2.THRESH_BINARY)
+def left_right_lines(contoursright,contoursleft,z):
     count = 0
-    contours, hierarchy = cv2.findContours(th3,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-    contoursc, hierarchy = cv2.findContours(th2, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
     Area = 1000
     ys = 250
     xs = 60
-    for c in contours:
+    tempr = 0
+    templ = 0
+    for c in contoursright:
         if(cv2.contourArea(c)>Area):
             #cv2.drawContours(original, contours, count, (128,255,0), 3)
             leftmost = tuple(c[c[:,:,0].argmin()][0])
@@ -102,10 +151,15 @@ while(True):
                 meandst = dst.mean()
                 #print meandst
                 if meandst > 240:
-                    cv2.line(original,topmost,bottommost,(0,255,0),5)
+                    cv2.line(z,topmost,bottommost,(0,255,0),5)
+                    tempr+=1
+                    rt = topmost
+                    rb = bottommost
+                    M = cv2.moments(c)
+                    cxr = int(M['m10']/M['m00'])
         count+=1
     count = 0
-    for c in contoursc:
+    for c in contoursleft:
         if(cv2.contourArea(c)>Area):
             #cv2.drawContours(original, contoursc, count, (128,255,0), 3)
             leftmost = tuple(c[c[:,:,0].argmin()][0])
@@ -125,17 +179,33 @@ while(True):
                 meandst = dst.mean()
                 #print meandst
                 if meandst > 240:
-                    cv2.line(original,topmost,bottommost,(0,255,0),5)
+                    cv2.line(z,topmost,bottommost,(0,255,0),5)
+                    templ+=1
+                    lt = topmost
+                    lb = bottommost
+                    M = cv2.moments(c)
+                    cxl = int(M['m10']/M['m00'])
         count+=1
+    if templ == 1 and tempr == 1:
+        doorway_movement(lb,lt,rb,rt,cxr,cxl)
+    return z
 
 
-    cv2.imshow('gray',a)
+while(True):
+    np.set_printoptions(threshold=np.nan)
+    a = get_depth()
+    z = a
+    a = cv2.bilateralFilter(a, 10, 50, 100)
+    contoursright = contours_return(a,2)
+    contoursleft = contours_return(a,-2)
+    regular_movement(z)
+    linesz = left_right_lines(contoursright,contoursleft,z)
+    cv2.imshow('gray',linesz)
     if cv2.waitKey(1)!=-1:
         ser.write('\x35')
         ser.close()
         freenect.Kill
         break
-
 cv2.destroyWindow('gray')
 time.sleep(1)
 for i in xrange(3):
