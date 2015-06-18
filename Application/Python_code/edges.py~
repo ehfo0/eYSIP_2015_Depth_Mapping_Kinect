@@ -145,13 +145,6 @@ def doorway_movement(lb,lt,rb,rt,cxr,cxl):
     else : mode = 0
 
 def left_right_lines(contoursright,contoursleft,z):
-    """
-    * Function Name:	left_right_lines
-    * Input:		left_contours, right_contours and the depth frame.                   
-    * Output:		left and right edges of the door.
-    * Logic:		For the list of left and right contours if left contour or right contour has an area greater than the threshold than 				processing is done on the contour. the leftmost, bottommost, rightmost and leftmost. If the height of the door edges 				falls in a given edge than the given program is followed
-    * Example Call:	doorway_movement(lb,lt,rb,rt,cxr,cxl)
-    """
     count = 0
     Area = 1000
     ys = 250
