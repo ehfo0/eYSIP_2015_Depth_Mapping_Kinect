@@ -219,24 +219,18 @@ def left_right_lines(contoursright,contoursleft,z):
 
 
 while(True):
-    np.set_printoptions(threshold=np.nan)
-    a = get_depth()
-    z = a
-    a = cv2.bilateralFilter(a, 10, 50, 100)
-    contoursright = contours_return(a,2)
-    contoursleft = contours_return(a,-2)
-    regular_movement(z)
-    linesz = left_right_lines(contoursright,contoursleft,z)
-    cv2.imshow('gray',linesz)
-    if cv2.waitKey(1)!=-1:
-        ser.write('\x35')
+    np.set_printoptions(threshold=np.nan)	
+    a = get_depth()	#gets the depth of the frame
+    z = a	#assign the frame to a original variable so that original frame can be used later
+    a = cv2.bilateralFilter(a, 10, 50, 100)	#filters out the noise in the frame
+    contoursright = contours_return(a,2)	#returns left edges contours
+    contoursleft = contours_return(a,-2)	#returns right edges contours
+    regular_movement(z)	#follows regular movement
+    linesz = left_right_lines(contoursright,contoursleft,z)	#draws the lines in the contours
+    cv2.imshow('gray',linesz)	#displays the final matrix with lines on it
+    if cv2.waitKey(1)!=-1:	#executes the while loop until a key is pressed
+        ser.write('\x35')	
         ser.close()
         freenect.Kill
         break
-cv2.destroyWindow('gray')
-time.sleep(1)
-for i in xrange(3):
-    #print frame[i]
-    time.sleep(1)
-
 cv2.destroyAllWindows()
