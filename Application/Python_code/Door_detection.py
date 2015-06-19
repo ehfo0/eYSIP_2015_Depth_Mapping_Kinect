@@ -31,7 +31,7 @@ import serial
 import time
 
 kernel = np.ones((5,5),np.uint8)
-#ser = serial.Serial('/dev/ttyUSB0')
+ser = serial.Serial('/dev/ttyUSB0')
 global eli
 eli = 0
 global flag
