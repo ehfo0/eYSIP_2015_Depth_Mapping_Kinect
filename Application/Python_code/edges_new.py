@@ -1,4 +1,4 @@
-"""
+'''
 *
 *                  ================================
 *
@@ -6,20 +6,23 @@
 *  Filename: 		edges.py
 *  Date:                June 11, 2015
 *  Functions:   get_depth()
-                return_mean()
-                contours_return()
-                regular_movement()
-                doorway_movement()
-                left_right_lines()
-*  Global Variables:    mode
-			diff
+                return_mean(a)
+                contours_return(a,num)
+                regular_movement(z)
+                doorway_movement(lb,lt,rb,rt,cxr,cxl)
+                left_right_lines(contoursright,contoursleft,z)
+*  Global Variables:    tp
+                        eli
 *  Dependent library files:     numpy, freenect, cv2, serial, time
 *
 *  e-Yantra - An MHRD project under National Mission on Education using
 *  ICT(NMEICT)
 *
 **************************************************************************
-"""
+*
+*
+*
+'''
 
 import freenect
 import cv2
@@ -27,21 +30,15 @@ import numpy as np
 import serial
 import time
 
-kernel = np.ones((5,5),np.uint8) #kernel for filtering
-ser = serial.Serial('/dev/ttyUSB0')	#initialization of serial communication
-global mode	#variable to provide the mode of movement
-mode = 0
-global diff	#variable to set a threshold for left and right movement
-diff = 0
+kernel = np.ones((5,5),np.uint8)
+ser = serial.Serial('/dev/ttyUSB0')
+global tp
+tp = 51
+global eli
+eli = 0
+
 
 def get_depth():
-    """
-    * Function Name:	get_depth
-    * Input:		None                        
-    * Output:		Returns the depth information from pixel values of 0 to 255
-    * Logic:		It gets the depth from kinect whose values lie in range of 0 to above 2000. It clips and left shifts the data to get 				all the values between 0 and 255.
-    * Example Call:	get_depth()
-    """
     a = freenect.sync_get_depth()[0]
     np.clip(a, 0, 2**10 - 1, a)
     a >>= 2
@@ -49,26 +46,18 @@ def get_depth():
     return a
 
 def return_mean(a):
-    """
-    * Function Name:	return_mean
-    * Input:		Depth Frame or any other matrix.                        
-    * Output:		Returns mean of the frame
-    * Logic:		It reduces the noise and calculates the mean of the pixel values in the frame using mean() function
-    * Example Call:	return_mean(a)
-    """
     mediane = cv2.medianBlur(a,5)
     rect = mediane[0:479, 0:639]
     mean = rect.mean()
     return mean
 
+
+#ctx = freenect.init()
+#dev = freenect.open_device(ctx, freenect.num_devices(ctx) - 1)
+
+#freenect.set_tilt_degs(dev, 15)
+#freenect.close_device(dev)
 def contours_return(a,num):
-    """
-    * Function Name:	contours_return
-    * Input:		Depth Frame and a number for shifting left or right the matrix                        
-    * Output:		Returns the left or right edges contours
-    * Logic:		It does noise removal process on the frame and shifts the frame matrix by num places so that change in values are 	     		highlighted in the image by Binary Thresholding it.
-    * Example Call:	contours_return(a,num)
-    """
     b = np.roll(a,num)
     res = np.subtract(b,a)
     res = np.multiply(res,255)
@@ -77,60 +66,69 @@ def contours_return(a,num):
     contours, hierarchy = cv2.findContours(th3,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
     return contours
 
+def take_left():
+    while(1):
+        z = get_depth()
+        middlearea = z[200:479,200:439]
+        middleval = middlearea.mean()
+        ser.write("\x34")
+        if middleval > 220:
+            return
+
+def take_right():
+    while(1):
+        z = get_depth()
+        middlearea = z[200:479,200:439]
+        middleval = middlearea.mean()
+        ser.write("\x36")
+        if middleval > 220:
+            return
+
+def CountZeros(area,th1,th2):
+    ret, mask = cv2.threshold(area,th1,th2,cv2.THRESH_BINARY_INV)
+    Zeros = cv2.countNonZero(mask)
+    return Zeros
+
 def regular_movement(z):
-    """
-    * Function Name:	regular_movement
-    * Input:		Depth Frame                       
-    * Output:		Just normal movement of the robot
-    * Logic:		The robot moves by first calculating the mean of the pixel values of left, middle and right part of frames. If the left 			or the right part crosses a threshold than the robot will move left or right as it has to avoid the obstacles from 				bumping. While taking a left or a right the robot takes left/right until and unless the middlearea value crosses the 				threshold. If the it does not than the diff variable avoids the localization of robot in a corner by taking a big left 				until middlearea value is recieved. 
-    * Example Call:	regular_movement(z)
-    """
-    global mode
-    global diff
+    global tp
+    global eli
     middlearea = z[200:479,200:439]
     middleval = middlearea.mean()
     leftarea = z[0:479,0:100]
     rightarea = z[0:479,539:639]
     leftval = leftarea.mean()
     rightval = rightarea.mean()
-
-    if mode == 0:
-        if middleval > 220:
+    leftvals = CountZeros(leftarea,150,255)
+    rightvals = CountZeros(rightarea,150,255)
+    middleob = CountZeros(middlearea,150,255)
+    if eli == 0:
+        if middleval > 220 and middleob < 1000:
             print "forward"
             ser.write("\x38")
-            diff = 0
             time.sleep(0.1)
         else:
-            if leftval - rightval > diff:
+            if leftval > rightval:
                 print "left"
-                diff+=1
-                ser.write("\x34")
+                take_left()
             else:
                 print "right"
-                ser.write("\x36")
-                diff+=1
-    if leftval < 175:
-        print "righta"
-        ser.write("\x36")
-        diff+=1
-    elif rightval < 175:
-            print "lefta"
-            ser.write("\x34")
-            diff+=1
+                take_right()
+    if leftvals > 1000 or rightvals > 1000:
+        if leftvals > rightvals:
+                #print "left"
+                take_right()
+        else:
+                #print "right"
+                take_left()
+
+
 
 def doorway_movement(lb,lt,rb,rt,cxr,cxl):
-    """
-    * Function Name:	doorway_movement
-    * Input:		left_bottom, left_top, right_bottom, right_top, right_edge_centroid, left_edge_centroid                       
-    * Output:		Movement of the robot on door detection
-    * Logic:		Pixel Heights of the edges are calculated. If the pixel height difference and centroid of left and right edge 				difference crosses a threshold than the edges are door edges. The midpoint is calculated. If midpoint lies in middle 				frame than robot moves forward and if it lies on the left or right part than the robot takes a turn. When mode is 1 the 			door is detected and in mode 0 mode regular movement is followed.
-    * Example Call:	doorway_movement(lb,lt,rb,rt,cxr,cxl)
-    """
-    global mode
+    global eli
     diffl = lb[1]-lt[1]
     diffr = rb[1]-rt[1]
     if abs(diffl - diffr) < 50 and (cxr - cxl) > 50:
-        mode = 1
+        eli = 1
         mid = (cxr + cxl)/2
         print "haha"
         if mid < 500 and mid > 200:
@@ -142,16 +140,9 @@ def doorway_movement(lb,lt,rb,rt,cxr,cxl):
         else:
             print "right"
             ser.write("\x36")
-    else : mode = 0
+    else : eli = 0
 
 def left_right_lines(contoursright,contoursleft,z):
-    """
-    * Function Name:	left_right_lines
-    * Input:		left_contours, right_contours and the depth frame.                   
-    * Output:		left and right edges of the door.
-    * Logic:		For the list of left and right contours if left contour or right contour has an area greater than the threshold than 				processing is done on the contour. the leftmost, bottommost, rightmost and leftmost. If the height of the door edges 				falls in a given edge than the given program is followed
-    * Example Call:	doorway_movement(lb,lt,rb,rt,cxr,cxl)
-    """
     count = 0
     Area = 1000
     ys = 250
@@ -233,10 +224,5 @@ while(True):
         ser.close()
         freenect.Kill
         break
-cv2.destroyWindow('gray')
-time.sleep(1)
-for i in xrange(3):
-    #print frame[i]
-    time.sleep(1)
 
 cv2.destroyAllWindows()
