@@ -123,7 +123,7 @@ def doorway_movement(lb,lt,rb,rt,cxr,cxl):
     * Function Name:	doorway_movement
     * Input:		left_bottom, left_top, right_bottom, right_top, right_edge_centroid, left_edge_centroid                       
     * Output:		Movement of the robot on door detection
-    * Logic:		Pixel Heights of the edges are calculated. If the pixel height difference and centroid of left and right edge 				difference crosses a threshold than the edges are door edges. The midpoint is calculated. If midpoint lies in middle 				frame than robot moves forward and if it lies on the left or right part than the robot takes a turn. When mode is 1 				the door is detected and in mode 0 mode regular movement is followed.
+    * Logic:		Pixel Heights of the edges are calculated. If the pixel height difference and centroid of left and right edge 				difference crosses a threshold than the edges are door edges. The midpoint is calculated. If midpoint lies in middle 				frame than robot moves forward and if it lies on the left or right part than the robot takes a turn. When mode is 1 the 			door is detected and in mode 0 mode regular movement is followed.
     * Example Call:	doorway_movement(lb,lt,rb,rt,cxr,cxl)
     """
     global mode

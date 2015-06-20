@@ -252,7 +252,7 @@ def left_right_lines(contoursright,contoursleft,z):
     return z
 
 while(True):
-    z = get_depth()	#returns the depth frame 
+    z = get_depth()
     contoursright = contours_return(z,2)
     contoursleft = contours_return(z,-2)
     linesz = left_right_lines(contoursright,contoursleft,z)
