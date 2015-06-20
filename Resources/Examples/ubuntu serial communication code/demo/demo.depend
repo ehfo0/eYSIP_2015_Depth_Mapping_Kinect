@@ -1,6 +1,0 @@
-# depslib dependency file v1.0
-1434623492 source:/home/aniket/PycharmProjects/doorc/demo/main.c
-	<avr/io.h>
-	<avr/interrupt.h>
-	<util/delay.h>
-

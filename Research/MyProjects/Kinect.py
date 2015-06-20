@@ -3,7 +3,7 @@ __author__ = 'aniket'
 *
 *                  ================================
 *
-*  Author List: Aniket P
+*  Author List: Aniket Patel
 *  Filename: 		Kinect.py
 *  Date:                June 20, 2015
 *  Functions:   get_depth()
@@ -30,7 +30,7 @@ import numpy as np
 import time
 import serial
 
-ser = serial.Serial('/dev/ttyUSB0')	#initialization of serial communication
+ser = serial.Serial('/dev/ttyUSB1')	#initialization of serial communication
 
 global mode	#variable to provide the mode of movement
 mode = 0
@@ -82,7 +82,7 @@ def get_depth():
     * Example Call:	get_depth()
     """
     a = freenect.sync_get_depth(format = freenect.DEPTH_MM)[0]
-    a = a/30
+    a = a/30.0
     a = a.astype(np.uint8)
     a = filter_smooth(a)
     return a
@@ -97,8 +97,11 @@ def contours_return(a,num):
     """
     b = np.roll(a,num)
     res = np.subtract(b,a)
-    res = np.multiply(res,255)
-    res = cv2.medianBlur(res,5)
+    res = cv2.medianBlur(res,11)
+    mask = res > 200
+    res[mask] = 0
+    mask = res < 100
+    res[mask] = 0
     ret,th3 = cv2.threshold(res,50,255,cv2.THRESH_BINARY)
     contours, hierarchy = cv2.findContours(th3,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
     return contours
@@ -125,14 +128,13 @@ def potential_rightedge(c):
             y1 = topmost[1]
             y2 = bottommost[1]
             w = 50
-            xr,yr,wr,hr = cv2.boundingRect(c)
-            if (y2 - y1 > ys) and (abs(x2 - x1) < xs) and hr > 240 and wr < 50:
+            if (y2 - y1 > ys) and (abs(x2 - x1) < xs):
                 pts1 = np.float32([[topmost[0]-w,y1],[topmost[0],y1],[bottommost[0]-w,y2],[bottommost[0],y2]])
                 pts2 = np.float32([[0,0],[w,0],[0,y2-y1],[w,y2-y1]])
                 M = cv2.getPerspectiveTransform(pts1,pts2)
                 dst = cv2.warpPerspective(z,M,(w,y2-y1))
                 meandst = dst.mean()
-                if meandst > 150:
+                if meandst > 50:
                     cv2.line(z,topmost,bottommost,(0,255,0),5)
                     rt = topmost
                     rb = bottommost
@@ -163,14 +165,14 @@ def potential_leftedge(c):
             y1 = topmost[1]
             y2 = bottommost[1]
             w = 50
-            xr,yr,wr,hr = cv2.boundingRect(c)
-            if (y2 - y1 > ys) and (abs(x2 - x1) < xs) and hr > 240 and wr < 50:
+            if (y2 - y1 > ys) and (abs(x2 - x1) < xs):
                 pts1 = np.float32([[topmost[0],y1],[topmost[0]+w,y1],[bottommost[0],y2],[bottommost[0]+w,y2]])
                 pts2 = np.float32([[0,0],[w,0],[0,y2-y1],[w,y2-y1]])
                 M = cv2.getPerspectiveTransform(pts1,pts2)
                 dst = cv2.warpPerspective(z,M,(w,y2-y1))
                 meandst = dst.mean()
-                if meandst > 150:
+                print meandst
+                if meandst > 50:
                     cv2.line(z,topmost,bottommost,(0,255,0),5)
                     lt = topmost
                     lb = bottommost
@@ -251,13 +253,85 @@ def left_right_lines(contoursright,contoursleft,z):
             doorway_movement(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i])
     return z
 
+def data_send_right(speed):
+    if speed == 8:
+        ser.write('\x11')
+    elif speed == 7:
+        ser.write('\x12')
+    elif speed == 6:
+        ser.write('\x13')
+    elif speed == 5:
+        ser.write('\x14')
+    elif speed == 4:
+        ser.write('\x15')
+    elif speed == 3:
+        ser.write('\x16')
+    elif speed == 2:
+        ser.write('\x17')
+    elif speed == 1:
+        ser.write('\x18')
+    elif speed == 0:
+        ser.write('\x19')
+
+def data_send_left(speed):
+    if speed == 8:
+        ser.write('\x01')
+    elif speed == 7:
+        ser.write('\x02')
+    elif speed == 6:
+        ser.write('\x03')
+    elif speed == 5:
+        ser.write('\x04')
+    elif speed == 4:
+        ser.write('\x05')
+    elif speed == 3:
+        ser.write('\x06')
+    elif speed == 2:
+        ser.write('\x07')
+    elif speed == 1:
+        ser.write('\x08')
+    elif speed == 0:
+        ser.write('\x09')
+
+def regular_movement(original):
+    x = 320
+    speed = 8
+    for i in xrange(8):
+        area = original[0:479,x:x+39]
+        ret, th3 = cv2.threshold(area,30,255,cv2.THRESH_BINARY_INV)
+        Count = cv2.countNonZero(th3)
+        if Count > 1000:
+            break
+        speed = speed - 1
+        x = x + 40
+    speed_right = speed
+    x = 319
+    speed = 8
+    for i in xrange(8):
+        area = original[0:479,x-39:x]
+        ret, th3 = cv2.threshold(area,30,255,cv2.THRESH_BINARY_INV)
+        Count = cv2.countNonZero(th3)
+        if Count > 1000:
+            break
+        speed = speed - 1
+        x = x - 40
+    speed_left = speed
+    for i in xrange(5):
+        data_send_right(speed_right)
+    for i in xrange(5):
+        data_send_left(speed_left)
+
 while(True):
-    z = get_depth()	#returns the depth frame 
-    contoursright = contours_return(z,2)
-    contoursleft = contours_return(z,-2)
-    linesz = left_right_lines(contoursright,contoursleft,z)
-    cv2.imshow('depth',linesz)
+    z = get_depth()	#returns the depth frame
+    original = z
+    #contoursright = contours_return(z,-5)
+    #contoursleft = contours_return(z,5)
+    #linesz = left_right_lines(contoursright,contoursleft,z)
+    regular_movement(original)
+    cv2.imshow('depth',original)
     if cv2.waitKey(1)!=-1:
+        ser.write('\x35')
+        ser.close()
         freenect.Kill
         break
 

@@ -1,0 +1,17 @@
+# depslib dependency file v1.0
+1434623492 source:/home/aniket/PycharmProjects/doorc/demo/main.c
+	<avr/io.h>
+	<avr/interrupt.h>
+	<util/delay.h>
+
+1434797161 source:/home/aniket/eYSIP_2015_Depth_Mapping_Kinect/Resources/Examples/ubuntu_serial_communication_code/demo/main.c
+	<avr/io.h>
+	<avr/interrupt.h>
+	<util/delay.h>
+	"lcd.c"
+
+1424798953 /home/aniket/eYSIP_2015_Depth_Mapping_Kinect/Resources/Examples/ubuntu_serial_communication_code/demo/lcd.c
+	<avr/io.h>
+	<avr/delay.h>
+	<util/delay.h>
+

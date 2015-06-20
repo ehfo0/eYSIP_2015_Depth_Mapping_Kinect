@@ -31,7 +31,7 @@ import serial
 import time
 
 kernel = np.ones((5,5),np.uint8)
-ser = serial.Serial('/dev/ttyUSB0')
+#ser = serial.Serial('/dev/ttyUSB0')
 global tp
 tp = 51
 global eli
@@ -60,10 +60,10 @@ def return_mean(a):
 def contours_return(a,num):
     b = np.roll(a,num)
     res = np.subtract(b,a)
-    res = np.multiply(res,255)
     res = cv2.medianBlur(res,5)
-    ret,th3 = cv2.threshold(res,50,255,cv2.THRESH_BINARY)
-    contours, hierarchy = cv2.findContours(th3,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+    mask = res > 200
+    res[mask] = 0
+    contours, hierarchy = cv2.findContours(res,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
     return contours
 
 def take_left():
@@ -71,7 +71,7 @@ def take_left():
         z = get_depth()
         middlearea = z[200:479,200:439]
         middleval = middlearea.mean()
-        ser.write("\x34")
+        #ser.write("\x34")
         if middleval > 220:
             return
 
@@ -80,7 +80,7 @@ def take_right():
         z = get_depth()
         middlearea = z[200:479,200:439]
         middleval = middlearea.mean()
-        ser.write("\x36")
+        #ser.write("\x36")
         if middleval > 220:
             return
 
@@ -104,7 +104,7 @@ def regular_movement(z):
     if eli == 0:
         if middleval > 220 and middleob < 1000:
             print "forward"
-            ser.write("\x38")
+            #ser.write("\x38")
             time.sleep(0.1)
         else:
             if leftval > rightval:
@@ -133,13 +133,13 @@ def doorway_movement(lb,lt,rb,rt,cxr,cxl):
         print "haha"
         if mid < 500 and mid > 200:
             print "forward"
-            ser.write("\x38")
+            #ser.write("\x38")
         elif mid < 200:
             print "left"
-            ser.write("\x34")
+            #ser.write("\x34")
         else:
             print "right"
-            ser.write("\x36")
+            #ser.write("\x36")
     else : eli = 0
 
 def left_right_lines(contoursright,contoursleft,z):
@@ -220,8 +220,8 @@ while(True):
     linesz = left_right_lines(contoursright,contoursleft,z)
     cv2.imshow('gray',linesz)
     if cv2.waitKey(1)!=-1:
-        ser.write('\x35')
-        ser.close()
+        #ser.write('\x35')
+        #ser.close()
         freenect.Kill
         break
 
