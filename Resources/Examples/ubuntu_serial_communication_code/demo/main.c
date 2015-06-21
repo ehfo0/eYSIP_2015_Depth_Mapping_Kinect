@@ -71,6 +71,18 @@ void stop (void)
   motion_set(0x00);
 }
 
+void left (void) //Left wheel backward, right wheel stationary
+{
+ motion_set(0x01);
+ velocity(200,0);
+}
+
+void right (void) //Left wheel stationary, Right wheel backward
+{
+ motion_set(0x08);
+ velocity(0,200);
+}
+
 //Function to initialize ports
 void port_init()
 {
@@ -115,86 +127,37 @@ SIGNAL(USART2_RX_vect) 		// ISR for receive complete interrupt
 {
 	data = UDR2; 				//making copy of data from UDR2 in 'data' variable
 
-	//UDR2 = data; 				//echo data back to PC
-		if(data == 0x01) //ASCII value of 8
-		{
-			y = 50;  //forward
-		}
-		if(data == 0x11) //ASCII value of 8
-		{
-			x = 50;  //forward
-		}
-		if(data == 0x02) //ASCII value of 2
-		{
-			y = 100; //back
-		}
-        if(data == 0x12) //ASCII value of 2
-		{
-			x = 100; //back
-		}
-		if(data == 0x03) //ASCII value of 4
-		{
-			y = 120;  //left
-		}
-        if(data == 0x13) //ASCII value of 4
-		{
-			x = 120;  //left
-		}
-		if(data == 0x04) //ASCII value of 6
-		{
-			y = 140; //right
-		}
-        if(data == 0x14) //ASCII value of 6
-		{
-			x = 140; //right
-		}
-		if(data == 0x05) //ASCII value of 5
-		{
-			y = 160; //stop
-		}
-        if(data == 0x15) //ASCII value of 5
-		{
-			x = 160; //stop
-		}
-		if(data == 0x06) //ASCII value of 7
-		{
-			y = 180;
-		}
-        if(data == 0x16) //ASCII value of 7
-		{
-			x = 180;
-		}
-		if(data == 0x07) //ASCII value of 9
-		{
-			y = 200;
-		}
-        if(data == 0x17) //ASCII value of 9
-		{
-			x = 200;
-		}
-		if(data == 0x08) //ASCII value of 9
-		{
-			y = 220;
-		}
-        if(data == 0x18) //ASCII value of 9
-		{
-			x = 220;
-		}
-		if(data == 0x09) //ASCII value of 9
-		{
-			y = 255;
-		}
-		if(data == 0x19) //ASCII value of 9
-		{
-			x = 255;
-		}
-
-        if(data == 0x35)
-        {
-            stop();
-            x = 0;
-            y = 0;
-        }
+	//UDR2 = data;
+	switch(data)
+	{
+        case 0x00: x = 255; y = 255; break;
+        case 0x01: x = 200; y = 255; break;
+        case 0x02: x = 150; y = 255; break;
+        case 0x03: x = 100; y = 255; break;
+        case 0x04: x = 50;  y = 255; break;
+        case 0x10: x = 255; y = 200; break;
+        case 0x11: x = 200; y = 200; break;
+        case 0x12: x = 150; y = 200; break;
+        case 0x13: x = 100; y = 200; break;
+        case 0x14: x = 50;  y = 200; break;
+        case 0x20: x = 255; y = 150; break;
+        case 0x21: x = 200; y = 150; break;
+        case 0x22: x = 150; y = 150; break;
+        case 0x23: x = 100; y = 150; break;
+        case 0x24: x = 50;  y = 150; break;
+        case 0x30: x = 255; y = 100; break;
+        case 0x31: x = 200; y = 100; break;
+        case 0x32: x = 150; y = 100; break;
+        case 0x33: x = 255; y = 255; break;
+        case 0x34: x = 50;  y = 150; break;
+        case 0x40: x = 255; y = 50;  break;
+        case 0x41: x = 200; y = 50;  break;
+        case 0x42: x = 150; y = 50;  break;
+        case 0x43: x = 150; y = 50;  break;
+        case 0x44: right();          return;
+        case 0x45: left();           return;
+        case 0x35: x = 0;   y = 0;   break;
+	}
         forward();
         velocity(x,y);
         lcd_print(1,1,x,5);

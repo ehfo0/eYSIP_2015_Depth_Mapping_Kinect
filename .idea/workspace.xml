@@ -2,23 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c1cb8885-c3ec-473a-8bbf-dcd2816bea4c" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu serial communication code/avr-libc-user-manual.pdf.gz" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu serial communication code/demo/bin/Debug/demo.eep" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu serial communication code/demo/bin/Debug/demo.elf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu serial communication code/demo/bin/Debug/demo.fuse" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu serial communication code/demo/bin/Debug/demo.hex" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu serial communication code/demo/bin/Debug/demo.lock" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu serial communication code/demo/bin/Debug/demo.lss" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu serial communication code/demo/bin/Debug/demo.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu serial communication code/demo/bin/Debug/demo.sig" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu serial communication code/demo/demo.cbp" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu serial communication code/demo/demo.depend" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu serial communication code/demo/demo.layout" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu serial communication code/demo/fuse.c" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu serial communication code/demo/main.c" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu serial communication code/demo/obj/Debug/main.o" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu_serial_communication_code/demo/bin/Debug/demo.elf" afterPath="$PROJECT_DIR$/Resources/Examples/ubuntu_serial_communication_code/demo/bin/Debug/demo.elf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu_serial_communication_code/demo/obj/Debug/main.o" afterPath="$PROJECT_DIR$/Resources/Examples/ubuntu_serial_communication_code/demo/obj/Debug/main.o" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Research/MyProjects/Kinect.py" afterPath="$PROJECT_DIR$/Research/MyProjects/Kinect.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Research/MyProjects/edges.py" afterPath="$PROJECT_DIR$/Research/MyProjects/edges.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu_serial_communication_code/demo/demo.depend" afterPath="$PROJECT_DIR$/Resources/Examples/ubuntu_serial_communication_code/demo/demo.depend" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu_serial_communication_code/demo/bin/Debug/demo.hex" afterPath="$PROJECT_DIR$/Resources/Examples/ubuntu_serial_communication_code/demo/bin/Debug/demo.hex" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu_serial_communication_code/demo/demo.layout" afterPath="$PROJECT_DIR$/Resources/Examples/ubuntu_serial_communication_code/demo/demo.layout" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu_serial_communication_code/demo/bin/Debug/demo.lss" afterPath="$PROJECT_DIR$/Resources/Examples/ubuntu_serial_communication_code/demo/bin/Debug/demo.lss" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu_serial_communication_code/demo/bin/Debug/demo.map" afterPath="$PROJECT_DIR$/Resources/Examples/ubuntu_serial_communication_code/demo/bin/Debug/demo.map" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Resources/Examples/ubuntu_serial_communication_code/demo/main.c" afterPath="$PROJECT_DIR$/Resources/Examples/ubuntu_serial_communication_code/demo/main.c" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="eYSIP_2015_Depth_Mapping_Kinect.iws" />
@@ -46,8 +38,8 @@
       <file leaf-file-name="Door_detection.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Application/Python_code/Door_detection.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="3909" max-vertical-offset="4575">
-              <caret line="298" column="20" selection-start-line="297" selection-start-column="8" selection-end-line="298" selection-end-column="20" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1434" max-vertical-offset="4575">
+              <caret line="110" column="45" selection-start-line="109" selection-start-column="4" selection-end-line="110" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -66,8 +58,8 @@
       <file leaf-file-name="Kinect.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Research/MyProjects/Kinect.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.11764706" vertical-offset="4030" max-vertical-offset="5160">
-              <caret line="272" column="20" selection-start-line="272" selection-start-column="20" selection-end-line="272" selection-end-column="20" />
+            <state vertical-scroll-proportion="0.85882354" vertical-offset="5755" max-vertical-offset="6555">
+              <caret line="408" column="4" selection-start-line="408" selection-start-column="4" selection-end-line="408" selection-end-column="4" />
               <folding>
                 <element signature="e#663#678#0" expanded="true" />
               </folding>
@@ -103,9 +95,9 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="69" />
-    <option name="y" value="-772" />
+    <option name="y" value="24" />
     <option name="width" value="1297" />
-    <option name="height" value="772" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -130,6 +122,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -200,7 +193,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -401,7 +393,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="69" y="-772" width="1297" height="772" extended-state="6" />
+    <frame x="69" y="24" width="1297" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -446,6 +438,210 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Application/Python_code/Door_detection.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1434" max-vertical-offset="4575">
+          <caret line="110" column="45" selection-start-line="109" selection-start-column="4" selection-end-line="110" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research/Tests/Depth_mm_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="147" max-vertical-offset="900">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research/MyProjects/Kinect.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5985">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#663#678#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research/MyProjects/edges.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2769" max-vertical-offset="3435">
+          <caret line="223" column="9" selection-start-line="223" selection-start-column="9" selection-end-line="223" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Python_code/Door_detection.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3909" max-vertical-offset="4575">
+          <caret line="298" column="20" selection-start-line="297" selection-start-column="8" selection-end-line="298" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research/Tests/Depth_mm_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="147" max-vertical-offset="900">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research/MyProjects/Kinect.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5385">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#663#678#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research/MyProjects/edges.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2769" max-vertical-offset="3435">
+          <caret line="223" column="9" selection-start-line="223" selection-start-column="9" selection-end-line="223" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Python_code/Door_detection.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3909" max-vertical-offset="4575">
+          <caret line="298" column="20" selection-start-line="297" selection-start-column="8" selection-end-line="298" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research/Tests/Depth_mm_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="147" max-vertical-offset="900">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research/MyProjects/Kinect.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4920">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#663#678#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research/MyProjects/edges.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2769" max-vertical-offset="3435">
+          <caret line="223" column="9" selection-start-line="223" selection-start-column="9" selection-end-line="223" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Python_code/Door_detection.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3909" max-vertical-offset="4575">
+          <caret line="298" column="20" selection-start-line="297" selection-start-column="8" selection-end-line="298" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research/Tests/Depth_mm_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="147" max-vertical-offset="900">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research/MyProjects/Kinect.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5160">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#663#678#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research/MyProjects/edges.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2769" max-vertical-offset="3435">
+          <caret line="223" column="9" selection-start-line="223" selection-start-column="9" selection-end-line="223" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Python_code/Door_detection.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3909" max-vertical-offset="4575">
+          <caret line="298" column="20" selection-start-line="297" selection-start-column="8" selection-end-line="298" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research/Tests/Depth_mm_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="147" max-vertical-offset="900">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research/MyProjects/Kinect.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5160">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#663#678#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research/MyProjects/edges.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2769" max-vertical-offset="3435">
+          <caret line="223" column="9" selection-start-line="223" selection-start-column="9" selection-end-line="223" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/Python_code/Door_detection.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3909" max-vertical-offset="4575">
+          <caret line="298" column="20" selection-start-line="297" selection-start-column="8" selection-end-line="298" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research/Tests/Depth_mm_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="147" max-vertical-offset="900">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research/MyProjects/Kinect.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5160">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#663#678#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research/MyProjects/edges.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2769" max-vertical-offset="3435">
+          <caret line="223" column="9" selection-start-line="223" selection-start-column="9" selection-end-line="223" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Application/Python_code/Door_detection.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2322" max-vertical-offset="4575">
@@ -575,16 +771,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Application/Python_code/Door_detection.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3909" max-vertical-offset="4575">
-          <caret line="298" column="20" selection-start-line="297" selection-start-column="8" selection-end-line="298" selection-end-column="20" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1434" max-vertical-offset="4575">
+          <caret line="110" column="45" selection-start-line="109" selection-start-column="4" selection-end-line="110" selection-end-column="45" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Research/MyProjects/Kinect.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.11764706" vertical-offset="4030" max-vertical-offset="5160">
-          <caret line="272" column="20" selection-start-line="272" selection-start-column="20" selection-end-line="272" selection-end-column="20" />
+        <state vertical-scroll-proportion="0.85882354" vertical-offset="5755" max-vertical-offset="6555">
+          <caret line="408" column="4" selection-start-line="408" selection-start-column="4" selection-end-line="408" selection-end-column="4" />
           <folding>
             <element signature="e#663#678#0" expanded="true" />
           </folding>

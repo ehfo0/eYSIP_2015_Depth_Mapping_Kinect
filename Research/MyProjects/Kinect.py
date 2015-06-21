@@ -30,7 +30,7 @@ import numpy as np
 import time
 import serial
 
-ser = serial.Serial('/dev/ttyUSB1')	#initialization of serial communication
+ser = serial.Serial('/dev/ttyUSB0')	#initialization of serial communication
 
 global mode	#variable to provide the mode of movement
 mode = 0
@@ -253,73 +253,166 @@ def left_right_lines(contoursright,contoursleft,z):
             doorway_movement(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i])
     return z
 
-def data_send_right(speed):
-    if speed == 8:
-        ser.write('\x11')
-    elif speed == 7:
-        ser.write('\x12')
-    elif speed == 6:
-        ser.write('\x13')
-    elif speed == 5:
-        ser.write('\x14')
-    elif speed == 4:
-        ser.write('\x15')
-    elif speed == 3:
-        ser.write('\x16')
-    elif speed == 2:
-        ser.write('\x17')
-    elif speed == 1:
-        ser.write('\x18')
-    elif speed == 0:
-        ser.write('\x19')
+def take_right():
+    while(1):
+        z = get_depth()
+        middlearea = z[200:479,200:439]
+        middleval = middlearea.mean()
+        ser.write("\x44")
+        if middleval > 30:
+            return
 
-def data_send_left(speed):
-    if speed == 8:
-        ser.write('\x01')
-    elif speed == 7:
-        ser.write('\x02')
-    elif speed == 6:
-        ser.write('\x03')
-    elif speed == 5:
-        ser.write('\x04')
-    elif speed == 4:
-        ser.write('\x05')
-    elif speed == 3:
-        ser.write('\x06')
-    elif speed == 2:
-        ser.write('\x07')
-    elif speed == 1:
-        ser.write('\x08')
-    elif speed == 0:
-        ser.write('\x09')
+def take_left():
+    while(1):
+        z = get_depth()
+        middlearea = z[200:479,200:439]
+        middleval = middlearea.mean()
+        ser.write("\x45")
+        if middleval > 30:
+            return
+
+def take_right_near():
+    while(1):
+        z = get_depth()
+        middlearea = z[200:479,200:439]
+        ser.write("\x44")
+        print 1;
+        if Count_near_pixels(middlearea,900) < 1000:
+            return
+
+def take_left_near():
+    while(1):
+        z = get_depth()
+        middlearea = z[200:479,200:439]
+        ser.write("\x45")
+        if Count_near_pixels(middlearea,900) < 1000:
+            return
+
+def stuck_pos_movement():
+    z = get_depth()
+    leftarea = z[0:479,0:100]
+    rightarea = z[0:479,539:639]
+    leftvals = leftarea.mean()
+    rightvals = rightarea.mean()
+    if leftvals > rightvals:
+        print "left"
+        take_left()
+    else:
+        print "right"
+        take_right();
+
+def data_send(x,y):
+    print x,y
+    if x == 0:
+        if y==0:
+            ser.write('\x00')
+        elif y == 1:
+            ser.write('\x01')
+        elif y == 2:
+            ser.write('\x02')
+        elif y == 3:
+            ser.write('\x03')
+        elif y == 4:
+            ser.write('\x04')
+    elif x == 1:
+        if y==0:
+            ser.write('\x10')
+        elif y == 1:
+            ser.write('\x11')
+        elif y == 2:
+            ser.write('\x12')
+        elif y == 3:
+            ser.write('\x13')
+        elif y == 4:
+            ser.write('\x14')
+    elif x == 2:
+        if y==0:
+            ser.write('\x20')
+        elif y == 1:
+            ser.write('\x21')
+        elif y == 2:
+            ser.write('\x22')
+        elif y == 3:
+            ser.write('\x23')
+        elif y == 4:
+            ser.write('\x24')
+    elif x == 3:
+        if y==0:
+            ser.write('\x30')
+        elif y == 1:
+            ser.write('\x31')
+        elif y == 2:
+            ser.write('\x32')
+        elif y == 3:
+            ser.write('\x33')
+        elif y == 4:
+            ser.write('\x34')
+    elif x == 4:
+        if y==0:
+            ser.write('\x40')
+        elif y == 1:
+            ser.write('\x41')
+        elif y == 2:
+            ser.write('\x42')
+        elif y == 3:
+            ser.write('\x43')
+        elif y == 4:
+            stuck_pos_movement()
+
+def Count_near_pixels(area,dist):
+    ret, th3 = cv2.threshold(area,dist/30,255,cv2.THRESH_BINARY_INV)
+    Count = cv2.countNonZero(th3)
+    return Count
+
+def search_wall(dir):
+    if dir == 0:
+        while(True):
+            z = get_depth()
+            area = z[0:479,0:319]
+            ser.write("\x03")
+            if Count_near_pixels(area,1800) > 1000:
+                break
+    elif dir == 1:
+        while(True):
+            z = get_depth()
+            area = z[0:479,320:639]
+            ser.write("\x30")
+            if Count_near_pixels(area,1800) > 1000:
+                break
+
 
 def regular_movement(original):
     x = 320
-    speed = 8
-    for i in xrange(8):
-        area = original[0:479,x:x+39]
-        ret, th3 = cv2.threshold(area,30,255,cv2.THRESH_BINARY_INV)
-        Count = cv2.countNonZero(th3)
-        if Count > 1000:
+    speed = 4
+    for i in xrange(4):
+        area = original[0:479,x:x+79]
+        if Count_near_pixels(area,900) > 1000:
             break
         speed = speed - 1
-        x = x + 40
+        x = x + 80
     speed_right = speed
     x = 319
-    speed = 8
-    for i in xrange(8):
-        area = original[0:479,x-39:x]
-        ret, th3 = cv2.threshold(area,30,255,cv2.THRESH_BINARY_INV)
-        Count = cv2.countNonZero(th3)
-        if Count > 1000:
+    speed = 4
+    for i in xrange(4):
+        area = original[0:479,x-79:x]
+        if Count_near_pixels(area,900) > 1000:
             break
         speed = speed - 1
-        x = x - 40
+        x = x - 80
     speed_left = speed
-    for i in xrange(5):
-        data_send_right(speed_right)
-    for i in xrange(5):
-        data_send_left(speed_left)
+    print speed_left
+    print speed_right
+    if speed_left!=0 or speed_right!=0:
+        data_send(speed_left,speed_right)
+    else:
+        search_wall(0)
+        ser.write("\x00")
+
+#ctx = freenect.init()
+#dev = freenect.open_device(ctx, freenect.num_devices(ctx) - 1)
+
+#freenect.set_tilt_degs(dev, 20)
+#freenect.close_device(dev)
 
 while(True):
     z = get_depth()	#returns the depth frame
