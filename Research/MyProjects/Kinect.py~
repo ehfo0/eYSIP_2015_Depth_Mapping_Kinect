@@ -3,7 +3,7 @@ __author__ = 'aniket'
 *
 *                  ================================
 *
-*  Author List: Aniket P
+*  Author List: Aniket Patel
 *  Filename: 		Kinect.py
 *  Date:                June 20, 2015
 *  Functions:   get_depth()
@@ -43,7 +43,7 @@ def filter_noise(a,mask,ad,row,col):
     * Input:		Original frame, noise mask, Original frame with noise pixels being made to 255 value, no. of row tiles, No. of column 				tiles                
     * Output:		Filters the noise from the original depth frame.
     * Logic:		The function divides rows and cols of the frame in some number of pixels. It then finds the mean of the tile and 				assigns the value to the noise pixels in that tile.
-    * Example Call:	filter_noise(a,mask,ad,row,col)
+    * Example Call:	filter_noise(a,mask,ad,3,4)
     """
     rp = 480/row
     cp = 640/col
@@ -82,7 +82,7 @@ def get_depth():
     * Example Call:	get_depth()
     """
     a = freenect.sync_get_depth(format = freenect.DEPTH_MM)[0]
-    a = a/30
+    a = a/30.0
     a = a.astype(np.uint8)
     a = filter_smooth(a)
     return a
@@ -93,12 +93,15 @@ def contours_return(a,num):
     * Input:		Depth Frame and a number for shifting left or right the matrix                        
     * Output:		Returns the left or right edges contours
     * Logic:		It does noise removal process on the frame and shifts the frame matrix by num places so that change in values are 	     		highlighted in the image by Binary Thresholding it.
-    * Example Call:	contours_return(a,num)
+    * Example Call:	contours_return(a,5)
     """
     b = np.roll(a,num)
     res = np.subtract(b,a)
-    res = np.multiply(res,255)
-    res = cv2.medianBlur(res,5)
+    res = cv2.medianBlur(res,11)
+    mask = res > 200
+    res[mask] = 0
+    mask = res < 100
+    res[mask] = 0
     ret,th3 = cv2.threshold(res,50,255,cv2.THRESH_BINARY)
     contours, hierarchy = cv2.findContours(th3,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
     return contours
@@ -125,14 +128,13 @@ def potential_rightedge(c):
             y1 = topmost[1]
             y2 = bottommost[1]
             w = 50
-            xr,yr,wr,hr = cv2.boundingRect(c)
-            if (y2 - y1 > ys) and (abs(x2 - x1) < xs) and hr > 240 and wr < 50:
+            if (y2 - y1 > ys) and (abs(x2 - x1) < xs):
                 pts1 = np.float32([[topmost[0]-w,y1],[topmost[0],y1],[bottommost[0]-w,y2],[bottommost[0],y2]])
                 pts2 = np.float32([[0,0],[w,0],[0,y2-y1],[w,y2-y1]])
                 M = cv2.getPerspectiveTransform(pts1,pts2)
                 dst = cv2.warpPerspective(z,M,(w,y2-y1))
                 meandst = dst.mean()
-                if meandst > 150:
+                if meandst > 50:
                     cv2.line(z,topmost,bottommost,(0,255,0),5)
                     rt = topmost
                     rb = bottommost
@@ -163,14 +165,14 @@ def potential_leftedge(c):
             y1 = topmost[1]
             y2 = bottommost[1]
             w = 50
-            xr,yr,wr,hr = cv2.boundingRect(c)
-            if (y2 - y1 > ys) and (abs(x2 - x1) < xs) and hr > 240 and wr < 50:
+            if (y2 - y1 > ys) and (abs(x2 - x1) < xs):
                 pts1 = np.float32([[topmost[0],y1],[topmost[0]+w,y1],[bottommost[0],y2],[bottommost[0]+w,y2]])
                 pts2 = np.float32([[0,0],[w,0],[0,y2-y1],[w,y2-y1]])
                 M = cv2.getPerspectiveTransform(pts1,pts2)
                 dst = cv2.warpPerspective(z,M,(w,y2-y1))
                 meandst = dst.mean()
-                if meandst > 150:
+                print meandst
+                if meandst > 50:
                     cv2.line(z,topmost,bottommost,(0,255,0),5)
                     lt = topmost
                     lb = bottommost
@@ -251,13 +253,241 @@ def left_right_lines(contoursright,contoursleft,z):
             doorway_movement(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i])
     return z
 
-while(True):
+def take_right():
+    """
+    * Function Name:	take_right
+    * Input:		None             
+    * Output:		Takes Right turn
+    * Logic:		This function takes a right turn until the mean of the middlearea crosses the threshold value 
+    * Example Call:	take_right()
+    """
+    while(1):
+        z = get_depth()
+        middlearea = z[200:479,200:439]
+        middleval = middlearea.mean()
+        ser.write("\x44")
+        if middleval > 30:
+            return
+
+def take_left():
+    """
+    * Function Name:	take_left
+    * Input:		None             
+    * Output:		Takes Left turn
+    * Logic:		This function takes a left turn until the mean of the middlearea crosses the threshold value 
+    * Example Call:	take_left()
+    """
+    while(1):
+        z = get_depth()
+        middlearea = z[200:479,200:439]
+        middleval = middlearea.mean()
+        ser.write("\x45")
+        if middleval > 30:
+            return
+
+def take_right_near():
+    """
+    * Function Name:	take_right_near
+    * Input:		None             
+    * Output:		Takes Right turn
+    * Logic:		This function takes a Right turn until the obstacle is not detected i.e. If the obstacle is in range it will turn 				until it is out of its sight 
+    * Example Call:	take_right_near()
+    """
+    while(1):
+        z = get_depth()
+        middlearea = z[200:479,200:439]
+        ser.write("\x44")
+        print 1;
+        if Count_near_pixels(middlearea,900) < 1000:
+            return
+
+def take_left_near():
+    """
+    * Function Name:	take_left_near
+    * Input:		None             
+    * Output:		Takes Left turn
+    * Logic:		This function takes a Left turn until the obstacle is not detected i.e. If the obstacle is in range it will turn 				until it is out of its sight 
+    * Example Call:	take_left_near()
+    """
+    while(1):
+        z = get_depth()
+        middlearea = z[200:479,200:439]
+        ser.write("\x45")
+        if Count_near_pixels(middlearea,900) < 1000:
+            return
+
+def stuck_pos_movement():
+    """
+    * Function Name:	stuck_pos_movement
+    * Input:		None             
+    * Output:		Removes robot from a stuck position
+    * Logic:		When both the middle left and middle right detect an obstacle it takes the mean of the left and right area and the 				area with lesser mean is the preferable area to go 
+    * Example Call:	stuck_pos_movement()
+    """
     z = get_depth()
-    contoursright = contours_return(z,2)
-    contoursleft = contours_return(z,-2)
-    linesz = left_right_lines(contoursright,contoursleft,z)
-    cv2.imshow('depth',linesz)
+    leftarea = z[0:479,0:100]
+    rightarea = z[0:479,539:639]
+    leftvals = leftarea.mean()
+    rightvals = rightarea.mean()
+    if leftvals > rightvals:
+        print "left"
+        take_left()
+    else:
+        print "right"
+        take_right();
+
+def data_send(x,y):
+    """
+    * Function Name:	data_send
+    * Input:		left and right speed mode         
+    * Output:		Sends speed mode of the robot wheels to the Fire bird V for further analysis
+    * Logic:		Total 25 different possibilities of speed modes are their according to the vertical frame in which the obstacle is 				detected and using if else statements proper speed mode is sent
+    * Example Call:	data_send(speed_left,speed_right)
+    """
+    print x,y
+    if x == 0:
+        if y==0:
+            ser.write('\x00')
+        elif y == 1:
+            ser.write('\x01')
+        elif y == 2:
+            ser.write('\x02')
+        elif y == 3:
+            ser.write('\x03')
+        elif y == 4:
+            ser.write('\x04')
+    elif x == 1:
+        if y==0:
+            ser.write('\x10')
+        elif y == 1:
+            ser.write('\x11')
+        elif y == 2:
+            ser.write('\x12')
+        elif y == 3:
+            ser.write('\x13')
+        elif y == 4:
+            ser.write('\x14')
+    elif x == 2:
+        if y==0:
+            ser.write('\x20')
+        elif y == 1:
+            ser.write('\x21')
+        elif y == 2:
+            ser.write('\x22')
+        elif y == 3:
+            ser.write('\x23')
+        elif y == 4:
+            ser.write('\x24')
+    elif x == 3:
+        if y==0:
+            ser.write('\x30')
+        elif y == 1:
+            ser.write('\x31')
+        elif y == 2:
+            ser.write('\x32')
+        elif y == 3:
+            ser.write('\x33')
+        elif y == 4:
+            ser.write('\x34')
+    elif x == 4:
+        if y==0:
+            ser.write('\x40')
+        elif y == 1:
+            ser.write('\x41')
+        elif y == 2:
+            ser.write('\x42')
+        elif y == 3:
+            ser.write('\x43')
+        elif y == 4:
+            stuck_pos_movement()
+
+def Count_near_pixels(area,dist):
+    """
+    * Function Name:	Count_near_pixels
+    * Input:		area and the distance upto which the obstacle should be detected        
+    * Output:		Returns the number of obstacle pixels that are in the distance range.
+    * Logic:		The depth data is Binary thresholded according to the obstacle detected in its range. Than the NonZeros are counted as 				they are the obstacle
+    * Example Call:	Count_near_pixels(area,900)
+    """
+    ret, th3 = cv2.threshold(area,dist/30,255,cv2.THRESH_BINARY_INV)
+    Count = cv2.countNonZero(th3)
+    return Count
+
+def search_wall(dir):
+    """
+    * Function Name:	search_wall
+    * Input:		left/right wall      
+    * Output:		follows left or right wall
+    * Logic:		If left wall is selected for instance then the robot moves along the wall. The robot keeps track of the objects on the 				left side of frame for left wall and if the frame does not have any object in the range than the robot moves left 				until it is detected 
+    * Example Call:	search_wall(0)
+    """
+    if dir == 0:
+        while(True):
+            z = get_depth()
+            area = z[0:479,0:319]
+            ser.write("\x03")
+            if Count_near_pixels(area,1800) > 1000:
+                break
+    elif dir == 1:
+        while(True):
+            z = get_depth()
+            area = z[0:479,320:639]
+            ser.write("\x30")
+            if Count_near_pixels(area,1800) > 1000:
+                break
+
+
+def regular_movement(original):
+    """
+    * Function Name:	regular_movement
+    * Input:		Original depth frame     
+    * Output:		robot moves without bumping into any obstacle
+    * Logic:		The frame is divided in 8 vertical sections. Speed mode is selected from the speed_right and speed_left. There are 4 				left frames and 4 right frames. The frame loop starts from middle and if any frame detects any obstacle break the loop 				and the corresponding data is saved in the speed_left or speed_right variable
+    * Example Call:	regular_movement(original)
+    """
+    x = 320
+    speed = 4
+    for i in xrange(4):
+        area = original[0:479,x:x+79]
+        if Count_near_pixels(area,900) > 1000:
+            break
+        speed = speed - 1
+        x = x + 80
+    speed_right = speed
+    x = 319
+    speed = 4
+    for i in xrange(4):
+        area = original[0:479,x-79:x]
+        if Count_near_pixels(area,900) > 1000:
+            break
+        speed = speed - 1
+        x = x - 80
+    speed_left = speed
+    print speed_left
+    print speed_right
+    if speed_left!=0 or speed_right!=0:
+        data_send(speed_left,speed_right)
+    else:
+        search_wall(0)
+        ser.write("\x00")
+
+ctx = freenect.init()
+dev = freenect.open_device(ctx, freenect.num_devices(ctx) - 1)
+
+freenect.set_tilt_degs(dev, 22)
+freenect.close_device(dev)
+
+while(True):
+    z = get_depth()	#returns the depth frame
+    original = z
+    #contoursright = contours_return(z,-5)
+    #contoursleft = contours_return(z,5)
+    #linesz = left_right_lines(contoursright,contoursleft,z)
+    regular_movement(original)
+    cv2.imshow('depth',original)
     if cv2.waitKey(1)!=-1:
+        ser.write('\x35')
+        ser.close()
         freenect.Kill
         break
 

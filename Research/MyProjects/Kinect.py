@@ -3,19 +3,18 @@ __author__ = 'aniket'
 *
 *                  ================================
 *
-*  Author List: Aniket Patel
-*  Filename: 		Kinect.py
+*  Author List:         Aniket Patel
+*  Filename: 		    Kinect.py
 *  Date:                June 20, 2015
-*  Functions:   get_depth()
-		filter_smooth()
-		filter_noise()
-                contours_return()
-		potential_rightedge()
-		potential_leftedge()
-                doorway_movement()
-                left_right_lines()
-*  Global Variables:    mode
-			flag
+*  Functions:           get_depth()
+		                filter_smooth()
+		                filter_noise()
+                        contours_return()
+		                potential_rightedge()
+                        potential_leftedge()
+                        doorway_movement()
+                        left_right_lines()
+*  Global Variables:
 *  Dependent library files:     numpy, freenect, cv2, serial, time
 *
 *  e-Yantra - An MHRD project under National Mission on Education using
@@ -32,18 +31,13 @@ import serial
 
 ser = serial.Serial('/dev/ttyUSB0')	#initialization of serial communication
 
-global mode	#variable to provide the mode of movement
-mode = 0
-global flag	#flag is 0 if door is not yet detected. It is 1 when the door is detected even once.
-flag = 0
-
 def filter_noise(a,mask,ad,row,col):
     """
     * Function Name:	filter_noise
     * Input:		Original frame, noise mask, Original frame with noise pixels being made to 255 value, no. of row tiles, No. of column 				tiles                
     * Output:		Filters the noise from the original depth frame.
     * Logic:		The function divides rows and cols of the frame in some number of pixels. It then finds the mean of the tile and 				assigns the value to the noise pixels in that tile.
-    * Example Call:	filter_noise(a,mask,ad,row,col)
+    * Example Call:	filter_noise(a,mask,ad,3,4)
     """
     rp = 480/row
     cp = 640/col
@@ -93,7 +87,7 @@ def contours_return(a,num):
     * Input:		Depth Frame and a number for shifting left or right the matrix                        
     * Output:		Returns the left or right edges contours
     * Logic:		It does noise removal process on the frame and shifts the frame matrix by num places so that change in values are 	     		highlighted in the image by Binary Thresholding it.
-    * Example Call:	contours_return(a,num)
+    * Example Call:	contours_return(a,5)
     """
     b = np.roll(a,num)
     res = np.subtract(b,a)
@@ -189,16 +183,12 @@ def doorway_movement(lb,lt,rb,rt,cxr,cxl):
     * Logic:		Pixel Heights of the edges are calculated. If the pixel height difference and centroid of left and right edge 				difference crosses a threshold than the edges are door edges. The midpoint is calculated. If midpoint lies in middle 				frame than robot moves forward and if it lies on the left or right part than the robot takes a turn. When mode is 1 				the door is detected and in mode 0 mode regular movement is followed.
     * Example Call:	doorway_movement(lb,lt,rb,rt,cxr,cxl)
     """
-    global mode
-    global flag
     diffl = lb[1]-lt[1]
     diffr = rb[1]-rt[1]
     if abs(diffl - diffr) < 150 and ((cxr - cxl) > 50 and (cxr - cxl ) < 400):
         #ser.write("\x37")
         time.sleep(0.05)
         #ser.write("\x39")
-        mode = 2
-        flag = 1
         mid = (cxr + cxl)/2
         cv2.line(z,lt,lb,(128,255,0),10)
         cv2.line(z,rt,rb,(128,255,0),10)
@@ -211,10 +201,6 @@ def doorway_movement(lb,lt,rb,rt,cxr,cxl):
         else:
             print "right"
             #ser.write("\x36")
-    else :
-        if flag == 0:
-            mode = 0
-        else: mode = 2
 
 def left_right_lines(contoursright,contoursleft,z):
     """
@@ -246,14 +232,24 @@ def left_right_lines(contoursright,contoursleft,z):
             rbl.append(rb)
             cxrl.append(cxr)
             tempr+=1
+    return ltl, lbl, cxll, rtl, rbl, cxrl, templ, tempr
 
-    mode = 0
+def door_detection(contoursright,contoursleft,z):
+    ltl, lbl, cxll, rtl, rbl, cxrl, templ, tempr = left_right_lines(contoursright,contoursleft,z)
+    print ltl
     for i in xrange(templ):
         for j in xrange(tempr):
             doorway_movement(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i])
     return z
 
 def take_right():
+    """
+    * Function Name:	take_right
+    * Input:		None             
+    * Output:		Takes Right turn
+    * Logic:		This function takes a right turn until the mean of the middlearea crosses the threshold value 
+    * Example Call:	take_right()
+    """
     while(1):
         z = get_depth()
         middlearea = z[200:479,200:439]
@@ -263,6 +259,13 @@ def take_right():
             return
 
 def take_left():
+    """
+    * Function Name:	take_left
+    * Input:		None             
+    * Output:		Takes Left turn
+    * Logic:		This function takes a left turn until the mean of the middlearea crosses the threshold value 
+    * Example Call:	take_left()
+    """
     while(1):
         z = get_depth()
         middlearea = z[200:479,200:439]
@@ -272,15 +275,28 @@ def take_left():
             return
 
 def take_right_near():
+    """
+    * Function Name:	take_right_near
+    * Input:		None             
+    * Output:		Takes Right turn
+    * Logic:		This function takes a Right turn until the obstacle is not detected i.e. If the obstacle is in range it will turn 				until it is out of its sight 
+    * Example Call:	take_right_near()
+    """
     while(1):
         z = get_depth()
         middlearea = z[200:479,200:439]
         ser.write("\x44")
-        print 1;
         if Count_near_pixels(middlearea,900) < 1000:
             return
 
 def take_left_near():
+    """
+    * Function Name:	take_left_near
+    * Input:		None             
+    * Output:		Takes Left turn
+    * Logic:		This function takes a Left turn until the obstacle is not detected i.e. If the obstacle is in range it will turn 				until it is out of its sight 
+    * Example Call:	take_left_near()
+    """
     while(1):
         z = get_depth()
         middlearea = z[200:479,200:439]
@@ -289,6 +305,13 @@ def take_left_near():
             return
 
 def stuck_pos_movement():
+    """
+    * Function Name:	stuck_pos_movement
+    * Input:		None             
+    * Output:		Removes robot from a stuck position
+    * Logic:		When both the middle left and middle right detect an obstacle it takes the mean of the left and right area and the 				area with lesser mean is the preferable area to go 
+    * Example Call:	stuck_pos_movement()
+    """
     z = get_depth()
     leftarea = z[0:479,0:100]
     rightarea = z[0:479,539:639]
@@ -302,7 +325,13 @@ def stuck_pos_movement():
         take_right();
 
 def data_send(x,y):
-    print x,y
+    """
+    * Function Name:	data_send
+    * Input:		left and right speed mode         
+    * Output:		Sends speed mode of the robot wheels to the Fire bird V for further analysis
+    * Logic:		Total 25 different possibilities of speed modes are their according to the vertical frame in which the obstacle is 				detected and using if else statements proper speed mode is sent
+    * Example Call:	data_send(speed_left,speed_right)
+    """
     if x == 0:
         if y==0:
             ser.write('\x00')
@@ -360,11 +389,25 @@ def data_send(x,y):
             stuck_pos_movement()
 
 def Count_near_pixels(area,dist):
+    """
+    * Function Name:	Count_near_pixels
+    * Input:		area and the distance upto which the obstacle should be detected        
+    * Output:		Returns the number of obstacle pixels that are in the distance range.
+    * Logic:		The depth data is Binary thresholded according to the obstacle detected in its range. Than the NonZeros are counted as 				they are the obstacle
+    * Example Call:	Count_near_pixels(area,900)
+    """
     ret, th3 = cv2.threshold(area,dist/30,255,cv2.THRESH_BINARY_INV)
     Count = cv2.countNonZero(th3)
     return Count
 
 def search_wall(dir):
+    """
+    * Function Name:	search_wall
+    * Input:		left/right wall      
+    * Output:		follows left or right wall
+    * Logic:		If left wall is selected for instance then the robot moves along the wall. The robot keeps track of the objects on the 				left side of frame for left wall and if the frame does not have any object in the range than the robot moves left 				until it is detected 
+    * Example Call:	search_wall(0)
+    """
     if dir == 0:
         while(True):
             z = get_depth()
@@ -382,6 +425,13 @@ def search_wall(dir):
 
 
 def regular_movement(original):
+    """
+    * Function Name:	regular_movement
+    * Input:		Original depth frame     
+    * Output:		robot moves without bumping into any obstacle
+    * Logic:		The frame is divided in 8 vertical sections. Speed mode is selected from the speed_right and speed_left. There are 4 				left frames and 4 right frames. The frame loop starts from middle and if any frame detects any obstacle break the loop 				and the corresponding data is saved in the speed_left or speed_right variable
+    * Example Call:	regular_movement(original)
+    """
     x = 320
     speed = 4
     for i in xrange(4):
@@ -400,26 +450,25 @@ def regular_movement(original):
         speed = speed - 1
         x = x - 80
     speed_left = speed
-    print speed_left
-    print speed_right
     if speed_left!=0 or speed_right!=0:
         data_send(speed_left,speed_right)
     else:
         search_wall(0)
         ser.write("\x00")
 
-#ctx = freenect.init()
-#dev = freenect.open_device(ctx, freenect.num_devices(ctx) - 1)
+ctx = freenect.init()
+dev = freenect.open_device(ctx, freenect.num_devices(ctx) - 1)
 
-#freenect.set_tilt_degs(dev, 20)
-#freenect.close_device(dev)
+freenect.set_tilt_degs(dev, 22)
+freenect.close_device(dev)
+
 
 while(True):
     z = get_depth()	#returns the depth frame
     original = z
-    #contoursright = contours_return(z,-5)
-    #contoursleft = contours_return(z,5)
-    #linesz = left_right_lines(contoursright,contoursleft,z)
+    contoursright = contours_return(z,-5)
+    contoursleft = contours_return(z,5)
+    door_detection(contoursright,contoursleft,z)
     regular_movement(original)
     cv2.imshow('depth',original)
     if cv2.waitKey(1)!=-1:

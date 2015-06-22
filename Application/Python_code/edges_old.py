@@ -2,7 +2,7 @@
 *
 *                  ================================
 *
-*  Author List: Aniket P, Mukesh P
+*  Author List: Aniket P
 *  Filename: 		edges.py
 *  Date:                June 11, 2015
 *  Functions:   get_depth()
@@ -67,7 +67,7 @@ def contours_return(a,num):
     * Input:		Depth Frame and a number for shifting left or right the matrix                        
     * Output:		Returns the left or right edges contours
     * Logic:		It does noise removal process on the frame and shifts the frame matrix by num places so that change in values are 	     		highlighted in the image by Binary Thresholding it.
-    * Example Call:	contours_return(a,num)
+    * Example Call:	contours_return(a,5)
     """
     b = np.roll(a,num)
     res = np.subtract(b,a)

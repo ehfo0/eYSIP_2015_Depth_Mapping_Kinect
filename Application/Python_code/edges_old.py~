@@ -2,7 +2,7 @@
 *
 *                  ================================
 *
-*  Author List: Aniket P, Mukesh P
+*  Author List: Aniket P
 *  Filename: 		edges.py
 *  Date:                June 11, 2015
 *  Functions:   get_depth()
@@ -67,7 +67,7 @@ def contours_return(a,num):
     * Input:		Depth Frame and a number for shifting left or right the matrix                        
     * Output:		Returns the left or right edges contours
     * Logic:		It does noise removal process on the frame and shifts the frame matrix by num places so that change in values are 	     		highlighted in the image by Binary Thresholding it.
-    * Example Call:	contours_return(a,num)
+    * Example Call:	contours_return(a,5)
     """
     b = np.roll(a,num)
     res = np.subtract(b,a)
@@ -123,7 +123,7 @@ def doorway_movement(lb,lt,rb,rt,cxr,cxl):
     * Function Name:	doorway_movement
     * Input:		left_bottom, left_top, right_bottom, right_top, right_edge_centroid, left_edge_centroid                       
     * Output:		Movement of the robot on door detection
-    * Logic:		Pixel Heights of the edges are calculated. If the pixel height difference and centroid of left and right edge 				difference crosses a threshold than the edges are door edges. The midpoint is calculated. If midpoint lies in middle 				frame than robot moves forward and if it lies on the left or right part than the robot takes a turn. When mode is 1 the 			door is detected and in mode 0 mode regular movement is followed.
+    * Logic:		Pixel Heights of the edges are calculated. If the pixel height difference and centroid of left and right edge 				difference crosses a threshold than the edges are door edges. The midpoint is calculated. If midpoint lies in middle 				frame than robot moves forward and if it lies on the left or right part than the robot takes a turn. When mode is 1 				the door is detected and in mode 0 mode regular movement is followed.
     * Example Call:	doorway_movement(lb,lt,rb,rt,cxr,cxl)
     """
     global mode

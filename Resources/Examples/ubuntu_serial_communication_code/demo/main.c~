@@ -3,22 +3,7 @@
  *Author List:			Aniket Patel, Mukesh P
  *Filename:			main.c
  *Theme: 			Cargo Sorting
- *Functions: 			lcd_port_config (void)
-				buzzer_pin_config (void)
-				motion_pin_config (void)
-				timer5_init()
-				velocity (unsigned char left_motor, unsigned char right_motor)
-				motion_set (unsigned char Direction)
-				forward (void)
-				stop (void)
-				right (void)
-				left()
-				port_init()
-				buzzer_on (void)
-				buzzer_off (void)
-				uart2_init(void)
-				SIGNAL(USART2_RX_vect)
-				init_devices()
+ *Functions: 		
  *Global Variables:		data, x, y
  *Note: The code hereby is the Universal Code for the Cargo-Sorting theme. 
  *(It will work for any configuration of the prescribed theme within predetermined limits)
