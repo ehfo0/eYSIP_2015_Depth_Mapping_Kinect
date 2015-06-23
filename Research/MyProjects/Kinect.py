@@ -290,16 +290,51 @@ def actual_height_in_mm(lb,lt,rb,rt):
     right_height = math.sqrt(right_height)
     return left_height, right_height
 
+def return_height_in_mm(lb,lt,rb,rt):
+    a = freenect.sync_get_depth(format = freenect.DEPTH_MM)[0]
+    left_bottom_x, left_bottom_y = lb[0], lb[1]
+    left_top_x, left_top_y = lt[0], lt[1]
+    right_bottom_x, right_bottom_y = rb[0], rb[1]
+    right_top_x, right_top_y = rt[0], rt[1]
+    left_top_area = a[left_top_y:left_top_y+10,left_top_x-10:left_top_x]
+    mask = left_top_area == 0
+    left_top_area[mask] = 8000
+    top = np.amin(left_top_area)
+    bound_rect = a[left_top_y:left_bottom_y, left_top_x - 20:left_top_x]
+    mask = bound_rect == 0
+    bound_rect[mask] = 8000
+    bottom = np.amin(bound_rect)
+    left_height = math.sqrt(top**2 - bottom **2)
+    right_top_area = a[right_top_y:right_top_y+10,right_top_x:right_top_x+10]
+    mask = right_top_area == 0
+    right_top_area[mask] = 8000
+    top = np.amin(right_top_area)
+    bound_rect_right = a[right_top_y:right_bottom_y, right_top_x:right_top_x + 20]
+    mask = bound_rect_right == 0
+    bound_rect_right[mask] = 8000
+    bottom = np.amin(bound_rect_right)
+    right_height = math.sqrt(top**2 - bottom **2)
+    cv2.line(z,lt,lb,(128,255,0),10)
+    cv2.line(z,rt,rb,(128,255,0),10)
+    return left_height, right_height
+
+def horizontal_edge_test(lb,lt,rb,rt,cxl,cxr,hl,hr,cxh):
+    asd = 1
+
+def actual_height_test(left, right):
+
 def door_detection(contoursright,contoursleft):
     ltl, lbl, cxll, rtl, rbl, cxrl, templ, tempr = left_right_lines(contoursright,contoursleft)
     hll, hrl, cxhl, temph = horizontal_lines()
     for i in xrange(templ):
         for j in xrange(tempr):
-            if doorway_movement(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i]):
-                left_height, right_height = actual_height_in_mm(lbl[i],ltl[i],rbl[j],rtl[j])
-                width = actual_width_in_mm(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i])
-                print left_height, right_height
-                print width
+            for k in xrange(temph):
+                if doorway_movement(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i]):
+                    left_height, right_height = return_height_in_mm(lbl[i],ltl[i],rbl[j],rtl[j])
+                    width = actual_width_in_mm(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i])
+                    #actual_dimension_test(left_height, right_height, width)
+
+    #horizontal_edge_test(lbl[i],ltl[i],rbl[j],rtl[j],cxll[i],cxrl[i],hll,hrl,cxhl)
 
 def take_right():
     """
