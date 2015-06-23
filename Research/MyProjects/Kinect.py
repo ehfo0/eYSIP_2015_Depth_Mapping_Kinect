@@ -192,12 +192,12 @@ def doorway_movement(lb,lt,rb,rt,cxr,cxl):
         #ser.write("\x39")
         cv2.line(z,lt,lb,(128,255,0),10)
         cv2.line(z,rt,rb,(128,255,0),10)
-        cv2.waitKey(0)
+        #cv2.waitKey(0)
         return 1
     return 0
 
 
-def left_right_lines(contoursright,contoursleft,z):
+def left_right_lines(contoursright,contoursleft):
     """
     * Function Name:	left_right_lines
     * Input:		right contours, left contours, original depth frame                    
@@ -229,6 +229,21 @@ def left_right_lines(contoursright,contoursleft,z):
             tempr+=1
     return ltl, lbl, cxll, rtl, rbl, cxrl, templ, tempr
 
+def horizontal_lines():
+    contour = contours_return(z,6400)
+    temph = 0
+    hll = []
+    hrl = []
+    cxhl = []
+    for c in contour:
+        hl, hr, cxh = horizontal_edge(c)
+        if cxh != 0:
+            hll.append(hl)
+            hrl.append(hr)
+            cxhl.append(cxh)
+            temph += 1
+    return hll, hrl, cxhl, temph
+
 def actual_width_in_mm(lb,lt,rb,rt,cxr,cxl):
     a = freenect.sync_get_depth(format = freenect.DEPTH_MM)[0]
     a = a/30.0
@@ -246,10 +261,10 @@ def actual_width_in_mm(lb,lt,rb,rt,cxr,cxl):
     dst = cv2.warpPerspective(ad,M,(30,rb[1]-rt[1]))
     right_depth = np.amin(dst)*30
     pixel_width = cxr-cxl
-    angle = (pixel_width/640.0)*(57/180)*(math.pi)
+    angle = (pixel_width/640.0)*(57/180.0)*(math.pi)
     width = (left_depth*left_depth) + (right_depth*right_depth) - (2*left_depth*right_depth*math.cos(angle))
     width = math.sqrt(width)
-    #print width
+    return width
 
 def actual_height_in_mm(lb,lt,rb,rt):
     a = freenect.sync_get_depth(format = freenect.DEPTH_MM)[0]
@@ -273,15 +288,18 @@ def actual_height_in_mm(lb,lt,rb,rt):
     right_height = righttop_depth * righttop_depth + rightbottom_depth * rightbottom_depth - 2 * rightbottom_depth * righttop_depth * math.cos(right_angle)
     left_height = math.sqrt(left_height)
     right_height = math.sqrt(right_height)
-    print left_height
-    print right_height
+    return left_height, right_height
 
-def door_detection(contoursright,contoursleft,z):
-    ltl, lbl, cxll, rtl, rbl, cxrl, templ, tempr = left_right_lines(contoursright,contoursleft,z)
+def door_detection(contoursright,contoursleft):
+    ltl, lbl, cxll, rtl, rbl, cxrl, templ, tempr = left_right_lines(contoursright,contoursleft)
+    hll, hrl, cxhl, temph = horizontal_lines()
     for i in xrange(templ):
         for j in xrange(tempr):
             if doorway_movement(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i]):
-                actual_height_in_mm(lbl[i],ltl[i],rbl[j],rtl[j])
+                left_height, right_height = actual_height_in_mm(lbl[i],ltl[i],rbl[j],rtl[j])
+                width = actual_width_in_mm(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i])
+                print left_height, right_height
+                print width
 
 def take_right():
     """
@@ -464,7 +482,7 @@ def search_wall(dir):
             if Count_near_pixels(area,1800) > 1000:
                 break
 
-def regular_movement(original):
+def regular_movement(z):
     """
     * Function Name:	regular_movement
     * Input:		Original depth frame     
@@ -475,7 +493,7 @@ def regular_movement(original):
     x = 320
     speed = 4
     for i in xrange(4):
-        area = original[0:479,x:x+79]
+        area = z[0:479,x:x+79]
         if Count_near_pixels(area,900) > 1000:
             break
         speed = speed - 1
@@ -484,7 +502,7 @@ def regular_movement(original):
     x = 319
     speed = 4
     for i in xrange(4):
-        area = original[0:479,x-79:x]
+        area = z[0:479,x-79:x]
         if Count_near_pixels(area,900) > 1000:
             break
         speed = speed - 1
@@ -496,18 +514,40 @@ def regular_movement(original):
         search_wall(0)
         ser.write("\x00")
 
+def horizontal_edge(c):
+    Area = 500
+    ys = 50
+    xs = 100
+    if(cv2.contourArea(c)>Area):
+            leftmost = tuple(c[c[:,:,0].argmin()][0])
+            rightmost = tuple(c[c[:,:,0].argmax()][0])
+            topmost = tuple(c[c[:,:,1].argmin()][0])
+            bottommost = tuple(c[c[:,:,1].argmax()][0])
+            x1 = leftmost[0]
+            x2 = rightmost[0]
+            y1 = topmost[1]
+            y2 = bottommost[1]
+            w = 50
+            if (y2 - y1 < ys) and (abs(x2 - x1) > xs):
+                    cv2.line(z,leftmost,rightmost,(0,255,0),5)
+                    hl = leftmost
+                    hr = rightmost
+                    M = cv2.moments(c)
+                    cxh = int(M['m10']/M['m00'])
+                    return hl, hr, cxh
+    return 0, 0, 0
+
 ctx = freenect.init()
 dev = freenect.open_device(ctx, freenect.num_devices(ctx) - 1)
 
-freenect.set_tilt_degs(dev, 22)
+freenect.set_tilt_degs(dev, 20)
 freenect.close_device(dev)
-
 
 while(True):
     z = get_depth()	#returns the depth frame
     contoursright = contours_return(z,-5)
     contoursleft = contours_return(z,5)
-    door_detection(contoursright,contoursleft,z)
+    door_detection(contoursright,contoursleft)
     #regular_movement(original)
     cv2.imshow('depth',z)
     if cv2.waitKey(1)!=-1:
