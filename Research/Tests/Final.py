@@ -1,9 +1,9 @@
-__author__ = 'aniket'
+__author__ = 'mukesh'
 """
 *
 *                  ================================
 *
-*  Author List:         Aniket Patel
+*  Author List:         Mukesh P
 *  Filename: 		    Kinect.py
 *  Date:                June 20, 2015
 *  Functions:           get_depth()
