@@ -29,6 +29,7 @@ import numpy as np
 import time
 import serial
 import math
+import matplotlib.mlab as mlab
 
 ser = serial.Serial('/dev/ttyUSB0')	#initialization of serial communication
 
@@ -321,7 +322,26 @@ def return_height_in_mm(lb,lt,rb,rt):
 def horizontal_edge_test(lb,lt,rb,rt,cxl,cxr,hl,hr,cxh):
     asd = 1
 
-def actual_height_test(left, right):
+def Probability(std_value,sigma,data):
+    p = int(round(data))
+    x = np.linspace(std_value-sigma,std_value+sigma,2*sigma)
+    a = mlab.normpdf(x,std_value,sigma)
+    a = a/(a[len(a)/2])*100
+    NewValue = []
+    for i in xrange(2*sigma):
+        NewValue.append(((a[i] - 60) * 100) / 40)
+    if p >= std_value-sigma and p <= std_value+sigma:
+        return NewValue[p - (std_value - sigma)]
+    else:return 0
+
+def actual_width_test(width):
+    prob = Probability(1000,1000,width)
+    return prob
+
+def actual_height_test(left_height,right_height):
+    left_prob = Probability(1500,1500,left_height)
+    right_prob = Probability(1500,1500,right_height)
+    return left_prob, right_prob
 
 def door_detection(contoursright,contoursleft):
     ltl, lbl, cxll, rtl, rbl, cxrl, templ, tempr = left_right_lines(contoursright,contoursleft)
@@ -330,9 +350,10 @@ def door_detection(contoursright,contoursleft):
         for j in xrange(tempr):
             for k in xrange(temph):
                 if doorway_movement(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i]):
-                    left_height, right_height = return_height_in_mm(lbl[i],ltl[i],rbl[j],rtl[j])
+                    left_height, right_height = actual_height_in_mm(lbl[i],ltl[i],rbl[j],rtl[j])
                     width = actual_width_in_mm(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i])
-                    #actual_dimension_test(left_height, right_height, width)
+                    actual_height_test(left_height, right_height)
+                    #actual_width_test(width)
 
     #horizontal_edge_test(lbl[i],ltl[i],rbl[j],rtl[j],cxll[i],cxrl[i],hll,hrl,cxhl)
 
@@ -580,8 +601,8 @@ freenect.close_device(dev)
 
 while(True):
     z = get_depth()	#returns the depth frame
-    contoursright = contours_return(z,-5)
-    contoursleft = contours_return(z,5)
+    contoursright = contours_return(z,-10)
+    contoursleft = contours_return(z,10)
     door_detection(contoursright,contoursleft)
     #regular_movement(original)
     cv2.imshow('depth',z)
