@@ -193,7 +193,6 @@ def doorway_movement(lb,lt,rb,rt,cxr,cxl):
         #ser.write("\x39")
         cv2.line(z,lt,lb,(128,255,0),10)
         cv2.line(z,rt,rb,(128,255,0),10)
-        #cv2.waitKey(0)
         return 1
     return 0
 
@@ -320,7 +319,21 @@ def return_height_in_mm(lb,lt,rb,rt):
     return left_height, right_height
 
 def horizontal_edge_test(lb,lt,rb,rt,cxl,cxr,hl,hr,cxh):
-    asd = 1
+    if cxh > cxl and cxh < cxr:
+        top_edge_pixel_length = hr[0] - hl[0]
+        top = rt[0] - lt[0]
+        middle = cxr - cxl
+        bottom = rb[0] - lb[0]
+        top_error = top - top_edge_pixel_length
+        middle_error = middle - top_edge_pixel_length
+        bottom_error = bottom - top_edge_pixel_length
+        probtop = Probability(0,200,top_error)
+        probmiddle = Probability(0,200,middle_error)
+        probbottom = Probability(0,200,bottom_error)
+        probavg = (probtop+probmiddle+probbottom)/3
+        cv2.waitKey(0)
+        print probavg
+        return probavg
 
 def Probability(std_value,sigma,data):
     p = int(round(data))
@@ -352,10 +365,11 @@ def door_detection(contoursright,contoursleft):
                 if doorway_movement(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i]):
                     left_height, right_height = actual_height_in_mm(lbl[i],ltl[i],rbl[j],rtl[j])
                     width = actual_width_in_mm(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i])
-                    actual_height_test(left_height, right_height)
+                    horizontal_edge_test(lbl[i],ltl[i],rbl[j],rtl[j],cxll[i],cxrl[j],hll[k],hrl[k],cxhl[k])
+                    #actual_height_test(left_height, right_height)
                     #actual_width_test(width)
 
-    #horizontal_edge_test(lbl[i],ltl[i],rbl[j],rtl[j],cxll[i],cxrl[i],hll,hrl,cxhl)
+
 
 def take_right():
     """
