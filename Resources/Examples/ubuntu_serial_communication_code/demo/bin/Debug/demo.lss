@@ -912,8 +912,8 @@ void stop (void)
  */
 void left (void) //Left wheel backward, right wheel stationary
 {
- motion_set(0x01);
- 540:	81 e0       	ldi	r24, 0x01	; 1
+ motion_set(0x04);
+ 540:	84 e0       	ldi	r24, 0x04	; 4
  542:	0e 94 94 02 	call	0x528	; 0x528 <motion_set>
  * Logic:		Assignment of char value to the pin
  * Example Call:	velocity(200,200)
@@ -921,10 +921,10 @@ void left (void) //Left wheel backward, right wheel stationary
 void velocity (unsigned char left_motor, unsigned char right_motor)
 {
 	OCR5AL = (unsigned char)left_motor;
- 546:	88 ec       	ldi	r24, 0xC8	; 200
- 548:	80 93 28 01 	sts	0x0128, r24
+ 546:	10 92 28 01 	sts	0x0128, r1
 	OCR5BL = (unsigned char)right_motor;
- 54c:	10 92 2a 01 	sts	0x012A, r1
+ 54a:	88 ec       	ldi	r24, 0xC8	; 200
+ 54c:	80 93 2a 01 	sts	0x012A, r24
  550:	08 95       	ret
 
 00000552 <right>:
@@ -933,8 +933,8 @@ void velocity (unsigned char left_motor, unsigned char right_motor)
  */
 void right (void) //Left wheel stationary, Right wheel backward
 {
- motion_set(0x08);
- 552:	88 e0       	ldi	r24, 0x08	; 8
+ motion_set(0x02);
+ 552:	82 e0       	ldi	r24, 0x02	; 2
  554:	0e 94 94 02 	call	0x528	; 0x528 <motion_set>
  * Logic:		Assignment of char value to the pin
  * Example Call:	velocity(200,200)
@@ -942,10 +942,10 @@ void right (void) //Left wheel stationary, Right wheel backward
 void velocity (unsigned char left_motor, unsigned char right_motor)
 {
 	OCR5AL = (unsigned char)left_motor;
- 558:	10 92 28 01 	sts	0x0128, r1
+ 558:	88 ec       	ldi	r24, 0xC8	; 200
+ 55a:	80 93 28 01 	sts	0x0128, r24
 	OCR5BL = (unsigned char)right_motor;
- 55c:	88 ec       	ldi	r24, 0xC8	; 200
- 55e:	80 93 2a 01 	sts	0x012A, r24
+ 55e:	10 92 2a 01 	sts	0x012A, r1
  562:	08 95       	ret
 
 00000564 <port_init>:

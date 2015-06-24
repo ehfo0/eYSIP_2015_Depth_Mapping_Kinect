@@ -87,7 +87,6 @@ def get_depth():
     a = a.astype(np.uint8)
     a = filter_smooth(a)
     a[0:479,630:639] = a[0:479,620:629]
-    cv2.imshow('depth',a)
     return a
 
 def contours_return(a,num):
@@ -402,6 +401,7 @@ def take_right():
         z = get_depth()
         middlearea = z[200:479,200:439]
         middleval = middlearea.mean()
+        print middleval
         ser.write("\x44")
         if middleval > 30:
             return
@@ -432,7 +432,7 @@ def take_right_near():
     """
     while(1):
         z = get_depth()
-        middlearea = z[200:479,200:439]
+        middlearea = z[0:479,160:479]
         contoursright = contours_return(z,-10)
         contoursleft = contours_return(z,10)
         door_detection(contoursright,contoursleft,test_cases)
@@ -450,7 +450,7 @@ def take_left_near():
     """
     while(1):
         z = get_depth()
-        middlearea = z[200:479,200:439]
+        middlearea = z[0:479,160:479]
         contoursright = contours_return(z,-10)
         contoursleft = contours_return(z,10)
         door_detection(contoursright,contoursleft,test_cases)
@@ -467,8 +467,8 @@ def stuck_pos_movement():
     * Example Call:	stuck_pos_movement()
     """
     z = get_depth()
-    leftarea = z[0:479,0:100]
-    rightarea = z[0:479,539:639]
+    leftarea = z[0:479,0:200]
+    rightarea = z[0:479,439:639]
     leftvals = leftarea.mean()
     rightvals = rightarea.mean()
     if leftvals > rightvals:
@@ -554,9 +554,28 @@ def Count_near_pixels(area,dist):
     Count = cv2.countNonZero(th3)
     return Count
 
+def door_movement(z):
+    middlearea = z[200:479,200:439]
+    middleval = Count_near_pixels(middlearea,900)
+    leftarea = z[0:479,0:100]
+    rightarea = z[0:479,539:639]
+    leftval = leftarea.mean()
+    rightval = rightarea.mean()
+    if middleval < 1000:
+        print "forward"
+        ser.write("\x00")
+        time.sleep(0.1)
+    else:
+        if leftval > rightval:
+            print "left"
+            take_left()
+        else:
+            print "right"
+            take_right()
+
 def search_wall(dir):
     """
-    * Function Name:	search_wall
+    * Function Name:    search_wall
     * Input:		left/right wall      
     * Output:		follows left or right wall
     * Logic:		If left wall is selected for instance then the robot moves along the wall. The robot keeps track of the objects on the 				left side of frame for left wall and if the frame does not have any object in the range than the robot moves left 				until it is detected 
@@ -612,11 +631,8 @@ def regular_movement(z):
     if speed_left!=0 or speed_right!=0:
         data_send(speed_left,speed_right)
     else:
-        if flag:
-            data_send(speed_left,speed_right)
-        else:
-            search_wall(0)
-            ser.write("\x00")
+        search_wall(0)
+        ser.write("\x00")
 
 def horizontal_edge(c):
     Area = 500
@@ -653,7 +669,9 @@ while(True):
     contoursright = contours_return(z,-10)
     contoursleft = contours_return(z,10)
     door_detection(contoursright,contoursleft,test_cases)
-    regular_movement(z)
+    if flag:
+        door_movement(z)
+    else: regular_movement(z)
     cv2.imshow('final',z)
     if cv2.waitKey(1)!=-1:
         ser.write('\x35')

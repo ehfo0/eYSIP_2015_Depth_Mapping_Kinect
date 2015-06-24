@@ -164,8 +164,8 @@ void stop (void)
  */
 void left (void) //Left wheel backward, right wheel stationary
 {
- motion_set(0x01);
- velocity(200,0);
+ motion_set(0x04);
+ velocity(0,200);
 }
 
 /*
@@ -177,8 +177,8 @@ void left (void) //Left wheel backward, right wheel stationary
  */
 void right (void) //Left wheel stationary, Right wheel backward
 {
- motion_set(0x08);
- velocity(0,200);
+ motion_set(0x02);
+ velocity(200,0);
 }
 
 //Function to initialize ports
