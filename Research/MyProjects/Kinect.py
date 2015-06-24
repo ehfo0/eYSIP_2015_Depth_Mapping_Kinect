@@ -31,6 +31,11 @@ import serial
 import math
 import matplotlib.mlab as mlab
 
+global flag
+flag = False
+global count
+count = 0
+
 ser = serial.Serial('/dev/ttyUSB0')	#initialization of serial communication
 
 def filter_noise(a,mask,ad,row,col):
@@ -177,7 +182,7 @@ def potential_leftedge(c):
                     return lt, lb, cxl
     return 0, 0, 0
 
-def doorway_movement(lb,lt,rb,rt,cxr,cxl):
+def is_door(lb,lt,rb,rt,cxr,cxl):
     """
     * Function Name:	doorway_movement
     * Input:		left_bottom, left_top, right_bottom, right_top, right_edge_centroid, left_edge_centroid                       
@@ -188,9 +193,9 @@ def doorway_movement(lb,lt,rb,rt,cxr,cxl):
     diffl = lb[1]-lt[1]
     diffr = rb[1]-rt[1]
     if abs(diffl - diffr) < 150 and ((cxr - cxl) > 50 and (cxr - cxl ) < 400):
-        #ser.write("\x37")
+        ser.write("\x37")
         time.sleep(0.05)
-        #ser.write("\x39")
+        ser.write("\x39")
         cv2.line(z,lt,lb,(128,255,0),10)
         cv2.line(z,rt,rb,(128,255,0),10)
         return 1
@@ -318,7 +323,7 @@ def return_height_in_mm(lb,lt,rb,rt):
     cv2.line(z,rt,rb,(128,255,0),10)
     return left_height, right_height
 
-def horizontal_edge_test(lb,lt,rb,rt,cxl,cxr,hl,hr,cxh):
+def rectangle_door_test(lb,lt,rb,rt,cxl,cxr,hl,hr,cxh):
     if cxh > cxl and cxh < cxr:
         top_edge_pixel_length = hr[0] - hl[0]
         top = rt[0] - lt[0]
@@ -331,8 +336,6 @@ def horizontal_edge_test(lb,lt,rb,rt,cxl,cxr,hl,hr,cxh):
         probmiddle = Probability(0,200,middle_error)
         probbottom = Probability(0,200,bottom_error)
         probavg = (probtop+probmiddle+probbottom)/3
-        cv2.waitKey(0)
-        print probavg
         return probavg
 
 def Probability(std_value,sigma,data):
@@ -353,23 +356,31 @@ def actual_width_test(width):
 
 def actual_height_test(left_height,right_height):
     left_prob = Probability(1500,1500,left_height)
-    right_prob = Probability(1500,1500,right_height)
-    return left_prob, right_prob
+    right_prob = Probability(1000,1000,right_height)
+    return (left_prob+right_prob)/2.0
 
-def door_detection(contoursright,contoursleft):
+def door_detection(contoursright,contoursleft,test_cases):
+    global flag
+    global count
     ltl, lbl, cxll, rtl, rbl, cxrl, templ, tempr = left_right_lines(contoursright,contoursleft)
+    Test_1, Test_2, Test_3 = test_cases
     hll, hrl, cxhl, temph = horizontal_lines()
     for i in xrange(templ):
         for j in xrange(tempr):
             for k in xrange(temph):
-                if doorway_movement(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i]):
+                if is_door(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i]):
                     left_height, right_height = actual_height_in_mm(lbl[i],ltl[i],rbl[j],rtl[j])
                     width = actual_width_in_mm(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i])
-                    horizontal_edge_test(lbl[i],ltl[i],rbl[j],rtl[j],cxll[i],cxrl[j],hll[k],hrl[k],cxhl[k])
-                    #actual_height_test(left_height, right_height)
-                    #actual_width_test(width)
-
-
+                    if Test_1:
+                        prob_1 = rectangle_door_test(lbl[i],ltl[i],rbl[j],rtl[j],cxll[i],cxrl[j],hll[k],hrl[k],cxhl[k])
+                    if Test_2:
+                        prob_2 = actual_height_test(left_height, right_height)
+                    if Test_3:
+                        prob_3 = actual_width_test(width)
+                    if prob_1 > 80 and prob_2 > 80 and prob_3 > 90:
+                        count += 1
+    if count > 30:
+        flag = True
 
 def take_right():
     """
@@ -581,8 +592,11 @@ def regular_movement(z):
     if speed_left!=0 or speed_right!=0:
         data_send(speed_left,speed_right)
     else:
-        search_wall(0)
-        ser.write("\x00")
+        if flag:
+            data_send(speed_left,speed_right)
+        else:
+            search_wall(0)
+            ser.write("\x00")
 
 def horizontal_edge(c):
     Area = 500
@@ -612,12 +626,13 @@ dev = freenect.open_device(ctx, freenect.num_devices(ctx) - 1)
 
 freenect.set_tilt_degs(dev, 20)
 freenect.close_device(dev)
+test_cases = [True, True, True]
 
 while(True):
     z = get_depth()	#returns the depth frame
     contoursright = contours_return(z,-10)
     contoursleft = contours_return(z,10)
-    door_detection(contoursright,contoursleft)
+    door_detection(contoursright,contoursleft,test_cases)
     #regular_movement(original)
     cv2.imshow('depth',z)
     if cv2.waitKey(1)!=-1:

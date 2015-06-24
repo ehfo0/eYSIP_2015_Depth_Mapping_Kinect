@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c1cb8885-c3ec-473a-8bbf-dcd2816bea4c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Research/MyProjects/Kinect.py" afterPath="$PROJECT_DIR$/Research/MyProjects/Kinect.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="eYSIP_2015_Depth_Mapping_Kinect.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -50,8 +49,8 @@
       <file leaf-file-name="Kinect.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Research/MyProjects/Kinect.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.43764704" vertical-offset="5274" max-vertical-offset="9525">
-              <caret line="364" column="41" selection-start-line="364" selection-start-column="41" selection-end-line="364" selection-end-column="41" />
+            <state vertical-scroll-proportion="0.6940874" vertical-offset="8640" max-vertical-offset="9750">
+              <caret line="594" column="16" selection-start-line="594" selection-start-column="16" selection-end-line="594" selection-end-column="16" />
               <folding>
                 <element signature="e#761#776#0" expanded="true" />
               </folding>
@@ -946,8 +945,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Research/MyProjects/Kinect.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.43764704" vertical-offset="5274" max-vertical-offset="9525">
-          <caret line="364" column="41" selection-start-line="364" selection-start-column="41" selection-end-line="364" selection-end-column="41" />
+        <state vertical-scroll-proportion="0.6940874" vertical-offset="8640" max-vertical-offset="9750">
+          <caret line="594" column="16" selection-start-line="594" selection-start-column="16" selection-end-line="594" selection-end-column="16" />
           <folding>
             <element signature="e#761#776#0" expanded="true" />
           </folding>
