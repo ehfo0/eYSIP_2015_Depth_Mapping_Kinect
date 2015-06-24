@@ -20,7 +20,7 @@
 				SIGNAL(USART2_RX_vect)
 				init_devices()
  *Global Variables:		data, x, y
- *Note: The code hereby is the Universal Code for the Cargo-Sorting theme. 
+ *Note: The code hereby is the Universal Code for the Cargo-Sorting theme.
  *(It will work for any configuration of the prescribed theme within predetermined limits)
 
 **************************************************/
@@ -39,7 +39,7 @@ int x = 255,y = 255;
  * Logic:		Enables the DDRC register and setting pins of PORTC
  * Example Call:	lcd_port_config ();
  *
- */	
+ */
 void lcd_port_config (void)
 {
 	DDRC = DDRC | 0xF7; //setting all the LCD pin's direction set as output
@@ -53,7 +53,7 @@ void lcd_port_config (void)
  * Logic:		Enables the DDRC register and setting pin of PORTC 7
  * Example Call:	buzzer_pin_config ()
  *
- */	
+ */
 void buzzer_pin_config (void)
 {
  DDRC = DDRC | 0x08;		//Setting PORTC 3 as outpt
@@ -66,7 +66,7 @@ void buzzer_pin_config (void)
  * Output: 		Configures the pins for motion
  * Logic:		Enables the DDRA register and setting pins of PORTA and enables the DDRL Register
  * Example Call:	motion_pin_config ()
- */	
+ */
 void motion_pin_config (void)
 {
  DDRA = DDRA | 0x0F;
@@ -288,6 +288,8 @@ SIGNAL(USART2_RX_vect) 		// ISR for receive complete interrupt
         case 0x43: x = 150; y = 50;  break;
         case 0x44: right();          return;
         case 0x45: left();           return;
+        case 0x37: buzzer_on();      return;
+        case 0x39: buzzer_off();     return;
         case 0x35: x = 0;   y = 0;   break;
 	}
         forward();

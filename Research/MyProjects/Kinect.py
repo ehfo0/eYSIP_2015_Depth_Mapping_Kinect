@@ -67,7 +67,7 @@ def filter_smooth(a):
     * Logic:		It creates a mask for the noise. It makes all the noise pixels to 255 to send to filter noise. The output from filter 				noise is smoothened using bilateral filter
     * Example Call:	filter_smooth(a)
     """
-    ret, mask = cv2.threshold(a,1,255,cv2.THRESH_BINARY_INV)
+    ret, mask = cv2.threshold(a,10,255,cv2.THRESH_BINARY_INV)
     mask_1 = mask/255
     ad = a + mask
     blur = filter_noise(a,mask_1,ad,3,4)
@@ -86,7 +86,8 @@ def get_depth():
     a = a/30.0
     a = a.astype(np.uint8)
     a = filter_smooth(a)
-    a[0:479,635:639] = a[0:479,630:634]
+    a[0:479,630:639] = a[0:479,620:629]
+    cv2.imshow('depth',a)
     return a
 
 def contours_return(a,num):
@@ -127,10 +128,12 @@ def potential_rightedge(c):
             bottommost = tuple(c[c[:,:,1].argmax()][0])
             x1 = leftmost[0]
             x2 = rightmost[0]
+            x3 = topmost[0]
+            x4 = bottommost[0]
             y1 = topmost[1]
             y2 = bottommost[1]
             w = 50
-            if (y2 - y1 > ys) and (abs(x2 - x1) < xs):
+            if (y2 - y1 > ys) and (abs(x2 - x1) < xs) and x3 < 620 and x4 < 620:
                 pts1 = np.float32([[topmost[0]-w,y1],[topmost[0],y1],[bottommost[0]-w,y2],[bottommost[0],y2]])
                 pts2 = np.float32([[0,0],[w,0],[0,y2-y1],[w,y2-y1]])
                 M = cv2.getPerspectiveTransform(pts1,pts2)
@@ -164,10 +167,12 @@ def potential_leftedge(c):
             bottommost = tuple(c[c[:,:,1].argmax()][0])
             x1 = leftmost[0]
             x2 = rightmost[0]
+            x3 = topmost[0]
+            x4 = bottommost[0]
             y1 = topmost[1]
             y2 = bottommost[1]
             w = 50
-            if (y2 - y1 > ys) and (abs(x2 - x1) < xs):
+            if (y2 - y1 > ys) and (abs(x2 - x1) < xs) and x3 > 20 and x4 > 20:
                 pts1 = np.float32([[topmost[0],y1],[topmost[0]+w,y1],[bottommost[0],y2],[bottommost[0]+w,y2]])
                 pts2 = np.float32([[0,0],[w,0],[0,y2-y1],[w,y2-y1]])
                 M = cv2.getPerspectiveTransform(pts1,pts2)
@@ -193,9 +198,6 @@ def is_door(lb,lt,rb,rt,cxr,cxl):
     diffl = lb[1]-lt[1]
     diffr = rb[1]-rt[1]
     if abs(diffl - diffr) < 150 and ((cxr - cxl) > 50 and (cxr - cxl ) < 400):
-        ser.write("\x37")
-        time.sleep(0.05)
-        ser.write("\x39")
         cv2.line(z,lt,lb,(128,255,0),10)
         cv2.line(z,rt,rb,(128,255,0),10)
         return 1
@@ -367,20 +369,26 @@ def door_detection(contoursright,contoursleft,test_cases):
     hll, hrl, cxhl, temph = horizontal_lines()
     for i in xrange(templ):
         for j in xrange(tempr):
-            for k in xrange(temph):
+            #for k in xrange(temph):
                 if is_door(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i]):
                     left_height, right_height = actual_height_in_mm(lbl[i],ltl[i],rbl[j],rtl[j])
                     width = actual_width_in_mm(lbl[i],ltl[i],rbl[j],rtl[j],cxrl[j],cxll[i])
-                    if Test_1:
-                        prob_1 = rectangle_door_test(lbl[i],ltl[i],rbl[j],rtl[j],cxll[i],cxrl[j],hll[k],hrl[k],cxhl[k])
+                    #if Test_1:
+                    #    prob_1 = rectangle_door_test(lbl[i],ltl[i],rbl[j],rtl[j],cxll[i],cxrl[j],hll[k],hrl[k],cxhl[k])
                     if Test_2:
                         prob_2 = actual_height_test(left_height, right_height)
                     if Test_3:
                         prob_3 = actual_width_test(width)
-                    if prob_1 > 80 and prob_2 > 80 and prob_3 > 90:
+                    if prob_2 > 80 and prob_3 > 90:
                         count += 1
-    if count > 30:
+                        ser.write("\x37")
+                        time.sleep(0.05)
+                        ser.write("\x39")
+    if count == 1:
         flag = True
+        print "haha"
+
+
 
 def take_right():
     """
@@ -425,6 +433,9 @@ def take_right_near():
     while(1):
         z = get_depth()
         middlearea = z[200:479,200:439]
+        contoursright = contours_return(z,-10)
+        contoursleft = contours_return(z,10)
+        door_detection(contoursright,contoursleft,test_cases)
         ser.write("\x44")
         if Count_near_pixels(middlearea,900) < 1000:
             return
@@ -440,6 +451,9 @@ def take_left_near():
     while(1):
         z = get_depth()
         middlearea = z[200:479,200:439]
+        contoursright = contours_return(z,-10)
+        contoursleft = contours_return(z,10)
+        door_detection(contoursright,contoursleft,test_cases)
         ser.write("\x45")
         if Count_near_pixels(middlearea,900) < 1000:
             return
@@ -459,10 +473,10 @@ def stuck_pos_movement():
     rightvals = rightarea.mean()
     if leftvals > rightvals:
         print "left"
-        take_left()
+        take_left_near()
     else:
         print "right"
-        take_right();
+        take_right_near();
 
 def data_send(x,y):
     """
@@ -552,6 +566,9 @@ def search_wall(dir):
         while(True):
             z = get_depth()
             area = z[0:479,0:319]
+            contoursright = contours_return(z,-10)
+            contoursleft = contours_return(z,10)
+            door_detection(contoursright,contoursleft,test_cases)
             ser.write("\x03")
             if Count_near_pixels(area,1800) > 1000:
                 break
@@ -559,6 +576,9 @@ def search_wall(dir):
         while(True):
             z = get_depth()
             area = z[0:479,320:639]
+            contoursright = contours_return(z,-10)
+            contoursleft = contours_return(z,10)
+            door_detection(contoursright,contoursleft,test_cases)
             ser.write("\x30")
             if Count_near_pixels(area,1800) > 1000:
                 break
@@ -633,8 +653,8 @@ while(True):
     contoursright = contours_return(z,-10)
     contoursleft = contours_return(z,10)
     door_detection(contoursright,contoursleft,test_cases)
-    #regular_movement(original)
-    cv2.imshow('depth',z)
+    regular_movement(z)
+    cv2.imshow('final',z)
     if cv2.waitKey(1)!=-1:
         ser.write('\x35')
         ser.close()
