@@ -1,20 +1,4 @@
 __author__ = 'aniket'
-"""
-*
-*                  ================================
-*
-*  Author List:
-*  Filename:
-*  Date:
-*  Functions:
-*  Global Variables:
-*  Dependent library files:
-*
-*  e-Yantra - An MHRD project under National Mission on Education using
-*  ICT(NMEICT)
-*
-**************************************************************************
-"""
 
 import freenect
 import cv2
@@ -28,9 +12,11 @@ global flag
 flag = False
 global count
 count = 0
+global z
+
 
 ser = serial.Serial('/dev/ttyUSB0')	 # initialization of serial communication
-
+test_cases = [True, True, True]
 
 def filter_noise(a, mask, ad, row, col):
     """
@@ -89,11 +75,13 @@ def get_depth():
                     to 1 bytes. It then smoothed the frame and returns it.
     * Example Call:	get_depth()
     """
+    global z
     a = freenect.sync_get_depth(format=freenect.DEPTH_MM)[0]
     a /= 30.0
     a = a.astype(np.uint8)
     a = filter_smooth(a)
     a[0:479, 630:639] = a[0:479, 620:629]
+    z = a
     return a
 
 
@@ -137,6 +125,7 @@ def potential_right_edge(c):
                     further use
     * Example Call:	potential_right_edge(c)
     """
+    global z
     area = 1000
     ys = 250
     xs = 60
@@ -185,6 +174,7 @@ def potential_left_edge(c):
                     calculated for further use
     * Example Call:	potential_left_edge(c)
     """
+    global z
     area = 1000
     ys = 250
     xs = 60
@@ -236,6 +226,7 @@ def is_door(lb, lt, rb, rt, cxr, cxl):
                     followed.
     * Example Call:	doorway_movement(lb,lt,rb,rt,cxr,cxl)
     """
+    global z
     diff_l = lb[1]-lt[1]
     diff_r = rb[1]-rt[1]
     if abs(diff_l - diff_r) < 150 \
@@ -293,6 +284,7 @@ def horizontal_lines():
                     sends them two at a time to doorway_movement function.
     * Example Call:	left_right_lines(contours_right,contours_left,z)
     """
+    global z
     contour = contours_return(z, 6400)
     temp_h = 0
     hl_l = []
@@ -398,6 +390,7 @@ def return_height_in_mm(lb, lt, rb, rt):
                     cosine rule.
     * Example Call:	return_height_in_mm(lb, lt, rb, rt)
     """
+    global z
     a = freenect.sync_get_depth(format=freenect.DEPTH_MM)[0]
     left_bottom_x, left_bottom_y = lb[0], lb[1]
     left_top_x, left_top_y = lt[0], lt[1]
@@ -514,16 +507,14 @@ def door_detection(contours_right_door, contours_left_door, test_cases_door):
     """
     global flag
     global count
-    prob_1 = 0
     lt_l, lb_l, cxl_l, rt_l, rb_l, cxr_l, temp_l, temp_r = \
         left_right_lines(contours_right_door, contours_left_door)
-    hl_l, hr_l, cxh_l, temp_h = horizontal_lines()
     test_1, test_2, test_3 = test_cases_door
     for i in xrange(temp_l):
         for j in xrange(temp_r):
             if is_door(lb_l[i], lt_l[i], rb_l[j], rt_l[j], cxr_l[j], cxl_l[i]):
                 left_height, right_height = \
-                    return_height_in_mm(lb_l[i], lt_l[i], rb_l[j], rt_l[j])
+                    actual_height_in_mm(lb_l[i], lt_l[i], rb_l[j], rt_l[j])
                 width = actual_width_in_mm(lb_l[i], lt_l[i], rb_l[j],
                                            rt_l[j], cxr_l[j], cxl_l[i])
                 if test_2:
@@ -534,16 +525,7 @@ def door_detection(contours_right_door, contours_left_door, test_cases_door):
                     prob_3 = actual_width_test(width)
                 else:
                     prob_3 = 0
-                for k in xrange(temp_h):
-                    if test_1:
-                        max_prob = rectangle_door_test(lb_l[i], lt_l[i], rb_l[j], rt_l[j], cxl_l[i], cxr_l[j], hl_l[k], hr_l[k], cxh_l[k])
-                    else:
-                        max_prob = 0
-                    if max_prob > prob_1:
-                        prob_1 = max_prob
-                weighted_probability = 0.1 * prob_1 + 0.5 * prob_2 + 0.4 * prob_3
-                print "Door Detected with confidence: " + str(weighted_probability)
-                if weighted_probability > 70:
+                if prob_2 > 80 and prob_3 > 90:
                     count += 1
                     ser.write("\x37")
                     time.sleep(0.05)
@@ -565,6 +547,7 @@ def take_right():
         z_right = get_depth()
         middle_area = z_right[200:479, 200:439]
         middle_val = middle_area.mean()
+        print middle_val
         ser.write("\x44")
         if middle_val > 30:
             return
@@ -648,8 +631,10 @@ def stuck_pos_movement():
     left_val = left_area.mean()
     right_val = right_area.mean()
     if left_val > right_val:
+        print "left"
         take_left_near()
     else:
+        print "right"
         take_right_near()
 
 
@@ -749,6 +734,7 @@ def door_movement():
                     region is too close to the door.
     * Example Call:	door_movement(c)
     """
+    global z
     middle_area = z[200:479, 200:439]
     middle_val = count_near_pixels(middle_area, 900)
     left_area = z[0:479, 0:100]
@@ -756,12 +742,15 @@ def door_movement():
     left_val = left_area.mean()
     right_val = right_area.mean()
     if middle_val < 1000:
+        print "forward"
         ser.write("\x00")
         time.sleep(0.1)
     else:
         if left_val > right_val:
+            print "left"
             take_left()
         else:
+            print "right"
             take_right()
 
 
@@ -813,6 +802,7 @@ def regular_movement():
                     speed_right variable
     * Example Call:	regular_movement(original)
     """
+    global z
     x = 320
     speed = 4
     for i in xrange(4):
@@ -850,6 +840,7 @@ def horizontal_edge(c):
                     The centroid is calculated and the co-ordinates are returned
     * Example Call:	horizontal_edge(c)
     """
+    global z
     area = 500
     ys = 50
     xs = 100
@@ -870,27 +861,3 @@ def horizontal_edge(c):
             cxh = int(m['m10']/m['m00'])
             return hl, hr, cxh
     return 0, 0, 0
-
-ctx = freenect.init()
-dev = freenect.open_device(ctx, freenect.num_devices(ctx) - 1)
-
-freenect.set_tilt_degs(dev, 20)
-freenect.close_device(dev)
-test_cases = [True, True, True]
-
-while True:
-    z = get_depth()	 # returns the depth frame
-    contours_right = contours_return(z, -10)
-    contours_left = contours_return(z, 10)
-    door_detection(contours_right, contours_left, test_cases)
-    if flag:
-        door_movement()
-    else:
-        regular_movement()
-    cv2.imshow('final', z)
-    if cv2.waitKey(1) != -1:
-        ser.write('\x35')
-        ser.close()
-        break
-
-cv2.destroyAllWindows()

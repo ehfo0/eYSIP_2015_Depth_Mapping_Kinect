@@ -28,9 +28,16 @@
 #include<avr/interrupt.h>
 #include<util/delay.h>
 #include "lcd.c"
+#include<math.h>
 
 unsigned char data; //to store received data from UDR1
 int x = 255,y = 255;
+unsigned char ADC_Conversion(unsigned char);
+unsigned char ADC_Value;
+unsigned char sharp, distance, adc_reading;
+unsigned int value_left, value_mid, value_right;
+unsigned int count = 21;
+int p5, p7;
 
 /*
  * Function Name:	lcd_port_config
@@ -54,6 +61,15 @@ void lcd_port_config (void)
  * Example Call:	buzzer_pin_config ()
  *
  */
+
+ void adc_pin_config (void)
+{
+ DDRF = 0x00; //set PORTF direction as input
+ PORTF = 0x00; //set PORTF pins floating
+ DDRK = 0x00; //set PORTK direction as input
+ PORTK = 0x00; //set PORTK pins floating
+}
+
 void buzzer_pin_config (void)
 {
  DDRC = DDRC | 0x08;		//Setting PORTC 3 as outpt
@@ -138,6 +154,18 @@ void motion_set (unsigned char Direction)
  * Logic:		sets pins of PORTA for forward movement
  * Example Call:	forward()
  */
+ void spot_left (void) //Left wheel backward, Right wheel forward
+{
+  motion_set(0x05);
+  velocity(255,255);
+}
+
+void spot_right (void) //Left wheel forward, Right wheel backward
+{
+  motion_set(0x0A);
+  velocity(255,255);
+}
+
 void forward (void) //both wheels forward
 {
   motion_set(0x06);
@@ -168,6 +196,11 @@ void left (void) //Left wheel backward, right wheel stationary
  velocity(0,200);
 }
 
+void left_back (void) //Left wheel backward, right wheel stationary
+{
+ motion_set(0x01);
+ velocity(200,0);
+}
 /*
  * Function Name:	right()
  * Input:		None
@@ -181,6 +214,17 @@ void right (void) //Left wheel stationary, Right wheel backward
  velocity(200,0);
 }
 
+void right_back (void) //Left wheel stationary, Right wheel backward
+{
+ motion_set(0x08);
+ velocity(0,200);
+}
+
+void back (void) //both wheels backward
+{
+	motion_set(0x09);
+	velocity(255,255);
+}
 //Function to initialize ports
 /*
  * Function Name:	port_init()
@@ -194,7 +238,36 @@ void port_init()
 	motion_pin_config();
 	buzzer_pin_config();
 	lcd_port_config();//lcd pin configuration
+    adc_pin_config();
 }
+
+void adc_init()
+{
+	ADCSRA = 0x00;
+	ADCSRB = 0x00;		//MUX5 = 0
+	ADMUX = 0x20;		//Vref=5V external --- ADLAR=1 --- MUX4:0 = 0000
+	ACSR = 0x80;
+	ADCSRA = 0x86;		//ADEN=1 --- ADIE=1 --- ADPS2:0 = 1 1 0
+}
+
+unsigned char ADC_Conversion(unsigned char Ch)
+{
+	unsigned char a;
+	if(Ch>7)
+	{
+		ADCSRB = 0x08;
+	}
+	Ch = Ch & 0x07;
+	ADMUX= 0x20| Ch;
+	ADCSRA = ADCSRA | 0x40;		//Set start conversion bit
+	while((ADCSRA&0x10)==0);	//Wait for ADC conversion to complete
+	a=ADCH;
+	ADCSRA = ADCSRA|0x10; //clear ADIF (ADC Interrupt Flag) by writing 1 to it
+	ADCSRB = 0x00;
+	return a;
+}
+
+
 
 /*
  * Function Name:	buzzer_on()
@@ -225,6 +298,22 @@ void buzzer_off (void)
  port_restore = port_restore & 0xF7;
  PORTC = port_restore;
 }
+
+
+unsigned int Sharp_GP2D12_estimation(unsigned char adc_reading)
+{
+	float distance;
+	unsigned int distanceInt;
+	distance = (int)(10.00*(2799.6*(1.00/(pow(adc_reading,1.1546)))));
+	distanceInt = (int)distance;
+	if(distanceInt>800)
+	{
+		distanceInt=800;
+	}
+	return distanceInt;
+}
+
+
 
 //Function To Initialize UART2
 // desired baud rate:9600
@@ -258,8 +347,43 @@ void uart2_init(void)
 SIGNAL(USART2_RX_vect) 		// ISR for receive complete interrupt
 {
 	data = UDR2; 				//making copy of data from UDR2 in 'data' variable
+        p5 = ADC_Conversion(5);
+		p7 = ADC_Conversion(7);
+        sharp = ADC_Conversion(11);						//Stores the Analog value of front sharp connected to ADC channel 11 into variable "sharp"
+		value_mid = Sharp_GP2D12_estimation(sharp);
+		sharp = ADC_Conversion(10);
+		value_left = Sharp_GP2D12_estimation(sharp);
+		sharp = ADC_Conversion(12);
+		value_right = Sharp_GP2D12_estimation(sharp);
+		lcd_print(1,1,p5,3);
+		lcd_print(1,8,p7,3);
+		lcd_print(2,1,value_left,3);
+		lcd_print(2,5,value_mid,3);
+		lcd_print(2,9,value_right,3);
+	if(((value_mid < 200) && (value_mid > 80)) || (p5 < 140) || (p7 < 140) || ((value_left < 200) && (value_left > 80)) || ((value_right < 200) && (value_right > 80)))
+	{
+        if((value_mid < 200) && (value_mid > 80))
+            back();
+        if(p5 < 140)
+        {
+            back();
+            velocity(150,255);
+        }
+        if(p7 < 140)
+        {
+            back();
+            velocity(255,150);
+        }
+        if((value_left < 200) && (value_left > 80))
+        {
+            right_back();
+        }
+        if((value_right < 200) && (value_right > 80))
+        {
+            left_back();
+        }
+    }
 
-	//UDR2 = data;
 	switch(data)
 	{
         case 0x00: x = 255; y = 255; break;
@@ -292,10 +416,13 @@ SIGNAL(USART2_RX_vect) 		// ISR for receive complete interrupt
         case 0x39: buzzer_off();     return;
         case 0x35: x = 0;   y = 0;   break;
 	}
+    if(((value_mid < 200) && (value_mid > 80)) || (p5 < 150) || (p7 < 140) || ((value_left < 200) && (value_left > 80)) || ((value_right < 200) && (value_right > 80)));
+    else{
         forward();
         velocity(x,y);
-        lcd_print(1,1,x,5);
-        lcd_print(2,1,y,5);
+        lcd_print(1,1,x,3);
+        lcd_print(2,1,y,3);
+        }
 }
 
 
@@ -313,6 +440,7 @@ void init_devices()
  port_init();  //Initializes all the ports
  uart2_init(); //Initailize UART1 for serial communiaction
  timer5_init();
+ adc_init();
  sei();   //Enables the global interrupts
 }
 
@@ -321,6 +449,6 @@ int main(void)
 {
 	init_devices();
 	lcd_reset_4bit();
-    	lcd_init();
+    lcd_init();
 	while(1);
 }
