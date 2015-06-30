@@ -44,7 +44,7 @@ Disassembly of section .text:
       58:	0c 94 50 01 	jmp	0x2a0	; 0x2a0 <__bad_interrupt>
       5c:	0c 94 50 01 	jmp	0x2a0	; 0x2a0 <__bad_interrupt>
       60:	0c 94 50 01 	jmp	0x2a0	; 0x2a0 <__bad_interrupt>
-      64:	0c 94 50 01 	jmp	0x2a0	; 0x2a0 <__bad_interrupt>
+      64:	0c 94 9a 03 	jmp	0x734	; 0x734 <__vector_25>
       68:	0c 94 50 01 	jmp	0x2a0	; 0x2a0 <__bad_interrupt>
       6c:	0c 94 50 01 	jmp	0x2a0	; 0x2a0 <__bad_interrupt>
       70:	0c 94 50 01 	jmp	0x2a0	; 0x2a0 <__bad_interrupt>
@@ -70,7 +70,7 @@ Disassembly of section .text:
       c0:	0c 94 50 01 	jmp	0x2a0	; 0x2a0 <__bad_interrupt>
       c4:	0c 94 50 01 	jmp	0x2a0	; 0x2a0 <__bad_interrupt>
       c8:	0c 94 50 01 	jmp	0x2a0	; 0x2a0 <__bad_interrupt>
-      cc:	0c 94 9a 03 	jmp	0x734	; 0x734 <__vector_51>
+      cc:	0c 94 50 01 	jmp	0x2a0	; 0x2a0 <__bad_interrupt>
       d0:	0c 94 50 01 	jmp	0x2a0	; 0x2a0 <__bad_interrupt>
       d4:	0c 94 50 01 	jmp	0x2a0	; 0x2a0 <__bad_interrupt>
       d8:	0c 94 50 01 	jmp	0x2a0	; 0x2a0 <__bad_interrupt>
@@ -206,40 +206,40 @@ Disassembly of section .text:
      1e2:	3e 4c       	sbci	r19, 0xCE	; 206
      1e4:	80 ef       	ldi	r24, 0xF0	; 240
      1e6:	ff be       	out	0x3f, r15	; 63
-     1e8:	01 c4       	rjmp	.+2050   	; 0x9ec <__vector_51+0x2b8>
+     1e8:	01 c4       	rjmp	.+2050   	; 0x9ec <__vector_25+0x2b8>
      1ea:	ff 7f       	andi	r31, 0xFF	; 255
      1ec:	3f 00       	.word	0x003f	; ????
      1ee:	00 00       	nop
 	...
 
 000001f2 <__trampolines_start>:
-     1f2:	0c 94 bd 04 	jmp	0x97a	; 0x97a <__vector_51+0x246>
-     1f6:	0c 94 8d 04 	jmp	0x91a	; 0x91a <__vector_51+0x1e6>
-     1fa:	0c 94 b4 04 	jmp	0x968	; 0x968 <__vector_51+0x234>
-     1fe:	0c 94 96 04 	jmp	0x92c	; 0x92c <__vector_51+0x1f8>
-     202:	0c 94 ab 04 	jmp	0x956	; 0x956 <__vector_51+0x222>
-     206:	0c 94 e5 04 	jmp	0x9ca	; 0x9ca <__vector_51+0x296>
-     20a:	0c 94 a2 04 	jmp	0x944	; 0x944 <__vector_51+0x210>
-     20e:	0c 94 cd 04 	jmp	0x99a	; 0x99a <__vector_51+0x266>
-     212:	0c 94 80 04 	jmp	0x900	; 0x900 <__vector_51+0x1cc>
-     216:	0c 94 f9 04 	jmp	0x9f2	; 0x9f2 <__vector_51+0x2be>
-     21a:	0c 94 b7 04 	jmp	0x96e	; 0x96e <__vector_51+0x23a>
-     21e:	0c 94 93 04 	jmp	0x926	; 0x926 <__vector_51+0x1f2>
-     222:	0c 94 d9 04 	jmp	0x9b2	; 0x9b2 <__vector_51+0x27e>
-     226:	0c 94 ba 04 	jmp	0x974	; 0x974 <__vector_51+0x240>
-     22a:	0c 94 ee 04 	jmp	0x9dc	; 0x9dc <__vector_51+0x2a8>
-     22e:	0c 94 99 04 	jmp	0x932	; 0x932 <__vector_51+0x1fe>
-     232:	0c 94 dc 04 	jmp	0x9b8	; 0x9b8 <__vector_51+0x284>
-     236:	0c 94 ae 04 	jmp	0x95c	; 0x95c <__vector_51+0x228>
-     23a:	0c 94 c6 04 	jmp	0x98c	; 0x98c <__vector_51+0x258>
-     23e:	0c 94 e8 04 	jmp	0x9d0	; 0x9d0 <__vector_51+0x29c>
-     242:	0c 94 f1 04 	jmp	0x9e2	; 0x9e2 <__vector_51+0x2ae>
-     246:	0c 94 9c 04 	jmp	0x938	; 0x938 <__vector_51+0x204>
-     24a:	0c 94 90 04 	jmp	0x920	; 0x920 <__vector_51+0x1ec>
-     24e:	0c 94 9f 04 	jmp	0x93e	; 0x93e <__vector_51+0x20a>
-     252:	0c 94 eb 04 	jmp	0x9d6	; 0x9d6 <__vector_51+0x2a2>
-     256:	0c 94 b1 04 	jmp	0x962	; 0x962 <__vector_51+0x22e>
-     25a:	0c 94 d6 04 	jmp	0x9ac	; 0x9ac <__vector_51+0x278>
+     1f2:	0c 94 bd 04 	jmp	0x97a	; 0x97a <__vector_25+0x246>
+     1f6:	0c 94 8d 04 	jmp	0x91a	; 0x91a <__vector_25+0x1e6>
+     1fa:	0c 94 b4 04 	jmp	0x968	; 0x968 <__vector_25+0x234>
+     1fe:	0c 94 96 04 	jmp	0x92c	; 0x92c <__vector_25+0x1f8>
+     202:	0c 94 ab 04 	jmp	0x956	; 0x956 <__vector_25+0x222>
+     206:	0c 94 e5 04 	jmp	0x9ca	; 0x9ca <__vector_25+0x296>
+     20a:	0c 94 a2 04 	jmp	0x944	; 0x944 <__vector_25+0x210>
+     20e:	0c 94 cd 04 	jmp	0x99a	; 0x99a <__vector_25+0x266>
+     212:	0c 94 80 04 	jmp	0x900	; 0x900 <__vector_25+0x1cc>
+     216:	0c 94 f9 04 	jmp	0x9f2	; 0x9f2 <__vector_25+0x2be>
+     21a:	0c 94 b7 04 	jmp	0x96e	; 0x96e <__vector_25+0x23a>
+     21e:	0c 94 93 04 	jmp	0x926	; 0x926 <__vector_25+0x1f2>
+     222:	0c 94 d9 04 	jmp	0x9b2	; 0x9b2 <__vector_25+0x27e>
+     226:	0c 94 ba 04 	jmp	0x974	; 0x974 <__vector_25+0x240>
+     22a:	0c 94 ee 04 	jmp	0x9dc	; 0x9dc <__vector_25+0x2a8>
+     22e:	0c 94 99 04 	jmp	0x932	; 0x932 <__vector_25+0x1fe>
+     232:	0c 94 dc 04 	jmp	0x9b8	; 0x9b8 <__vector_25+0x284>
+     236:	0c 94 ae 04 	jmp	0x95c	; 0x95c <__vector_25+0x228>
+     23a:	0c 94 c6 04 	jmp	0x98c	; 0x98c <__vector_25+0x258>
+     23e:	0c 94 e8 04 	jmp	0x9d0	; 0x9d0 <__vector_25+0x29c>
+     242:	0c 94 f1 04 	jmp	0x9e2	; 0x9e2 <__vector_25+0x2ae>
+     246:	0c 94 9c 04 	jmp	0x938	; 0x938 <__vector_25+0x204>
+     24a:	0c 94 90 04 	jmp	0x920	; 0x920 <__vector_25+0x1ec>
+     24e:	0c 94 9f 04 	jmp	0x93e	; 0x93e <__vector_25+0x20a>
+     252:	0c 94 eb 04 	jmp	0x9d6	; 0x9d6 <__vector_25+0x2a2>
+     256:	0c 94 b1 04 	jmp	0x962	; 0x962 <__vector_25+0x22e>
+     25a:	0c 94 d6 04 	jmp	0x9ac	; 0x9ac <__vector_25+0x278>
 
 0000025e <__ctors_end>:
      25e:	11 24       	eor	r1, r1
@@ -1287,37 +1287,37 @@ unsigned int Sharp_GP2D12_estimation(unsigned char adc_reading)
 }
      712:	08 95       	ret
 
-00000714 <uart2_init>:
+00000714 <uart0_init>:
  * Logic:		No logic
  * Example Call:	uart2_init()
  */
-void uart2_init(void)
+void uart0_init(void)
 {
- UCSR2B = 0x00; //disable while setting baud rate
-     714:	e1 ed       	ldi	r30, 0xD1	; 209
+ UCSR0B = 0x00; //disable while setting baud rate
+     714:	e1 ec       	ldi	r30, 0xC1	; 193
      716:	f0 e0       	ldi	r31, 0x00	; 0
      718:	10 82       	st	Z, r1
- UCSR2A = 0x00;
-     71a:	10 92 d0 00 	sts	0x00D0, r1
- UCSR2C = 0x06;
+ UCSR0A = 0x00;
+     71a:	10 92 c0 00 	sts	0x00C0, r1
+ UCSR0C = 0x06;
      71e:	86 e0       	ldi	r24, 0x06	; 6
-     720:	80 93 d2 00 	sts	0x00D2, r24
- UBRR2L = 0x5F; //set baud rate lo
+     720:	80 93 c2 00 	sts	0x00C2, r24
+ UBRR0L = 0x5F; //set baud rate lo
      724:	8f e5       	ldi	r24, 0x5F	; 95
-     726:	80 93 d4 00 	sts	0x00D4, r24
- UBRR2H = 0x00; //set baud rate hi
-     72a:	10 92 d5 00 	sts	0x00D5, r1
- UCSR2B = 0x98;
+     726:	80 93 c4 00 	sts	0x00C4, r24
+ UBRR0H = 0x00; //set baud rate hi
+     72a:	10 92 c5 00 	sts	0x00C5, r1
+ UCSR0B = 0x98;
      72e:	88 e9       	ldi	r24, 0x98	; 152
      730:	80 83       	st	Z, r24
      732:	08 95       	ret
 
-00000734 <__vector_51>:
+00000734 <__vector_25>:
  * Output: 		sets the velocity of the wheels
  * Logic:		It stores data from UDR2 in a variable and using switch cases it sets the desired velocity
  * Example Call:	No call as it is an interrupt
  */
-SIGNAL(USART2_RX_vect) 		// ISR for receive complete interrupt
+SIGNAL(USART0_RX_vect) 		// ISR for receive complete interrupt
 {
      734:	1f 92       	push	r1
      736:	0f 92       	push	r0
@@ -1338,8 +1338,8 @@ SIGNAL(USART2_RX_vect) 		// ISR for receive complete interrupt
      754:	bf 93       	push	r27
      756:	ef 93       	push	r30
      758:	ff 93       	push	r31
-	data = UDR2; 				//making copy of data from UDR2 in 'data' variable
-     75a:	80 91 d6 00 	lds	r24, 0x00D6
+	data = UDR0; 				//making copy of data from UDR2 in 'data' variable
+     75a:	80 91 c6 00 	lds	r24, 0x00C6
      75e:	80 93 17 02 	sts	0x0217, r24
         p5 = ADC_Conversion(5);
      762:	85 e0       	ldi	r24, 0x05	; 5
@@ -1424,32 +1424,32 @@ SIGNAL(USART2_RX_vect) 		// ISR for receive complete interrupt
      832:	91 09       	sbc	r25, r1
      834:	87 37       	cpi	r24, 0x77	; 119
      836:	91 05       	cpc	r25, r1
-     838:	08 f1       	brcs	.+66     	; 0x87c <__vector_51+0x148>
+     838:	08 f1       	brcs	.+66     	; 0x87c <__vector_25+0x148>
      83a:	80 91 0f 02 	lds	r24, 0x020F
      83e:	90 91 10 02 	lds	r25, 0x0210
      842:	8c 38       	cpi	r24, 0x8C	; 140
      844:	91 05       	cpc	r25, r1
-     846:	e4 f0       	brlt	.+56     	; 0x880 <__vector_51+0x14c>
+     846:	e4 f0       	brlt	.+56     	; 0x880 <__vector_25+0x14c>
      848:	80 91 08 02 	lds	r24, 0x0208
      84c:	90 91 09 02 	lds	r25, 0x0209
      850:	8c 38       	cpi	r24, 0x8C	; 140
      852:	91 05       	cpc	r25, r1
-     854:	ac f0       	brlt	.+42     	; 0x880 <__vector_51+0x14c>
+     854:	ac f0       	brlt	.+42     	; 0x880 <__vector_25+0x14c>
      856:	80 91 1a 02 	lds	r24, 0x021A
      85a:	90 91 1b 02 	lds	r25, 0x021B
      85e:	81 55       	subi	r24, 0x51	; 81
      860:	91 09       	sbc	r25, r1
      862:	87 37       	cpi	r24, 0x77	; 119
      864:	91 05       	cpc	r25, r1
-     866:	60 f0       	brcs	.+24     	; 0x880 <__vector_51+0x14c>
+     866:	60 f0       	brcs	.+24     	; 0x880 <__vector_25+0x14c>
      868:	80 91 18 02 	lds	r24, 0x0218
      86c:	90 91 19 02 	lds	r25, 0x0219
      870:	81 55       	subi	r24, 0x51	; 81
      872:	91 09       	sbc	r25, r1
      874:	87 37       	cpi	r24, 0x77	; 119
      876:	91 05       	cpc	r25, r1
-     878:	18 f0       	brcs	.+6      	; 0x880 <__vector_51+0x14c>
-     87a:	36 c0       	rjmp	.+108    	; 0x8e8 <__vector_51+0x1b4>
+     878:	18 f0       	brcs	.+6      	; 0x880 <__vector_25+0x14c>
+     87a:	36 c0       	rjmp	.+108    	; 0x8e8 <__vector_25+0x1b4>
 	{
         if((value_mid < 200) && (value_mid > 80))
             back();
@@ -1459,7 +1459,7 @@ SIGNAL(USART2_RX_vect) 		// ISR for receive complete interrupt
      884:	90 91 10 02 	lds	r25, 0x0210
      888:	8c 38       	cpi	r24, 0x8C	; 140
      88a:	91 05       	cpc	r25, r1
-     88c:	44 f4       	brge	.+16     	; 0x89e <__vector_51+0x16a>
+     88c:	44 f4       	brge	.+16     	; 0x89e <__vector_25+0x16a>
         {
             back();
      88e:	0e 94 1e 03 	call	0x63c	; 0x63c <back>
@@ -1484,7 +1484,7 @@ void velocity (unsigned char left_motor, unsigned char right_motor)
      8a2:	90 91 09 02 	lds	r25, 0x0209
      8a6:	8c 38       	cpi	r24, 0x8C	; 140
      8a8:	91 05       	cpc	r25, r1
-     8aa:	44 f4       	brge	.+16     	; 0x8bc <__vector_51+0x188>
+     8aa:	44 f4       	brge	.+16     	; 0x8bc <__vector_25+0x188>
         {
             back();
      8ac:	0e 94 1e 03 	call	0x63c	; 0x63c <back>
@@ -1511,7 +1511,7 @@ void velocity (unsigned char left_motor, unsigned char right_motor)
      8c6:	91 09       	sbc	r25, r1
      8c8:	87 37       	cpi	r24, 0x77	; 119
      8ca:	91 05       	cpc	r25, r1
-     8cc:	10 f4       	brcc	.+4      	; 0x8d2 <__vector_51+0x19e>
+     8cc:	10 f4       	brcc	.+4      	; 0x8d2 <__vector_25+0x19e>
         {
             right_back();
      8ce:	0e 94 15 03 	call	0x62a	; 0x62a <right_back>
@@ -1523,7 +1523,7 @@ void velocity (unsigned char left_motor, unsigned char right_motor)
      8dc:	91 09       	sbc	r25, r1
      8de:	87 37       	cpi	r24, 0x77	; 119
      8e0:	91 05       	cpc	r25, r1
-     8e2:	10 f4       	brcc	.+4      	; 0x8e8 <__vector_51+0x1b4>
+     8e2:	10 f4       	brcc	.+4      	; 0x8e8 <__vector_25+0x1b4>
         {
             left_back();
      8e4:	0e 94 03 03 	call	0x606	; 0x606 <left_back>
@@ -1535,8 +1535,8 @@ void velocity (unsigned char left_motor, unsigned char right_motor)
      8ec:	90 e0       	ldi	r25, 0x00	; 0
      8ee:	86 34       	cpi	r24, 0x46	; 70
      8f0:	91 05       	cpc	r25, r1
-     8f2:	08 f0       	brcs	.+2      	; 0x8f6 <__vector_51+0x1c2>
-     8f4:	7e c0       	rjmp	.+252    	; 0x9f2 <__vector_51+0x2be>
+     8f2:	08 f0       	brcs	.+2      	; 0x8f6 <__vector_25+0x1c2>
+     8f4:	7e c0       	rjmp	.+252    	; 0x9f2 <__vector_25+0x2be>
      8f6:	fc 01       	movw	r30, r24
      8f8:	ee 58       	subi	r30, 0x8E	; 142
      8fa:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -1552,35 +1552,35 @@ void velocity (unsigned char left_motor, unsigned char right_motor)
      90e:	90 e0       	ldi	r25, 0x00	; 0
      910:	90 93 03 02 	sts	0x0203, r25
      914:	80 93 02 02 	sts	0x0202, r24
-     918:	6c c0       	rjmp	.+216    	; 0x9f2 <__vector_51+0x2be>
+     918:	6c c0       	rjmp	.+216    	; 0x9f2 <__vector_25+0x2be>
         case 0x02: x = 150; y = 255; break;
      91a:	86 e9       	ldi	r24, 0x96	; 150
      91c:	90 e0       	ldi	r25, 0x00	; 0
-     91e:	f2 cf       	rjmp	.-28     	; 0x904 <__vector_51+0x1d0>
+     91e:	f2 cf       	rjmp	.-28     	; 0x904 <__vector_25+0x1d0>
         case 0x03: x = 100; y = 255; break;
      920:	84 e6       	ldi	r24, 0x64	; 100
      922:	90 e0       	ldi	r25, 0x00	; 0
-     924:	ef cf       	rjmp	.-34     	; 0x904 <__vector_51+0x1d0>
+     924:	ef cf       	rjmp	.-34     	; 0x904 <__vector_25+0x1d0>
         case 0x04: x = 50;  y = 255; break;
      926:	82 e3       	ldi	r24, 0x32	; 50
      928:	90 e0       	ldi	r25, 0x00	; 0
-     92a:	ec cf       	rjmp	.-40     	; 0x904 <__vector_51+0x1d0>
+     92a:	ec cf       	rjmp	.-40     	; 0x904 <__vector_25+0x1d0>
         case 0x10: x = 255; y = 200; break;
      92c:	8f ef       	ldi	r24, 0xFF	; 255
      92e:	90 e0       	ldi	r25, 0x00	; 0
-     930:	0b c0       	rjmp	.+22     	; 0x948 <__vector_51+0x214>
+     930:	0b c0       	rjmp	.+22     	; 0x948 <__vector_25+0x214>
         case 0x11: x = 200; y = 200; break;
      932:	88 ec       	ldi	r24, 0xC8	; 200
      934:	90 e0       	ldi	r25, 0x00	; 0
-     936:	2c c0       	rjmp	.+88     	; 0x990 <__vector_51+0x25c>
+     936:	2c c0       	rjmp	.+88     	; 0x990 <__vector_25+0x25c>
         case 0x12: x = 150; y = 200; break;
      938:	86 e9       	ldi	r24, 0x96	; 150
      93a:	90 e0       	ldi	r25, 0x00	; 0
-     93c:	05 c0       	rjmp	.+10     	; 0x948 <__vector_51+0x214>
+     93c:	05 c0       	rjmp	.+10     	; 0x948 <__vector_25+0x214>
         case 0x13: x = 100; y = 200; break;
      93e:	84 e6       	ldi	r24, 0x64	; 100
      940:	90 e0       	ldi	r25, 0x00	; 0
-     942:	02 c0       	rjmp	.+4      	; 0x948 <__vector_51+0x214>
+     942:	02 c0       	rjmp	.+4      	; 0x948 <__vector_25+0x214>
         case 0x14: x = 50;  y = 200; break;
      944:	82 e3       	ldi	r24, 0x32	; 50
      946:	90 e0       	ldi	r25, 0x00	; 0
@@ -1588,32 +1588,32 @@ void velocity (unsigned char left_motor, unsigned char right_motor)
      94c:	80 93 04 02 	sts	0x0204, r24
      950:	88 ec       	ldi	r24, 0xC8	; 200
      952:	90 e0       	ldi	r25, 0x00	; 0
-     954:	dd cf       	rjmp	.-70     	; 0x910 <__vector_51+0x1dc>
+     954:	dd cf       	rjmp	.-70     	; 0x910 <__vector_25+0x1dc>
         case 0x20: x = 255; y = 150; break;
      956:	8f ef       	ldi	r24, 0xFF	; 255
      958:	90 e0       	ldi	r25, 0x00	; 0
-     95a:	21 c0       	rjmp	.+66     	; 0x99e <__vector_51+0x26a>
+     95a:	21 c0       	rjmp	.+66     	; 0x99e <__vector_25+0x26a>
         case 0x21: x = 200; y = 150; break;
      95c:	88 ec       	ldi	r24, 0xC8	; 200
      95e:	90 e0       	ldi	r25, 0x00	; 0
-     960:	1e c0       	rjmp	.+60     	; 0x99e <__vector_51+0x26a>
+     960:	1e c0       	rjmp	.+60     	; 0x99e <__vector_25+0x26a>
         case 0x22: x = 150; y = 150; break;
      962:	86 e9       	ldi	r24, 0x96	; 150
      964:	90 e0       	ldi	r25, 0x00	; 0
-     966:	14 c0       	rjmp	.+40     	; 0x990 <__vector_51+0x25c>
+     966:	14 c0       	rjmp	.+40     	; 0x990 <__vector_25+0x25c>
         case 0x23: x = 100; y = 150; break;
      968:	84 e6       	ldi	r24, 0x64	; 100
      96a:	90 e0       	ldi	r25, 0x00	; 0
-     96c:	18 c0       	rjmp	.+48     	; 0x99e <__vector_51+0x26a>
+     96c:	18 c0       	rjmp	.+48     	; 0x99e <__vector_25+0x26a>
         case 0x24: x = 50;  y = 150; break;
         case 0x30: x = 255; y = 100; break;
      96e:	8f ef       	ldi	r24, 0xFF	; 255
      970:	90 e0       	ldi	r25, 0x00	; 0
-     972:	05 c0       	rjmp	.+10     	; 0x97e <__vector_51+0x24a>
+     972:	05 c0       	rjmp	.+10     	; 0x97e <__vector_25+0x24a>
         case 0x31: x = 200; y = 100; break;
      974:	88 ec       	ldi	r24, 0xC8	; 200
      976:	90 e0       	ldi	r25, 0x00	; 0
-     978:	02 c0       	rjmp	.+4      	; 0x97e <__vector_51+0x24a>
+     978:	02 c0       	rjmp	.+4      	; 0x97e <__vector_25+0x24a>
         case 0x32: x = 150; y = 100; break;
      97a:	86 e9       	ldi	r24, 0x96	; 150
      97c:	90 e0       	ldi	r25, 0x00	; 0
@@ -1621,13 +1621,13 @@ void velocity (unsigned char left_motor, unsigned char right_motor)
      982:	80 93 04 02 	sts	0x0204, r24
      986:	84 e6       	ldi	r24, 0x64	; 100
      988:	90 e0       	ldi	r25, 0x00	; 0
-     98a:	c2 cf       	rjmp	.-124    	; 0x910 <__vector_51+0x1dc>
+     98a:	c2 cf       	rjmp	.-124    	; 0x910 <__vector_25+0x1dc>
         case 0x33: x = 255; y = 255; break;
      98c:	8f ef       	ldi	r24, 0xFF	; 255
      98e:	90 e0       	ldi	r25, 0x00	; 0
      990:	90 93 05 02 	sts	0x0205, r25
      994:	80 93 04 02 	sts	0x0204, r24
-     998:	bb cf       	rjmp	.-138    	; 0x910 <__vector_51+0x1dc>
+     998:	bb cf       	rjmp	.-138    	; 0x910 <__vector_25+0x1dc>
         case 0x34: x = 50;  y = 150; break;
      99a:	82 e3       	ldi	r24, 0x32	; 50
      99c:	90 e0       	ldi	r25, 0x00	; 0
@@ -1635,15 +1635,15 @@ void velocity (unsigned char left_motor, unsigned char right_motor)
      9a2:	80 93 04 02 	sts	0x0204, r24
      9a6:	86 e9       	ldi	r24, 0x96	; 150
      9a8:	90 e0       	ldi	r25, 0x00	; 0
-     9aa:	b2 cf       	rjmp	.-156    	; 0x910 <__vector_51+0x1dc>
+     9aa:	b2 cf       	rjmp	.-156    	; 0x910 <__vector_25+0x1dc>
         case 0x40: x = 255; y = 50;  break;
      9ac:	8f ef       	ldi	r24, 0xFF	; 255
      9ae:	90 e0       	ldi	r25, 0x00	; 0
-     9b0:	05 c0       	rjmp	.+10     	; 0x9bc <__vector_51+0x288>
+     9b0:	05 c0       	rjmp	.+10     	; 0x9bc <__vector_25+0x288>
         case 0x41: x = 200; y = 50;  break;
      9b2:	88 ec       	ldi	r24, 0xC8	; 200
      9b4:	90 e0       	ldi	r25, 0x00	; 0
-     9b6:	02 c0       	rjmp	.+4      	; 0x9bc <__vector_51+0x288>
+     9b6:	02 c0       	rjmp	.+4      	; 0x9bc <__vector_25+0x288>
         case 0x42: x = 150; y = 50;  break;
         case 0x43: x = 150; y = 50;  break;
      9b8:	86 e9       	ldi	r24, 0x96	; 150
@@ -1652,19 +1652,19 @@ void velocity (unsigned char left_motor, unsigned char right_motor)
      9c0:	80 93 04 02 	sts	0x0204, r24
      9c4:	82 e3       	ldi	r24, 0x32	; 50
      9c6:	90 e0       	ldi	r25, 0x00	; 0
-     9c8:	a3 cf       	rjmp	.-186    	; 0x910 <__vector_51+0x1dc>
+     9c8:	a3 cf       	rjmp	.-186    	; 0x910 <__vector_25+0x1dc>
         case 0x44: right();          return;
      9ca:	0e 94 0c 03 	call	0x618	; 0x618 <right>
-     9ce:	58 c0       	rjmp	.+176    	; 0xa80 <__vector_51+0x34c>
+     9ce:	58 c0       	rjmp	.+176    	; 0xa80 <__vector_25+0x34c>
         case 0x45: left();           return;
      9d0:	0e 94 fa 02 	call	0x5f4	; 0x5f4 <left>
-     9d4:	55 c0       	rjmp	.+170    	; 0xa80 <__vector_51+0x34c>
+     9d4:	55 c0       	rjmp	.+170    	; 0xa80 <__vector_25+0x34c>
         case 0x37: buzzer_on();      return;
      9d6:	0e 94 58 03 	call	0x6b0	; 0x6b0 <buzzer_on>
-     9da:	52 c0       	rjmp	.+164    	; 0xa80 <__vector_51+0x34c>
+     9da:	52 c0       	rjmp	.+164    	; 0xa80 <__vector_25+0x34c>
         case 0x39: buzzer_off();     return;
      9dc:	0e 94 5c 03 	call	0x6b8	; 0x6b8 <buzzer_off>
-     9e0:	4f c0       	rjmp	.+158    	; 0xa80 <__vector_51+0x34c>
+     9e0:	4f c0       	rjmp	.+158    	; 0xa80 <__vector_25+0x34c>
         case 0x35: x = 0;   y = 0;   break;
      9e2:	10 92 05 02 	sts	0x0205, r1
      9e6:	10 92 04 02 	sts	0x0204, r1
@@ -1678,31 +1678,31 @@ void velocity (unsigned char left_motor, unsigned char right_motor)
      9fc:	91 09       	sbc	r25, r1
      9fe:	87 37       	cpi	r24, 0x77	; 119
      a00:	91 05       	cpc	r25, r1
-     a02:	f0 f1       	brcs	.+124    	; 0xa80 <__vector_51+0x34c>
+     a02:	f0 f1       	brcs	.+124    	; 0xa80 <__vector_25+0x34c>
      a04:	80 91 0f 02 	lds	r24, 0x020F
      a08:	90 91 10 02 	lds	r25, 0x0210
      a0c:	86 39       	cpi	r24, 0x96	; 150
      a0e:	91 05       	cpc	r25, r1
-     a10:	bc f1       	brlt	.+110    	; 0xa80 <__vector_51+0x34c>
+     a10:	bc f1       	brlt	.+110    	; 0xa80 <__vector_25+0x34c>
      a12:	80 91 08 02 	lds	r24, 0x0208
      a16:	90 91 09 02 	lds	r25, 0x0209
      a1a:	8c 38       	cpi	r24, 0x8C	; 140
      a1c:	91 05       	cpc	r25, r1
-     a1e:	84 f1       	brlt	.+96     	; 0xa80 <__vector_51+0x34c>
+     a1e:	84 f1       	brlt	.+96     	; 0xa80 <__vector_25+0x34c>
      a20:	80 91 1a 02 	lds	r24, 0x021A
      a24:	90 91 1b 02 	lds	r25, 0x021B
      a28:	81 55       	subi	r24, 0x51	; 81
      a2a:	91 09       	sbc	r25, r1
      a2c:	87 37       	cpi	r24, 0x77	; 119
      a2e:	91 05       	cpc	r25, r1
-     a30:	38 f1       	brcs	.+78     	; 0xa80 <__vector_51+0x34c>
+     a30:	38 f1       	brcs	.+78     	; 0xa80 <__vector_25+0x34c>
      a32:	80 91 18 02 	lds	r24, 0x0218
      a36:	90 91 19 02 	lds	r25, 0x0219
      a3a:	81 55       	subi	r24, 0x51	; 81
      a3c:	91 09       	sbc	r25, r1
      a3e:	87 37       	cpi	r24, 0x77	; 119
      a40:	91 05       	cpc	r25, r1
-     a42:	f0 f0       	brcs	.+60     	; 0xa80 <__vector_51+0x34c>
+     a42:	f0 f0       	brcs	.+60     	; 0xa80 <__vector_25+0x34c>
     else{
         forward();
      a44:	0e 94 f4 02 	call	0x5e8	; 0x5e8 <forward>
@@ -1771,8 +1771,8 @@ void init_devices()
      aa6:	f8 94       	cli
  port_init();  //Initializes all the ports
      aa8:	0e 94 27 03 	call	0x64e	; 0x64e <port_init>
- uart2_init(); //Initailize UART1 for serial communiaction
-     aac:	0e 94 8a 03 	call	0x714	; 0x714 <uart2_init>
+ uart0_init(); //Initailize UART1 for serial communiaction
+     aac:	0e 94 8a 03 	call	0x714	; 0x714 <uart0_init>
  timer5_init();
      ab0:	0e 94 bc 02 	call	0x578	; 0x578 <timer5_init>
  adc_init();

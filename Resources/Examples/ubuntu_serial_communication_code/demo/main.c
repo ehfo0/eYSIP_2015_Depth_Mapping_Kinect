@@ -327,14 +327,14 @@ unsigned int Sharp_GP2D12_estimation(unsigned char adc_reading)
  * Logic:		No logic
  * Example Call:	uart2_init()
  */
-void uart2_init(void)
+void uart0_init(void)
 {
- UCSR2B = 0x00; //disable while setting baud rate
- UCSR2A = 0x00;
- UCSR2C = 0x06;
- UBRR2L = 0x5F; //set baud rate lo
- UBRR2H = 0x00; //set baud rate hi
- UCSR2B = 0x98;
+ UCSR0B = 0x00; //disable while setting baud rate
+ UCSR0A = 0x00;
+ UCSR0C = 0x06;
+ UBRR0L = 0x5F; //set baud rate lo
+ UBRR0H = 0x00; //set baud rate hi
+ UCSR0B = 0x98;
 }
 
 /*
@@ -344,9 +344,9 @@ void uart2_init(void)
  * Logic:		It stores data from UDR2 in a variable and using switch cases it sets the desired velocity
  * Example Call:	No call as it is an interrupt
  */
-SIGNAL(USART2_RX_vect) 		// ISR for receive complete interrupt
+SIGNAL(USART0_RX_vect) 		// ISR for receive complete interrupt
 {
-	data = UDR2; 				//making copy of data from UDR2 in 'data' variable
+	data = UDR0; 				//making copy of data from UDR2 in 'data' variable
         p5 = ADC_Conversion(5);
 		p7 = ADC_Conversion(7);
         sharp = ADC_Conversion(11);						//Stores the Analog value of front sharp connected to ADC channel 11 into variable "sharp"
@@ -438,7 +438,7 @@ void init_devices()
 {
  cli(); //Clears the global interrupts
  port_init();  //Initializes all the ports
- uart2_init(); //Initailize UART1 for serial communiaction
+ uart0_init(); //Initailize UART1 for serial communiaction
  timer5_init();
  adc_init();
  sei();   //Enables the global interrupts
