@@ -23,12 +23,16 @@ import time
 import serial
 import math
 import matplotlib.mlab as lab
+from matplotlib import pyplot as plt
 
 global flag
 flag = False
 global count
 count = 0
-
+global axis_plot
+axis_plot = 0
+global door_flag
+door_flag = 0
 ser = serial.Serial('/dev/ttyUSB0')	 # initialization of serial communication
 
 
@@ -514,6 +518,8 @@ def door_detection(contours_right_door, contours_left_door, test_cases_door):
     """
     global flag
     global count
+    global axis_plot
+    global door_flag
     prob_1 = 0
     lt_l, lb_l, cxl_l, rt_l, rb_l, cxr_l, temp_l, temp_r = \
         left_right_lines(contours_right_door, contours_left_door)
@@ -542,12 +548,19 @@ def door_detection(contours_right_door, contours_left_door, test_cases_door):
                     if max_prob > prob_1:
                         prob_1 = max_prob
                 weighted_probability = 0.1 * prob_1 + 0.5 * prob_2 + 0.4 * prob_3
+                a.append(axis_plot)
+                b.append(weighted_probability)
+                axis_plot += 1
+                plt.plot(a,b)
+                plt.draw()
                 print "Door Detected with confidence: " + str(weighted_probability)
-                if weighted_probability > 70:
+                if weighted_probability > 60:
+                    mid_point = (cxr_l[j]+cxl_l[i])/2.
+                    doorway_movement(mid_point)
                     count += 1
-                    ser.write("\x37")
-                    time.sleep(0.05)
-                    ser.write("\x39")
+                    #ser.write("\x37")
+                    #time.sleep(0.05)
+                    #ser.write("\x39")
     if count == 1:
         flag = True
 
@@ -563,6 +576,7 @@ def take_right():
     """
     while 1:
         z_right = get_depth()
+        back_movement(z_right)
         middle_area = z_right[200:479, 200:439]
         middle_val = middle_area.mean()
         ser.write("\x44")
@@ -581,6 +595,7 @@ def take_left():
     """
     while 1:
         z_left = get_depth()
+        back_movement(z_left)
         middle_area = z_left[200:479, 200:439]
         middle_val = middle_area.mean()
         ser.write("\x45")
@@ -600,7 +615,8 @@ def take_right_near():
     """
     while 1:
         z_near = get_depth()
-        middle_area = z_near[0:479, 160:479]
+        back_movement(z_near)
+        middle_area = z_near[0:479, 240:399]
         contours_right_near = contours_return(z_near, -10)
         contours_left_near = contours_return(z_near, 10)
         door_detection(contours_right_near, contours_left_near, test_cases)
@@ -622,7 +638,8 @@ def take_left_near():
     """
     while 1:
         z_near = get_depth()
-        middle_area = z_near[0:479, 160:479]
+        back_movement(z_near)
+        middle_area = z_near[0:479, 240:399]
         contours_right_near = contours_return(z_near, -10)
         contours_left_near = contours_return(z_near, 10)
         door_detection(contours_right_near, contours_left_near, test_cases)
@@ -780,6 +797,7 @@ def search_wall(wall):
     if wall == 0:
         while True:
             z_wall = get_depth()
+            back_movement(z_wall)
             area = z_wall[0:479, 0:319]
             contours_right_wall = contours_return(z_wall, -10)
             contours_left_wall = contours_return(z_wall, 10)
@@ -790,7 +808,8 @@ def search_wall(wall):
     elif wall == 1:
         while True:
             z_wall = get_depth()
-            area = z[0:479, 320:639]
+            back_movement(z_wall)
+            area = z_wall[0:479, 320:639]
             contours_right_wall = contours_return(z_wall, -10)
             contours_left_wall = contours_return(z_wall, 10)
             door_detection(contours_right_wall, contours_left_wall, test_cases)
@@ -834,7 +853,7 @@ def regular_movement():
     if speed_left != 0 or speed_right != 0:
         data_send(speed_left, speed_right)
     else:
-        search_wall(0)
+        search_wall(wall)
         ser.write("\x00")
 
 
@@ -871,15 +890,53 @@ def horizontal_edge(c):
             return hl, hr, cxh
     return 0, 0, 0
 
+
+def doorway_movement(mid_point):
+    if mid_point > 80 and mid_point < 200:
+        for i in xrange(5):
+            data_send(0,4)
+        time.sleep(0.1)
+    if mid_point > 200 and mid_point < 320:
+        for i in xrange(5):
+            data_send(0,2)
+        time.sleep(0.1)
+    if mid_point > 320 and mid_point < 440:
+        for i in xrange(5):
+            data_send(4,0)
+        time.sleep(0.1)
+    if mid_point >440 and mid_point < 560:
+        for i in xrange(5):
+            data_send(2,0)
+        time.sleep(0.1)
+
+
+def back_movement(z_back):
+    if z_back[0:479,200:439].mean() > 200 or z_back[0:479,0:199].mean() > 200 or z_back[0:479,440:639].mean() > 200:
+        ser.write('\x50')
+        time.sleep(3)
+
+
+plt.ion()
+plt.figure()
+a = []
+b = []
 ctx = freenect.init()
 dev = freenect.open_device(ctx, freenect.num_devices(ctx) - 1)
 
 freenect.set_tilt_degs(dev, 20)
 freenect.close_device(dev)
 test_cases = [True, True, True]
-
+#for i in xrange(5):
+#    z = get_depth()
+#left_mean = z[0:479,0:319].mean()
+#right_mean = z[0:479,320:639].mean()
+#if left_mean > right_mean:
+#    wall = 1
+#else: wall = 0
+wall = 0
 while True:
     z = get_depth()	 # returns the depth frame
+    back_movement(z)
     contours_right = contours_return(z, -10)
     contours_left = contours_return(z, 10)
     door_detection(contours_right, contours_left, test_cases)
