@@ -1,3 +1,3 @@
-
+import Detect_door
 if __name__ == "__main__":
-	import Final.py
+    Detect_door.start()

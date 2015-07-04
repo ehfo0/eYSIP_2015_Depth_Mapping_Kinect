@@ -12,8 +12,9 @@ import sys
 sys.path.append('/usr/lib/python2.7/dist-packages')
 
 DOOR_FLAG = False
-
+global global_depth_map
 DOOR_COUNT = 0
+global ser
 
 def filter_noise(depth_array, mask, masked_array, row, col):
     """
@@ -860,28 +861,28 @@ def horizontal_edge(contours):
             return left_height, right_height, cxh
     return 0, 0, 0
 
+def start():
+    ser = serial.Serial('/dev/ttyUSB0')	#initialization of serial communication
 
-ser = serial.Serial('/dev/ttyUSB0')	#initialization of serial communication
+    ctx = freenect.init()
+    dev = freenect.open_device(ctx, freenect.num_devices(ctx) - 1)
 
-ctx = freenect.init()
-dev = freenect.open_device(ctx, freenect.num_devices(ctx) - 1)
+    freenect.set_tilt_degs(dev, 20)
+    freenect.close_device(dev)
+    test_cases = [True, True, True]
 
-freenect.set_tilt_degs(dev, 20)
-freenect.close_device(dev)
-test_cases = [True, True, True]
+    while True:
+        global_depth_map = get_depth()	#returns the depth frame
+        contoursright = contours_return(global_depth_map, -10)
+        contoursleft = contours_return(global_depth_map, 10)
+        door_detection(contoursright, contoursleft, test_cases)
+        if DOOR_FLAG:
+            door_movement(global_depth_map)
+        else: regular_movement(global_depth_map)
+        cv2.imshow('final', global_depth_map)
+        if cv2.waitKey(1) != -1:
+            ser.write('\x35')
+            ser.close()
+            break
 
-while True:
-    global_depth_map = get_depth()	#returns the depth frame
-    contoursright = contours_return(global_depth_map, -10)
-    contoursleft = contours_return(global_depth_map, 10)
-    door_detection(contoursright, contoursleft, test_cases)
-    if DOOR_FLAG:
-        door_movement(global_depth_map)
-    else: regular_movement(global_depth_map)
-    cv2.imshow('final', global_depth_map)
-    if cv2.waitKey(1) != -1:
-        ser.write('\x35')
-        ser.close()
-        break
-
-cv2.destroyAllWindows()
+    cv2.destroyAllWindows()
