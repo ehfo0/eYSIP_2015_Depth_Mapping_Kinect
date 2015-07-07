@@ -31,8 +31,7 @@ global count
 count = 0
 global axis_plot
 axis_plot = 0
-global door_flag
-door_flag = 0
+
 ser = serial.Serial('/dev/ttyUSB0')	 # initialization of serial communication
 
 
@@ -88,9 +87,9 @@ def get_depth():
     * Input:		None
     * Output:		Returns the depth information from pixel values of 0 to 255
     * Logic:		It receives the depth information from the Kinect sensor in mm.
-                    The depth range is 40cm to 800cm. The values are brought
-                    down from 0 to 255. It then changes the data type
-                    to 1 bytes. It then smoothed the frame and returns it.
+                    	The depth range is 40cm to 800cm. The values are brought
+                    	down from 0 to 255. It then changes the data type
+                    	to 1 bytes. It then smoothed the frame and returns it.
     * Example Call:	get_depth()
     """
     a = freenect.sync_get_depth(format=freenect.DEPTH_MM)[0]
@@ -107,9 +106,9 @@ def contours_return(a, num):
     * Input:		Depth Frame and a number for shifting left or right the matrix.
     * Output:		Returns the left or right edges contours
     * Logic:		It does noise removal process on the frame and
-                    shifts the frame matrix by num places so that
-                    change in values are highlighted in the
-                    image by Binary Threshold it.
+                    	shifts the frame matrix by num places so that
+                    	change in values are highlighted in the
+                    	image by Binary Threshold it.
     * Example Call:	contours_return(a,5)
     """
     b = np.roll(a, num)
@@ -130,15 +129,15 @@ def potential_right_edge(c):
     * Function Name:	potential_right_edge
     * Input:		A contour
     * Output:		Returns a potential right edge which fulfills all the conditions
-                    returns topmost, bottommost and centroid of the contour.
+                    	returns topmost, bottommost and centroid of the contour.
     * Logic:		If area of the contour crosses a threshold than the
-                    extreme points are calculated of the contour. If
-                    the difference 	in opposite extreme points lies
-                    in the given threshold and the width and height
-                    of the bounding rectangle lies in the threshold
-                    than the contour is a potential contour and a line
-                    is drawn as an edge. The centroid is calculated for
-                    further use
+                    	extreme points are calculated of the contour. If
+                    	the difference 	in opposite extreme points lies
+                    	in the given threshold and the width and height
+                    	of the bounding rectangle lies in the threshold
+                    	than the contour is a potential contour and a line
+                    	is drawn as an edge. The centroid is calculated for
+                    	further use
     * Example Call:	potential_right_edge(c)
     """
     area = 1000
@@ -178,15 +177,15 @@ def potential_left_edge(c):
     * Function Name:	potential_left_edge
     * Input:		A contour
     * Output:		Returns a potential left edge which fulfills all the conditions
-                    returns topmost, bottommost and centroid of the contour.
+                    	returns topmost, bottommost and centroid of the contour.
     * Logic:		If area of the contour crosses a threshold than the
-                    extreme points are calculated of the contour. If
-                    the difference in opposite extreme points lies
-                    in the given threshold and the width and height
-                    of the bounding rectangle lies in the threshold
-                    than the contour is a potential contour and a
-                    line is drawn as an edge. The centroid is
-                    calculated for further use
+                    	extreme points are calculated of the contour. If
+                    	the difference in opposite extreme points lies
+                    	in the given threshold and the width and height
+                    	of the bounding rectangle lies in the threshold
+                    	than the contour is a potential contour and a
+                    	line is drawn as an edge. The centroid is
+                    	calculated for further use
     * Example Call:	potential_left_edge(c)
     """
     area = 1000
@@ -225,19 +224,19 @@ def is_door(lb, lt, rb, rt, cxr, cxl):
     """
     * Function Name:	doorway_movement
     * Input:		left_bottom, left_top, right_bottom,
-                    right_top, right_edge_centroid,
-                    left_edge_centroid
+                    	right_top, right_edge_centroid,
+                    	left_edge_centroid
     * Output:		Movement of the robot on door detection
     * Logic:		Pixel Heights of the edges are calculated.
-                    If the pixel height difference and centroid
-                    of left and right edge difference crosses a
-                    threshold than the edges are door edges.
-                    The midpoint is calculated. If midpoint lies
-                    in middle frame than robot moves forward and
-                    if it lies on the left or right part than the
-                    robot takes a turn. When mode is 1 the door is
-                    detected and in mode 0 mode regular movement is
-                    followed.
+                    	If the pixel height difference and centroid
+                    	of left and right edge difference crosses a
+                    	threshold than the edges are door edges.
+                    	The midpoint is calculated. If midpoint lies
+                    	in middle frame than robot moves forward and
+                    	if it lies on the left or right part than the
+                    	robot takes a turn. When mode is 1 the door is
+                    	detected and in mode 0 mode regular movement is
+                    	followed.
     * Example Call:	doorway_movement(lb,lt,rb,rt,cxr,cxl)
     """
     diff_l = lb[1]-lt[1]
@@ -255,10 +254,10 @@ def left_right_lines(contours_right_line, contours_left_line):
     * Function Name:	left_right_lines
     * Input:		right contours, left contours, original depth frame
     * Output:		detects left and right edges and accordingly calls
-                    the door movement function.
+                    	the door movement function.
     * Logic:		creates an array of all the required parameters
-                    of all the potential left and right edges and
-                    sends them two at a time to doorway_movement function.
+                    	of all the potential left and right edges and
+                    	sends them two at a time to doorway_movement function.
     * Example Call:	left_right_lines(contours_right,contours_left,z)
     """
     temp_l = 0
@@ -291,10 +290,10 @@ def horizontal_lines():
     * Function Name:	horizontal_lines()
     * Input:		right contours, left contours, original depth frame
     * Output:		detects left and right edges and accordingly calls
-                    the door movement function.
+                    	the door movement function.
     * Logic:		creates an array of all the required parameters
-                    of all the potential left and right edges and
-                    sends them two at a time to doorway_movement function.
+                    	of all the potential left and right edges and
+                    	sends them two at a time to doorway_movement function.
     * Example Call:	left_right_lines(contours_right,contours_left,z)
     """
     contour = contours_return(z, 6400)
@@ -315,14 +314,14 @@ def horizontal_lines():
 def actual_width_in_mm(lb, lt, rb, rt, cxr, cxl):
     """
     * Function Name:actual_width_in_mm()
-    * Input:	    co-ordinates of left bottom, left top, right bottom, right top,
-                    right contour centroid, left contour centroid
+    * Input:	    	co-ordinates of left bottom, left top, right bottom, right top,
+                    	right contour centroid, left contour centroid
     * Output:		returns actual width of the door
     * Logic:		It takes the actual depth and using filters the black noise spaces are made white
-                    The 20 pixels of the area of left and right edges are processed.
-                    the minimum value in them is found and the depth is that value.
-                    Using pixel knowledge we find the angle and then using cosine rule
-                    we find the actual width of the door.
+                    	The 20 pixels of the area of left and right edges are processed.
+                    	the minimum value in them is found and the depth is that value.
+                    	Using pixel knowledge we find the angle and then using cosine rule
+                    	we find the actual width of the door.
     * Example Call:	actual_width_in_mm(lb, lt, rb, rt, cxr, cxl)
     """
     a = freenect.sync_get_depth(format=freenect.DEPTH_MM)[0]
@@ -519,7 +518,7 @@ def door_detection(contours_right_door, contours_left_door, test_cases_door):
     global flag
     global count
     global axis_plot
-    global door_flag
+    weighted_probability = 0
     prob_1 = 0
     lt_l, lb_l, cxl_l, rt_l, rb_l, cxr_l, temp_l, temp_r = \
         left_right_lines(contours_right_door, contours_left_door)
@@ -548,19 +547,26 @@ def door_detection(contours_right_door, contours_left_door, test_cases_door):
                     if max_prob > prob_1:
                         prob_1 = max_prob
                 weighted_probability = 0.1 * prob_1 + 0.5 * prob_2 + 0.4 * prob_3
-                a.append(axis_plot)
-                b.append(weighted_probability)
-                axis_plot += 1
-                plt.plot(a,b)
-                plt.draw()
                 print "Door Detected with confidence: " + str(weighted_probability)
                 if weighted_probability > 60:
                     mid_point = (cxr_l[j]+cxl_l[i])/2.
                     doorway_movement(mid_point)
                     count += 1
-                    #ser.write("\x37")
-                    #time.sleep(0.05)
-                    #ser.write("\x39")
+                    for i in xrange(5):
+                        ser.write('\x37')
+                    time.sleep(0.5)
+                    for i in xrange(5):
+                        ser.write('\x39')
+    a.append(axis_plot)
+    b.append(weighted_probability)
+    axis_plot += 1
+    plt.plot(a,b)
+    plt.draw()
+    if axis_plot == 100:
+        axis_plot = 0
+        a[:]=[]
+        b[:]=[]
+        plt.clf()
     if count == 1:
         flag = True
 
@@ -933,6 +939,8 @@ test_cases = [True, True, True]
 #if left_mean > right_mean:
 #    wall = 1
 #else: wall = 0
+for i in xrange(5):
+    zp = get_depth()
 wall = 0
 while True:
     z = get_depth()	 # returns the depth frame

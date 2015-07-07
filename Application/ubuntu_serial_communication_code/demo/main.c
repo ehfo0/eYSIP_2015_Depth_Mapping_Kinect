@@ -347,42 +347,7 @@ void uart0_init(void)
 SIGNAL(USART0_RX_vect) 		// ISR for receive complete interrupt
 {
 	data = UDR0; 				//making copy of data from UDR2 in 'data' variable
-        p5 = ADC_Conversion(5);
-		p7 = ADC_Conversion(7);
-        sharp = ADC_Conversion(11);						//Stores the Analog value of front sharp connected to ADC channel 11 into variable "sharp"
-		value_mid = Sharp_GP2D12_estimation(sharp);
-		sharp = ADC_Conversion(10);
-		value_left = Sharp_GP2D12_estimation(sharp);
-		sharp = ADC_Conversion(12);
-		value_right = Sharp_GP2D12_estimation(sharp);
-		lcd_print(1,1,p5,3);
-		lcd_print(1,8,p7,3);
-		lcd_print(2,1,value_left,3);
-		lcd_print(2,5,value_mid,3);
-		lcd_print(2,9,value_right,3);
-	if(((value_mid < 200) && (value_mid > 80)) || (p5 < 140) || (p7 < 140) || ((value_left < 200) && (value_left > 80)) || ((value_right < 200) && (value_right > 80)))
-	{
-        if((value_mid < 200) && (value_mid > 80))
-            back();
-        if(p5 < 140)
-        {
-            back();
-            velocity(150,255);
-        }
-        if(p7 < 140)
-        {
-            back();
-            velocity(255,150);
-        }
-        if((value_left < 200) && (value_left > 80))
-        {
-            right_back();
-        }
-        if((value_right < 200) && (value_right > 80))
-        {
-            left_back();
-        }
-    }
+
 
 	switch(data)
 	{
@@ -415,14 +380,14 @@ SIGNAL(USART0_RX_vect) 		// ISR for receive complete interrupt
         case 0x37: buzzer_on();      return;
         case 0x39: buzzer_off();     return;
         case 0x35: x = 0;   y = 0;   break;
+        case 0x50: back();           return;
 	}
-    if(((value_mid < 200) && (value_mid > 80)) || (p5 < 150) || (p7 < 140) || ((value_left < 200) && (value_left > 80)) || ((value_right < 200) && (value_right > 80)));
-    else{
+
         forward();
         velocity(x,y);
         lcd_print(1,1,x,3);
         lcd_print(2,1,y,3);
-        }
+
 }
 
 
