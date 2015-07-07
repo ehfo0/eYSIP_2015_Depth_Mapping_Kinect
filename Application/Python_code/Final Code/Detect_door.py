@@ -1,6 +1,18 @@
 """
-This module contains code for detection of doors.
-"""
+*
+* Author List: Mukesh P., Aniket Patel
+* Filename: Detect_door.py
+* Theme: Depth based room mapping using Kinect.
+* Functions: filter_noise, filter_smooth, get_depth, contours_return, potential_rightedge,
+                potential_leftedge, is_door, left_right_lines, horizontal_lines, actual_width_in_mm
+               actual_height_in_mm, return_height_in_mm, rectangle_door_test, probability, actual_width_test,
+               actual_height_test, door_detection, take_right, take_left
+               take_right_near, take_left_near, stuck_pos_movement, data_send, count_near_pixel, door_movement,
+               search_wall, regular_movement, horizontal_edge, start.
+* Global Variables: DOOR_FLAG, global_depth_map, DOOR_COUNT, ser
+*
+ """
+
 import freenect
 import cv2
 import numpy as np
@@ -12,6 +24,7 @@ import sys
 sys.path.append('/usr/lib/python2.7/dist-packages')
 
 DOOR_FLAG = False
+global test_cases
 global global_depth_map
 DOOR_COUNT = 0
 global ser
@@ -595,6 +608,7 @@ def take_right_near():
                     until it is out of its sight
     * Example Call:	take_right_near()
     """
+    global test_cases
     while True:
         global_depth_map = get_depth()
         middlearea = global_depth_map[0:479, 160:479]
@@ -863,7 +877,7 @@ def horizontal_edge(contours):
 
 def start():
     ser = serial.Serial('/dev/ttyUSB0')	#initialization of serial communication
-
+    global test_cases, ser, global_depth_map, DOOR_FLAG, DOOR_COUNT
     ctx = freenect.init()
     dev = freenect.open_device(ctx, freenect.num_devices(ctx) - 1)
 
