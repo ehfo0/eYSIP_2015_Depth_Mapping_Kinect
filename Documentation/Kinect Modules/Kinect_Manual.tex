@@ -27,9 +27,9 @@
   \subsection{filter\_smooth}
     \textbf{filter\_smooth(depth\_array) : }
     \begin{itemize}
-     \item It takes the original depth frame with noise
+     \item It takes the original noisy depth frame
      \item It masks the noise pixels
-     \item It is than passed through a filter to filter the noise. 
+     \item It is than passed through a filter to remove the noise. 
      \item It is then passed through a bilateral filter for better results
      \item It returns the smoothened image of the frame
      \item \textbf{Example Call:} depth\_array = filter\_smooth(depth\_array)
@@ -39,8 +39,8 @@
     \textbf{filter\_noise(depth\_array, noise mask, original image with inverted noise mask, rows, columns) : }
      \begin{itemize}
       \item It takes the original frame as input for processing. It takes noise mask and original frame with noise pixels made white. It takes the number of tiles in a row or a column
-      \item The algorithm takes the mean of the frame in a particular tile and replaces the noise pixels witb those values
-      \item It returns the filtered noise depth frame
+      \item The algorithm takes the mean of the frame in a particular tile and replaces the noise pixels with those values
+      \item It returns the noise filtered depth frame
       \item \textbf{Example Call:} blur = filter\_noise(depth\_array, mask\_1, masked\_array, 3, 4)
      \end{itemize}
 \end{frame}
@@ -65,9 +65,9 @@
        \item It takes no input arguments
        \item The frame is divided into 3 regions: left area, middlearea, rightarea.
        \item The mean of all the regions is taken.
-       \item If the middleregions goes below the threshold than left and right area means are checked
+       \item If the middleregions goes below the threshold than left and right area means of pixel values are checked
        \item The region with higher mean is selected and robot turns in that direction as higher value indicates more depth
-       \item So the robot traverses on the intuition of the area mean after door is detected
+       \item So the robot traverses on the intuition of the pixel mean value of the area after door is detected
        \item \textbf{Example Call:} door\_movement()
       \end{itemize}
   \framebreak
@@ -95,8 +95,8 @@
     \textbf{stuck\_pos\_movement(void) : }
       \begin{itemize}
        \item It takes no input arguments
-       \item It calculates the mean of the left and right of the frame. 
-       \item The section with higher mean, the robot takes a left or right turn until it comes out of the stuck position
+       \item It calculates the mean of the left and right pixels of the frame. 
+       \item The direction with higher mean is selected and the robot takes a left or right turn until it comes out of the stuck position
        \item This function basically moves the robot out of stuck position
        \item \textbf{Example Call:} stuck\_pos\_movement()
       \end{itemize}
@@ -118,10 +118,9 @@
        \item The input arguments are the co-ordinates of the left top, left bottom, right top, right bottom points of the door
        \item The function creates a small 10x30 area and finds the minimum pixel value as that will be the depth value of that point
        \item So we get the depth distance of the four points.
-       \item Now 640 pixels corresponds to 57 degrees and 480 pixels to 430 degrees. SO we find the pixels height to find the angle formed by the line joining the top and bottom points
+       \item Now 640 pixels corresponds to 57 degrees and 480 pixels to 430 degrees. So we find the pixels height to find the angle formed by the line joining the top and bottom points
        \item Using Cosine rule we find the height of the third side of the triangle formed by joining all the points.
        \item Rescaling the height we get the actual height of the left and right edges of the door
-       \item It returns the left and right door edges
        \item \textbf{Example Call:} left\_height, right\_height = actual\_height\_in\_mm((100,200), (100,100), (200,200), (200,100))
       \end{itemize}
   \framebreak
@@ -131,10 +130,8 @@
        \item The input arguments are the co-ordinates of the top and bottom of the left edge and the right edge, the midpoints of the contours of the left and right edges
        \item Using the co-ordinates we choose the area around the edges and using warp perspective we make it a rectangle
        \item We find the minimum of the matrix and find the depth of the left and right edges
-       \item We select the left area for the left edge and right area for the right edge
        \item 640 pixels corresponds to 57 degrees so we find the pixel width using the centroid of the left and right edges
        \item Using the pixel width we find the angle between the two edges and using cosine rule we find the actual width of the door
-       \item We return the actual width of the door from this function
        \item \textbf{Example Call:} width = actual\_width\_in\_mm((100,200), (100,100), (200,200), (200,100), 200, 100)
       \end{itemize}
   \framebreak
@@ -144,11 +141,9 @@
        \item The input arguments are the co-ordinates of the left top, left bottom, right top, right bottom points of the door
        \item The function creates a small 10x20 area and finds the minimum pixel value as that will be the depth value of that point
        \item So we get the depth distance of the four points.
-       \item Now 640 pixels corresponds to 57 degrees and 480 pixels to 430 degrees. SO we find the pixels height to find the angle formed by the line joining the top and bottom points
+       \item So we find the pixels height to find the angle formed by the line joining the top and bottom points
        \item Using Pythagoras theorem we find the actual height of the edge of the door
        \item The assumption is that the depth of the bottom points is in line with the robot and the triangle formed is a right angled triangle
-       \item Rescaling the height we get the actual height of the left and right edges of the door
-       \item It returns the left and right door edges
        \item \textbf{Example Call:} leftheight, rightheight = return\_height\_in\_mm((100,200), (100,100), (200,200), (200,100), 200, 100)
 	\end{itemize}
   \framebreak
@@ -212,7 +207,7 @@
     \textbf{actual\_height\_test(left edge height, right edge height) : }
       \begin{itemize}
 	\item It takes two arguments: The left edge height and the right edge height
-	\item It returns the probability percentage of the edges to be door edge. We have sent 1.5m as standard value and 1500 is the variance
+	\item It returns the probability percentage of the edges to be door edge. We have sent 1.5m as standard value and 1500mm is the variance
 	\item The average of the two probabilities is returned from this function
 	\item \textbf{Example Call:} prob\_2 = actual\_height\_test(1000, 1000)
       \end{itemize}
@@ -332,8 +327,8 @@
   \subsection{data\_send}
     \textbf{data\_send(left motor mode, right motor mode) : }
       \begin{itemize}
-       \item the arguments are the modes of the left and right motor
-       \item the mode selection is based on the division in which the object is detected
+       \item The arguments are the modes of the left and right motor
+       \item The mode selection is based on the division in which the object is detected
        \item Based on the mode selected a particular char value is send to the robot which sets the velocity of the two motors of the robot
        \item If the mode is 4,4 than the robot is stuck in a position and a function is called for that movement
        \item \textbf{Example Call:} data\_send(2,0)
