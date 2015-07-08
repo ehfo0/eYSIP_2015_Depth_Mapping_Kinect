@@ -3,10 +3,10 @@
 \contentsline {chapter}{\numberline {3}Completion}{4}
 \contentsline {section}{\numberline {3.1}Task 1- Learning FireBird V and Kinect API}{4}
 \contentsline {section}{\numberline {3.2}Task 2 - Develop a code for FireBird movement}{5}
-\contentsline {section}{\numberline {3.3}Task 3 - Creation of a depth map of room using Kinect}{7}
-\contentsline {section}{\numberline {3.4}Task - 4: Decison making about exiting the room based on depth map}{12}
-\contentsline {chapter}{\numberline {4}Result and discussion:}{16}
-\contentsline {section}{\numberline {4.1}Weighing of probabilities}{16}
-\contentsline {chapter}{\numberline {5}Bugs}{20}
-\contentsline {chapter}{\numberline {6}Future Work}{21}
-\contentsline {chapter}{\numberline {7}References}{22}
+\contentsline {section}{\numberline {3.3}Task 3 - Creation of a depth map of room using Kinect}{8}
+\contentsline {section}{\numberline {3.4}Task - 4: Decison making about exiting the room based on depth map}{13}
+\contentsline {chapter}{\numberline {4}Result and discussion:}{18}
+\contentsline {section}{\numberline {4.1}Weighing of probabilities:}{18}
+\contentsline {chapter}{\numberline {5}Issues}{22}
+\contentsline {chapter}{\numberline {6}Future Work}{23}
+\contentsline {chapter}{\numberline {7}References}{24}
