@@ -1,26 +1,4 @@
-"""
-*                       
-*                  ================================
-*  
-*  Author List: Mukesh P, Aniket Patel
-*  Filename: 		Depth_map.py
-*  Date:                June 18, 2015
-*  Functions: 		get_depth, return_mean
-*  Global Variables:	
-*  Dependent library files:     numpy, freenect, cv2, serial, time
-*  This software is made available on an AS IS WHERE IS BASIS. 
-*  Licensee/end user indemnifies and will keep e-Yantra indemnified from
-*  any and all claim(s) that emanate from the use of the Software or 
-*  breach of the terms of this agreement.
-*  
-*  e-Yantra - An MHRD project under National Mission on Education using 
-*  ICT(NMEICT)
-*
-**************************************************************************
-*     
-*
-*
-"""
+
 
 import freenect
 import cv2
@@ -76,7 +54,6 @@ while(True):
     else:
         while(return_mean(get_depth())<242):
             ser.write("\x36")	#rotate till the threshold is crossed
-
     th3 = cv2.adaptiveThreshold(a,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,3,2)	#Binary threshold
     contours, hierarchy = cv2.findContours(th3,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)	#find contours
     img = cv2.drawContours(a, contours, -1, (0,255,0), 3)	#draw contours in the frame

@@ -1,0 +1,2 @@
+import Kinect
+Kinect.start()

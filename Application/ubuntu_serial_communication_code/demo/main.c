@@ -1,25 +1,25 @@
 /***********************************************
  *Documentation for E-Yantra
- *Author List:			Aniket Patel, Mukesh P
+ *Author List:		Aniket Patel, Mukesh P
  *Filename:			main.c
  *Theme: 			Cargo Sorting
- *Functions: 			lcd_port_config (void)
-				buzzer_pin_config (void)
-				motion_pin_config (void)
-				timer5_init()
-				velocity (unsigned char left_motor, unsigned char right_motor)
-				motion_set (unsigned char Direction)
-				forward (void)
-				stop (void)
-				right (void)
-				left()
-				port_init()
-				buzzer_on (void)
-				buzzer_off (void)
-				uart2_init(void)
-				SIGNAL(USART2_RX_vect)
-				init_devices()
- *Global Variables:		data, x, y
+ *Functions: 		lcd_port_config (void)
+                    buzzer_pin_config (void)
+                    motion_pin_config (void)
+                    timer5_init()
+                    velocity (unsigned char left_motor, unsigned char right_motor)
+                    motion_set (unsigned char Direction)
+                    forward (void)
+                    stop (void)
+                    right (void)
+                    left()
+                    port_init()
+                    buzzer_on (void)
+                    buzzer_off (void)
+                    uart2_init(void)
+                    SIGNAL(USART2_RX_vect)
+                    init_devices()
+ *Global Variables:	data, x, y
  *Note: The code hereby is the Universal Code for the Cargo-Sorting theme.
  *(It will work for any configuration of the prescribed theme within predetermined limits)
 
@@ -54,14 +54,13 @@ void lcd_port_config (void)
 }
 
 /*
- * Function Name:	buzzer_pin_config
- * Input:		none
- * Output: 		Configures the buzzer pin
- * Logic:		Enables the DDRC register and setting pin of PORTC 7
- * Example Call:	buzzer_pin_config ()
+ * Function Name:	adc_pin_config
+ * Input:		    none
+ * Output: 		    Configures the adc pin
+ * Logic:		    It Enables the DDRF and DDRK register and setting pin of PORTF and PORTK
+ * Example Call:	adc_pin_config ()
  *
  */
-
  void adc_pin_config (void)
 {
  DDRF = 0x00; //set PORTF direction as input
@@ -70,6 +69,14 @@ void lcd_port_config (void)
  PORTK = 0x00; //set PORTK pins floating
 }
 
+/*
+ * Function Name:	buzzer_pin_config
+ * Input:		none
+ * Output: 		Configures the buzzer pin
+ * Logic:		Enables the DDRC register and setting pin of PORTC 7
+ * Example Call:	buzzer_pin_config ()
+ *
+ */
 void buzzer_pin_config (void)
 {
  DDRC = DDRC | 0x08;		//Setting PORTC 3 as outpt
@@ -93,9 +100,9 @@ void motion_pin_config (void)
 
 /*
  * Function Name:	timer5_init()
- * Input:		none
- * Output: 		Configures the pins for timer use
- * Logic:		Commented below
+ * Input:		    none
+ * Output: 		    Configures the pins for timer use
+ * Logic:		    Commented below
  * Example Call:	timer5_init()
  */
 void timer5_init()
@@ -118,9 +125,9 @@ void timer5_init()
 
 /*
  * Function Name:	velocity()
- * Input:		speed of left_motor, right_motor
- * Output: 		the value is stored in the OCR pins. This value sets the voltage across the motors. 255 indicates 12 V and 0 indicates 				0 V
- * Logic:		Assignment of char value to the pin
+ * Input:		    speed of left_motor, right_motor
+ * Output: 		    the value is stored in the OCR pins. This value sets the voltage across the motors. 255 indicates 12 V and 0 indicates 				0 V
+ * Logic:		    Assignment of char value to the pin
  * Example Call:	velocity(200,200)
  */
 void velocity (unsigned char left_motor, unsigned char right_motor)
@@ -131,9 +138,9 @@ void velocity (unsigned char left_motor, unsigned char right_motor)
 
 /*
  * Function Name:	motion_set()
- * Input:		sets the required pins for movement
- * Output: 		enables the necessary PORTA pins
- * Logic:		the required pins of the PORTA pins are set so that the robot can move left or right.
+ * Input:		    sets the required pins for movement
+ * Output: 		    enables the necessary PORTA pins
+ * Logic:		    the required pins of the PORTA pins are set so that the robot can move left or right.
  * Example Call:	motion_set(0x01)
  */
 void motion_set (unsigned char Direction)
@@ -148,11 +155,11 @@ void motion_set (unsigned char Direction)
 }
 
 /*
- * Function Name:	forward()
- * Input:		None
- * Output: 		sets pins for forward movement
- * Logic:		sets pins of PORTA for forward movement
- * Example Call:	forward()
+ * Function Name:	spot_left()
+ * Input:		    None
+ * Output: 		    Right wheel forward, Left wheel backward
+ * Logic:		    sets the pins and velocity of the wheels
+ * Example Call:	spot_left()
  */
  void spot_left (void) //Left wheel backward, Right wheel forward
 {
@@ -160,12 +167,26 @@ void motion_set (unsigned char Direction)
   velocity(255,255);
 }
 
+/*
+ * Function Name:	spot_right()
+ * Input:		    None
+ * Output: 		    Right wheel backward, Left wheel forward
+ * Logic:		    sets the pins and velocity of the wheels
+ * Example Call:	spot_right()
+ */
 void spot_right (void) //Left wheel forward, Right wheel backward
 {
   motion_set(0x0A);
   velocity(255,255);
 }
 
+/*
+ * Function Name:	forward()
+ * Input:		    None
+ * Output: 		    sets pins for forward movement
+ * Logic:		    sets pins of PORTA for forward movement
+ * Example Call:	forward()
+ */
 void forward (void) //both wheels forward
 {
   motion_set(0x06);
@@ -173,9 +194,9 @@ void forward (void) //both wheels forward
 
 /*
  * Function Name:	stop()
- * Input:		None
- * Output: 		sets pins for stopping
- * Logic:		sets pins of PORTA for to stop the robot
+ * Input:		    None
+ * Output: 		    sets pins for stopping
+ * Logic:		    sets pins of PORTA for to stop the robot
  * Example Call:	stop()
  */
 void stop (void)
@@ -185,17 +206,24 @@ void stop (void)
 
 /*
  * Function Name:	left()
- * Input:		None
- * Output: 		sets pins for left turn
- * Logic:		sets pins of PORTA for to turn the robot left and sets the velocity of the wheel
+ * Input:		    None
+ * Output: 		    sets pins for left turn
+ * Logic:		    sets pins of PORTA for to turn the robot left and sets the velocity of the wheel
  * Example Call:	left()
  */
-void left (void) //Left wheel backward, right wheel stationary
+void left (void) //Left wheel stationary, right wheel forward
 {
  motion_set(0x04);
  velocity(0,200);
 }
 
+/*
+ * Function Name:	left_back()
+ * Input:		    None
+ * Output: 		    sets pins for left turn
+ * Logic:		    sets pins of PORTA for to turn the robot left and sets the velocity of the wheel
+ * Example Call:	left_back()
+ */
 void left_back (void) //Left wheel backward, right wheel stationary
 {
  motion_set(0x01);
@@ -203,9 +231,9 @@ void left_back (void) //Left wheel backward, right wheel stationary
 }
 /*
  * Function Name:	right()
- * Input:		None
- * Output: 		sets pins for right turn
- * Logic:		sets pins of PORTA for to turn the robot right and sets the velocity of the wheel
+ * Input:		    None
+ * Output: 		    sets pins for right turn
+ * Logic:		    sets pins of PORTA for to turn the robot right and sets the velocity of the wheel
  * Example Call:	right()
  */
 void right (void) //Left wheel stationary, Right wheel backward
@@ -214,12 +242,26 @@ void right (void) //Left wheel stationary, Right wheel backward
  velocity(200,0);
 }
 
+/*
+ * Function Name:	right_back()
+ * Input:		    None
+ * Output: 		    sets pins for right turn
+ * Logic:		    sets pins of PORTA for to turn the robot right and sets the velocity of the wheel
+ * Example Call:	right_back()
+ */
 void right_back (void) //Left wheel stationary, Right wheel backward
 {
  motion_set(0x08);
  velocity(0,200);
 }
 
+/*
+ * Function Name:	back()
+ * Input:		    None
+ * Output: 		    sets pins for backward movement
+ * Logic:		    sets pins of PORTA for to turn the robot back and sets the velocity of the wheel
+ * Example Call:	back()
+ */
 void back (void) //both wheels backward
 {
 	motion_set(0x09);
@@ -228,9 +270,9 @@ void back (void) //both wheels backward
 //Function to initialize ports
 /*
  * Function Name:	port_init()
- * Input:		None
- * Output: 		initializes the required ports of Fire bird V
- * Logic:		calls the pin config functions
+ * Input:		    None
+ * Output: 		    initializes the required ports of Fire bird V
+ * Logic:		    calls the pin config functions
  * Example Call:	port_init()
  */
 void port_init()
@@ -241,6 +283,13 @@ void port_init()
     adc_pin_config();
 }
 
+/*
+ * Function Name:	adc_init()
+ * Input:		    None
+ * Output: 		    initializes the adc pins of Fire bird V for analog to digital conversion
+ * Logic:		    Enables the required pins
+ * Example Call:	adc_init()
+ */
 void adc_init()
 {
 	ADCSRA = 0x00;
@@ -250,6 +299,13 @@ void adc_init()
 	ADCSRA = 0x86;		//ADEN=1 --- ADIE=1 --- ADPS2:0 = 1 1 0
 }
 
+/*
+ * Function Name:	ADC_Conversion()
+ * Input:		    char value
+ * Output: 		    converts analog to digital reading
+ * Logic:		    recieves char
+ * Example Call:	ADC_Conversion(5)
+ */
 unsigned char ADC_Conversion(unsigned char Ch)
 {
 	unsigned char a;
@@ -299,7 +355,13 @@ void buzzer_off (void)
  PORTC = port_restore;
 }
 
-
+/*
+ * Function Name:	Sharp_GP2D12_estimation()
+ * Input:		    adc reading
+ * Output: 		    returns the distance in mm
+ * Logic:		    char value is converted into 0 to 800 mm range
+ * Example Call:	Sharp_GP2D12_estimation(100)
+ */
 unsigned int Sharp_GP2D12_estimation(unsigned char adc_reading)
 {
 	float distance;
@@ -321,11 +383,11 @@ unsigned int Sharp_GP2D12_estimation(unsigned char adc_reading)
 // char size: 8 bit
 // parity: Disabled
 /*
- * Function Name:	uart2_init()
- * Input:		None
- * Output: 		UART2 initialization
- * Logic:		No logic
- * Example Call:	uart2_init()
+ * Function Name:	uart0_init()
+ * Input:		    None
+ * Output: 		    UART0 initialization
+ * Logic:		    No logic
+ * Example Call:	uart0_init()
  */
 void uart0_init(void)
 {
@@ -339,50 +401,15 @@ void uart0_init(void)
 
 /*
  * Function Name:	SIGNAL()
- * Input:		Interrupt USART2_RX_vect
- * Output: 		sets the velocity of the wheels
- * Logic:		It stores data from UDR2 in a variable and using switch cases it sets the desired velocity
+ * Input:		    Interrupt USART2_RX_vect
+ * Output: 		    sets the velocity of the wheels
+ * Logic:		    It stores data from UDR2 in a variable and using switch cases it sets the desired velocity
  * Example Call:	No call as it is an interrupt
  */
 SIGNAL(USART0_RX_vect) 		// ISR for receive complete interrupt
 {
 	data = UDR0; 				//making copy of data from UDR2 in 'data' variable
-        p5 = ADC_Conversion(5);
-		p7 = ADC_Conversion(7);
-        sharp = ADC_Conversion(11);						//Stores the Analog value of front sharp connected to ADC channel 11 into variable "sharp"
-		value_mid = Sharp_GP2D12_estimation(sharp);
-		sharp = ADC_Conversion(10);
-		value_left = Sharp_GP2D12_estimation(sharp);
-		sharp = ADC_Conversion(12);
-		value_right = Sharp_GP2D12_estimation(sharp);
-		lcd_print(1,1,p5,3);
-		lcd_print(1,8,p7,3);
-		lcd_print(2,1,value_left,3);
-		lcd_print(2,5,value_mid,3);
-		lcd_print(2,9,value_right,3);
-	if(((value_mid < 200) && (value_mid > 80)) || (p5 < 140) || (p7 < 140) || ((value_left < 200) && (value_left > 80)) || ((value_right < 200) && (value_right > 80)))
-	{
-        if((value_mid < 200) && (value_mid > 80))
-            back();
-        if(p5 < 140)
-        {
-            back();
-            velocity(150,255);
-        }
-        if(p7 < 140)
-        {
-            back();
-            velocity(255,150);
-        }
-        if((value_left < 200) && (value_left > 80))
-        {
-            right_back();
-        }
-        if((value_right < 200) && (value_right > 80))
-        {
-            left_back();
-        }
-    }
+
 
 	switch(data)
 	{
@@ -415,14 +442,14 @@ SIGNAL(USART0_RX_vect) 		// ISR for receive complete interrupt
         case 0x37: buzzer_on();      return;
         case 0x39: buzzer_off();     return;
         case 0x35: x = 0;   y = 0;   break;
+        case 0x50: back();           return;
 	}
-    if(((value_mid < 200) && (value_mid > 80)) || (p5 < 150) || (p7 < 140) || ((value_left < 200) && (value_left > 80)) || ((value_right < 200) && (value_right > 80)));
-    else{
+
         forward();
         velocity(x,y);
         lcd_print(1,1,x,3);
         lcd_print(2,1,y,3);
-        }
+
 }
 
 
