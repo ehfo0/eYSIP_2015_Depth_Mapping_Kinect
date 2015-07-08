@@ -290,7 +290,7 @@ def horizontal_lines():
     * Logic:		Analyzes the depth array for any drastic
                     change in vertical DIRECTION. Areas with
                     sudden increase/decrease in depth are marked as edges.
-    * Example Call:	horizontal_line()
+    * Example Call:	horizontal_lines()
     """
     global GLOBAL_DEPTH_MAP
     contour = contours_return(GLOBAL_DEPTH_MAP, 6400)
@@ -310,16 +310,16 @@ def horizontal_lines():
 def actual_width_in_mm(left_bottom, left_top, right_bottom, right_top,
                        cxr, cxl):
     """
-    * Function Name:actual_width_in_mm()
+    * Function Name:	actual_width_in_mm()
     * Input:		left_bottom: bottom most co-ordinate of the left edge.
-                    left_top: top most co-ordinate of the right edge.
-                    right_bottom: Bottom most co-ordinate of the right edge
-                    right_top: Top most co-ordinate of the right edge
-                    cxr: Centroid of the right edge.
-                    cxl: Centroid of the left edge.
+                    	left_top: top most co-ordinate of the right edge.
+                    	right_bottom: Bottom most co-ordinate of the right edge
+                    	right_top: Top most co-ordinate of the right edge
+                    	cxr: Centroid of the right edge.
+                   	cxl: Centroid of the left edge.
     * Output:		Returns the real width of the obstacle.
     * Logic:		Calculates the real width in mm using
-                    basic trigonometric calculations.
+                    	basic trigonometric calculations.
     * Example Call:	acutal_width_in_mm(10,10,20,20,15,15)
     """
     depth_map = freenect.sync_get_depth(format=freenect.DEPTH_MM)[0]
