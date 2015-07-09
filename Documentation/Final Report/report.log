@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2015.6.15)  8 JUL 2015 12:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2015.6.15)  9 JUL 2015 18:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -263,67 +263,67 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
  [4
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 88--91
+Underfull \hbox (badness 10000) in paragraph at lines 86--94
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 88--91
+Underfull \hbox (badness 10000) in paragraph at lines 86--94
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 88--91
+Underfull \hbox (badness 10000) in paragraph at lines 86--94
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 88--91
+Underfull \hbox (badness 10000) in paragraph at lines 86--94
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 88--91
+Underfull \hbox (badness 10000) in paragraph at lines 86--94
 
  []
 
 [5] <Case_1.jpg, id=27, 963.6pt x 722.7pt>
 File: Case_1.jpg Graphic file (type jpg)
  <use Case_1.jpg>
-Package pdftex.def Info: Case_1.jpg used on input line 94.
+Package pdftex.def Info: Case_1.jpg used on input line 97.
 (pdftex.def)             Requested size: 569.05511pt x 426.79732pt.
 
-Overfull \hbox (114.3001pt too wide) in paragraph at lines 94--97
+Overfull \hbox (114.3001pt too wide) in paragraph at lines 97--100
 [][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 94--97
+Underfull \hbox (badness 10000) in paragraph at lines 97--100
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 94--97
+Underfull \hbox (badness 10000) in paragraph at lines 97--100
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 94--97
+Underfull \hbox (badness 10000) in paragraph at lines 97--100
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 94--97
+Underfull \hbox (badness 10000) in paragraph at lines 97--100
 
  []
 
 [6 <./Case_1.jpg>] <Case_2.jpg, id=32, 963.6pt x 722.7pt>
 File: Case_2.jpg Graphic file (type jpg)
  <use Case_2.jpg>
-Package pdftex.def Info: Case_2.jpg used on input line 103.
-(pdftex.def)             Requested size: 569.05511pt x 426.79732pt.
+Package pdftex.def Info: Case_2.jpg used on input line 104.
+(pdftex.def)             Requested size: 512.1496pt x 384.1209pt.
 
-Overfull \hbox (99.3001pt too wide) in paragraph at lines 103--104
+Overfull \hbox (42.39458pt too wide) in paragraph at lines 104--105
 []  
  []
 
@@ -372,95 +372,103 @@ Package pdftex.def Info: d_5bit.png used on input line 143.
 (pdftex.def)             Requested size: 284.52756pt x 235.64664pt.
  [9 <./bilat.jpg>]
 [10 <./d_4bit.png> <./d_5bit.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 146--147
-
- []
-
 <d_3bit.png, id=50, 635.37375pt x 540.0175pt>
 File: d_3bit.png Graphic file (type png)
  <use d_3bit.png>
-Package pdftex.def Info: d_3bit.png used on input line 148.
+Package pdftex.def Info: d_3bit.png used on input line 147.
 (pdftex.def)             Requested size: 284.52756pt x 241.83554pt.
- [11 <./d_3bit.png>] <Noise.png, id=54, 646.415pt x 512.91624pt>
-File: Noise.png Graphic file (type png)
- <use Noise.png>
-Package pdftex.def Info: Noise.png used on input line 158.
-(pdftex.def)             Requested size: 284.52756pt x 225.7621pt.
 
-<Noiseless.png, id=55, 647.41875pt x 514.92375pt>
+Underfull \hbox (badness 10000) in paragraph at lines 146--148
+
+ []
+
+[11 <./d_3bit.png>] <Noise.png, id=54, 646.415pt x 512.91624pt>
+File: Noise.png Graphic file (type png)
+
+<use Noise.png>
+Package pdftex.def Info: Noise.png used on input line 156.
+(pdftex.def)             Requested size: 284.52756pt x 225.7621pt.
+ <Noiseless.png, id=55, 647.41875pt x 514.92375pt>
 File: Noiseless.png Graphic file (type png)
- <use Noiseless.png>
-Package pdftex.def Info: Noiseless.png used on input line 160.
+
+<use Noiseless.png>
+Package pdftex.def Info: Noiseless.png used on input line 158.
 (pdftex.def)             Requested size: 284.52756pt x 226.3pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 157--161
+Underfull \hbox (badness 10000) in paragraph at lines 155--159
 
  []
 
 [12 <./Noise.png> <./Noiseless.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 166--167
+Underfull \hbox (badness 10000) in paragraph at lines 164--165
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 168--176
+Underfull \hbox (badness 10000) in paragraph at lines 166--174
 
  []
 
 <result.jpg, id=60, 642.4pt x 481.8pt>
 File: result.jpg Graphic file (type jpg)
  <use result.jpg>
-Package pdftex.def Info: result.jpg used on input line 177.
+Package pdftex.def Info: result.jpg used on input line 175.
 (pdftex.def)             Requested size: 284.52756pt x 213.39682pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 177--178
+Underfull \hbox (badness 10000) in paragraph at lines 175--176
 
  []
 
 [13 <./result.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 187--190
+Underfull \hbox (badness 10000) in paragraph at lines 185--188
 
  []
 
 <pythagoras.jpg, id=64, 963.6pt x 722.7pt>
 File: pythagoras.jpg Graphic file (type jpg)
  <use pythagoras.jpg>
-Package pdftex.def Info: pythagoras.jpg used on input line 191.
+Package pdftex.def Info: pythagoras.jpg used on input line 189.
 (pdftex.def)             Requested size: 284.52756pt x 213.39314pt.
  [14 <./pythagoras.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 199--201
+Underfull \hbox (badness 10000) in paragraph at lines 197--199
 
  []
 
 <Gaussian.jpg, id=68, 748.7975pt x 485.815pt>
 File: Gaussian.jpg Graphic file (type jpg)
  <use Gaussian.jpg>
-Package pdftex.def Info: Gaussian.jpg used on input line 202.
+Package pdftex.def Info: Gaussian.jpg used on input line 200.
 (pdftex.def)             Requested size: 284.52756pt x 184.59679pt.
  [15 <./Gaussian.jpg>]
+Underfull \hbox (badness 10000) in paragraph at lines 215--216
+
+ []
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 217--218
 
  []
 
+<cosine_modified.jpg, id=78, 963.6pt x 722.7pt>
+File: cosine_modified.jpg Graphic file (type jpg)
+ <use cosine_modified.jpg>
+Package pdftex.def Info: cosine_modified.jpg used on input line 219.
+(pdftex.def)             Requested size: 341.43306pt x 256.06956pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 219--220
+[16 <./cosine_modified.jpg>]
+Underfull \hbox (badness 10000) in paragraph at lines 238--239
 
  []
 
-<Cosine.jpg, id=78, 963.6pt x 722.7pt>
-File: Cosine.jpg Graphic file (type jpg)
- <use Cosine.jpg>
-Package pdftex.def Info: Cosine.jpg used on input line 221.
-(pdftex.def)             Requested size: 284.52756pt x 213.39314pt.
- [16 <./Cosine.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 239--240
+
+Underfull \hbox (badness 10000) in paragraph at lines 240--249
 
  []
 
 <horizontal.png, id=82, 645.41125pt x 518.93875pt>
 File: horizontal.png Graphic file (type png)
  <use horizontal.png>
-Package pdftex.def Info: horizontal.png used on input line 245.
+Package pdftex.def Info: horizontal.png used on input line 250.
 (pdftex.def)             Requested size: 284.52756pt x 228.76926pt.
 
 [17 <./horizontal.png>]
@@ -471,70 +479,70 @@ Chapter 4.
 File: confidence_304.png Graphic file (type png)
 
 <use confidence_304.png>
-Package pdftex.def Info: confidence_304.png used on input line 270.
+Package pdftex.def Info: confidence_304.png used on input line 275.
 (pdftex.def)             Requested size: 426.79134pt x 239.94662pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 269--271
+Underfull \hbox (badness 10000) in paragraph at lines 274--276
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 269--271
+Underfull \hbox (badness 10000) in paragraph at lines 274--276
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 269--271
+Underfull \hbox (badness 10000) in paragraph at lines 274--276
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 269--271
+Underfull \hbox (badness 10000) in paragraph at lines 274--276
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 269--271
+Underfull \hbox (badness 10000) in paragraph at lines 274--276
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 269--271
+Underfull \hbox (badness 10000) in paragraph at lines 274--276
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 269--271
+Underfull \hbox (badness 10000) in paragraph at lines 274--276
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 269--271
+Underfull \hbox (badness 10000) in paragraph at lines 274--276
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 269--271
+Underfull \hbox (badness 10000) in paragraph at lines 274--276
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 269--271
+Underfull \hbox (badness 10000) in paragraph at lines 274--276
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 269--271
+Underfull \hbox (badness 10000) in paragraph at lines 274--276
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 269--271
+Underfull \hbox (badness 10000) in paragraph at lines 274--276
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 269--271
+Underfull \hbox (badness 10000) in paragraph at lines 274--276
 
  []
 
@@ -542,36 +550,36 @@ Underfull \hbox (badness 10000) in paragraph at lines 269--271
 <confidence_204.png, id=94, 1371.1225pt x 770.88pt>
 File: confidence_204.png Graphic file (type png)
  <use confidence_204.png>
-Package pdftex.def Info: confidence_204.png used on input line 272.
+Package pdftex.def Info: confidence_204.png used on input line 277.
 (pdftex.def)             Requested size: 426.79134pt x 239.94662pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 271--273
+Underfull \hbox (badness 10000) in paragraph at lines 276--278
 
  []
 
 <lift.png, id=95, 1371.1225pt x 770.88pt>
 File: lift.png Graphic file (type png)
  <use lift.png>
-Package pdftex.def Info: lift.png used on input line 274.
+Package pdftex.def Info: lift.png used on input line 279.
 (pdftex.def)             Requested size: 426.79134pt x 239.94662pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 273--275
+Underfull \hbox (badness 10000) in paragraph at lines 278--280
 
  []
 
-[20 <./confidence_204.png> <./lift.png>]
+[20 <./confidence_204.png>]
 <erts_lab_confidence.png, id=99, 1371.1225pt x 770.88pt>
 File: erts_lab_confidence.png Graphic file (type png)
 
 <use erts_lab_confidence.png>
-Package pdftex.def Info: erts_lab_confidence.png used on input line 276.
+Package pdftex.def Info: erts_lab_confidence.png used on input line 281.
 (pdftex.def)             Requested size: 426.79134pt x 239.94662pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 275--277
+Underfull \hbox (badness 10000) in paragraph at lines 280--282
 
  []
 
-[21 <./erts_lab_confidence.png>]
+[21 <./lift.png> <./erts_lab_confidence.png>]
 Chapter 5.
 [22
 
@@ -582,7 +590,7 @@ Chapter 6.
 ]
 Chapter 7.
 
-Overfull \hbox (17.75423pt too wide) in paragraph at lines 310--311
+Overfull \hbox (17.75423pt too wide) in paragraph at lines 313--314
 []$\OML/cmm/m/it/10 http \OT1/cmr/m/n/10 : \OML/cmm/m/it/10 ==www:intel:com=con
 tent=dam=www=public=us=en=documents=guides=bkm \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/
 it/10 installing \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 ubunto \OMS/cmsy/m/n/10 
@@ -594,12 +602,12 @@ it/10 installing \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 ubunto \OMS/cmsy/m/n/10
 ] (./report.aux) ) 
 Here is how much of TeX's memory you used:
  3444 strings out of 495020
- 48091 string characters out of 6181324
+ 48136 string characters out of 6181324
  107242 words of memory out of 5000000
  6610 multiletter control sequences out of 15000+600000
  9928 words of font info for 36 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,6n,32p,626b,841s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,6n,32p,250b,841s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
 /cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx1
 2.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
@@ -613,7 +621,7 @@ public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
 s/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 sy7.pfb>
-Output written on report.pdf (25 pages, 1863789 bytes).
+Output written on report.pdf (25 pages, 1863022 bytes).
 PDF statistics:
  156 PDF objects out of 1000 (max. 8388607)
  96 compressed objects within 1 object stream

@@ -7,7 +7,7 @@
 \renewcommand{\baselinestretch}{2}
 \author{Mukesh P., Aniket Patel \\ Project mentor: Amiraj Dhawan} 
 
-\title{Depth-based Room Mapping using Kinect}
+\title{Depth based room mapping using Kinect}
 \begin{document}
 \maketitle
 \tableofcontents
@@ -15,12 +15,12 @@
 
 \chapter{Abstract}
 In this project, an indoor path planning algorithm is proposed for autonomously detecting and exiting a door. Complex situation in indoor
-environment may lead to serious problem with analysis of data to process corners and edges of doors. For this reason, a Kinect is used.
+environment may lead to serious problem with analysis of data to process corners and edges of doors. For this reason, a Microsoft Kinect sensor is used.
 Kinect can give depth information of an image. This depth information from Kinect is processed to detect edges and corners of a door and using serial
 communication, the robot is made to exit the room. Experiments on different indoor scenarios have been performed
 to verify the efficiency of algorithm.
 \chapter{Objective of the work}
-The aim of this project is to use the depth sensing to create a depth map of a room using Kinect sensor. The robot is used for movement and the 
+The aim of this project is to use depth sensing to create a depth map of a room using Kinect sensor. The robot is used for movement and
 Kinect to create a depth map of the room. The final goal is to exit the room from the only single door depending on the depth map created. \\ \\
 
 \begin{tabular}{ | c | c | c |}
@@ -42,14 +42,14 @@ Kinect to create a depth map of the room. The final goal is to exit the room fro
 
 \chapter{Completion}
 
-All tasks have been completed. Robot exits the door through the door present in the room in about 80\% of cases.
+Robot exits the door through the door present in the room in most of cases. All tasks have been completed.
 The following work has been done in each task.
 
-\section{Task 1- Learning FireBird V and Kinect API}
+\section{Task 1- Learning Firebird V and Kinect API}
 \begin{itemize}
 \item Installed the following libraries:
 \begin{itemize}
- \item \textbf{freenect}: This library contains necessary modules for installing Kinect. It provides sample 
+ \item \textbf{freenect}: This library contains necessary modules for installing Kinect Application Programming Interface (API). It provides sample 
 			  programs which can be used to test the functionality of Kinect.
  \item \textbf{python wrapper for freenect}: This library is used for reading data from Kinect in python.
  \item \textbf{opencv}: This library provides various modules which are used for processing an image. The data retrieved from
@@ -68,46 +68,46 @@ The following work has been done in each task.
 
 \end{itemize}
 
-\section{Task 2 - Develop a code for FireBird movement}
+\section{Task 2 - Develop a code for Firebird V movement}
 
 
 
 The robot will move forward till it can deduce that it is at a sufficient distance from a wall. 
-This will be decided by taking the mean of pixels in a particular space. After this, the robot
+This will be decided by taking the mean of the pixels in a particular space. After this, the robot
 will move along the wall and detect doors in the given space. It will map and keep a record of all the objects that look 
 like a door. One can never be sure whether a rectangular object detected is a door or not. Hence, 
 every such object will be associated with a probability. If this probability is above a threshold 
 value, then the robot will decide that the obstacle detected is a door and will exit through it. 
-If not, then it will scan the rest of the arena and keep storing information about obstacle, their 
-position and probabilities and after scanning the room, it will choose the door having highest
-probability. \\
+If not, then it will scan the rest of the arena.
 Two types of movements have been defined for robot traversal.
 
 1. Regular movement:
 
-This algorithm is used when the robot is trying to detect a door. In this algorithm, the image is divided into 8 frames. Suppose the frames are numbered consecutively from left to right. If a obstacle appears in the first frame, the robot will take a soft turn. As the obstacle starts getting closer to the middle area, the velocity is increased so that the robot takes a hard turn. There may exist two cases:
+This algorithm is used when the robot is trying to detect a door. In this algorithm, 
+the image is divided into 8 frames. Suppose the frames are numbered consecutively from left to right. 
+If a obstacle appears in the first frame, the robot takes a soft right turn. If the obstacle appears in the last frame, the robot takes
+a soft left turn. if the obstacle is in 2nd frame, the robot will take a harder right turn than the previous case. Similarly, if the
+obstacle is in 7th frame, the robot takes a harder left turn. Similarly, when the obstacle is in 3rd or 6th frame, the robot takes an
+even harder left or right turn . When the obstacle is detected in 4th or 5th frame, the robot takes a perfect hard turn. There may exist two cases:
 \\ \\ \\ \\ \\ \\
-Case 1: Obstacle which lie beyond 40cm:
+Case 1: Obstacle which lies beyond 40cm:
 
-In this case, the obstacle lies within Kinect's detection range. Hence, the movement of the robot looks something like this:
+In this case, the obstacle lies within Kinect's detection range. Hence, the movement of the robot looks as shown below:
 
 \includegraphics[width = 20CM]{Case_1.jpg}
 \\ \\ \\ \\ \\
-Case 2: Obstacle which lie between 0 - 40cm:
+Case 2: Obstacle which lies between 0 - 40cm:
 
 In this case, the obstacle does not lie within the Kinect's detection range. 
-The obstacle is detected using GP2D12 Sharp sensors. The movement of the robot would look something like this:
+The obstacle is detected using number of unknown pixels in Kinect feed. The movement of the robot would look as shown:
 \begin{flushleft}
- 
-
-\includegraphics[width = 20CM]{Case_2.jpg}
-
+\includegraphics[width = 18CM]{Case_2.jpg}
 \end{flushleft}
 
 2. Doorway Movement:
 This algorithm is used when a door is detected. After a door is detected, 
 the image is divided into three vertical frames (left, middle and right frame). 
-if there is sufficient space in middle frame, then the robot moves forward. Else, 
+If there is sufficient space in the middle frame, then the robot moves forward. Else, 
 depth in right and left areas are compared to decide whether a left turn should be taken or a right turn.
 
 \section{Task 3 - Creation of a depth map of room using Kinect}
@@ -119,11 +119,11 @@ The original image: \\
 \includegraphics[width = 10cm]{reference.jpg} \\
 Depth Map:\\
 \includegraphics[width = 10cm]{feed.jpg} \\
-The depth map of the environment can be retrieved from Kinect in python using: \\
+The depth map of the environment can be retrieved from Kinect in python using the following code snippet: \\
 \begin{lstlisting}
 depth = freenect.sync_get_depth(format=freenect.DEPTH_11BIT)
 \end{lstlisting}
-After retrieving the depth map, bilateral filter is applied on the image obtained to reduce noise and still pertain edges. After
+After retrieving the depth map, bilateral filter is applied on the image obtained. Bilateral filter is used so that edges are not affected. After
 applying bilateral filter, the image now becomes : \\
 \includegraphics[width = 10cm]{bilat.jpg}
 
@@ -133,9 +133,9 @@ in mm. This feed can be retrieved using: \\
 depth = freenect.sync_get_depth(format=freenect.DEPTH_MM)
 \end{lstlisting}
 
-The depth feed is a numpy array and contains values ranging from 0 to 8000mm: 0 represents unknown distance. Unknown distance may be 
+The depth feed is a numpy array and contains values ranging from 0 to 8000mm: the value '0' represents unknown distance. Unknown distance may be 
 obtained due to any reflective surface like mirrors or glasses. These values can be fit into the range 0-255 by converting it 
-into grayscale image and ignoring few lower bits. Results of ignoring different amounts of lower bits are shown below. \pagebreak
+into grayscale image and ignoring few lower bits. Results of ignoring different number of lower bits are shown below: \pagebreak
 \\
 Image after ignoring lower 4 bits: \\
 \includegraphics[width = 10cm]{d_4bit.png} \\
@@ -144,14 +144,12 @@ Image after ignoring lower 5 bits: \\
 \pagebreak
 
 Image after ignoring lower 3 bits and clipping \\
-\begin{center}
 \includegraphics[width = 10cm]{d_3bit.png} \\
-\end{center}
 
 This feed is filtered using the following method:
 This algorithm is similar to the algorithm used for median blur. A kernel element is taken and the mean of the depth array in the
 kernel element is calculated. The pixels where depth cannot be calculated contains zero value. Such noise pixels are replaced
-with the mean value calculated before using simple masking techniques. The result of this filter on an image is shown below.\\
+with the mean value calculated before using simple masking techniques. The result of this filter on an image is shown below:\\
 \pagebreak
 
 Noisy image: \\ 
@@ -161,7 +159,7 @@ After applying filter: \\
 
 \section{Task - 4: Decison making about exiting the room based on depth map}
 
-In this project, 4 basic tests are used to determine whether an obstacle having left and right edges is a door or not.
+In this project, 4 tests are used to determine whether an obstacle having left and right edges is a door or not.
 
 \textbf{Test 1: Depth analysis to determine edges} \\
 
@@ -178,11 +176,11 @@ First, the image feed is retrieved from Kinect and noise is removed using steps 
 
 The co-ordinates for contours of bigger obstacles are processed again. If a left edge (outgoing) 
 appears before a right edge (incoming edge), then the object can be considered as a door. If a right 
-edge appears  before the left edge, then the obstacle is something different than a door, maybe a
+edge appears  before the left edge, then the obstacle is something other than a door, probably a
 cupboard.
 
 \textbf{Test 2: Height analysis:} \\
-The height of obstacles are calculated using basic trigonometric operation.
+The height of obstacles are calculated using trigonometric operation.
 
 First, the edges of the obstacle are segregated using methods from previous test. 
 A bounded rectangle is formed around this contour. Now, the depth of the topmost point and the nearest 
@@ -190,8 +188,8 @@ point are noted. These values must be the base and hypotenuse of a triangle as s
 
 \includegraphics[width = 10cm]{pythagoras.jpg}
 
-This height is compared with the standard height of a door. The standard height of a door is 2000mm. 
-The difference between calculated height and actual height gives the error in height. Using this height, 
+This height is compared with the assumed standard height of a door. The assumed standard height of a door was take as 2000mm. 
+The difference between calculated height and actual height gives the error in height. Using this error in height, 
 a probability value can be estimated which will reflect how much a particular obstacle passes this test. 
 The probability is calculated using a Gaussian Distribution curve. \\
 \pagebreak
@@ -207,7 +205,7 @@ f(x|\mu,\sigma) = \frac{1}{\sigma\sqrt{2\pi}}e^{-(\frac{(x-\mu)^2}{2\sigma^2}}
 Here, $\mu$ is the mean or expectation of the distribution (and also its median and mode)
 The parameter $\sigma$ is its standard deviation with its variance then $\sigma^2$. A random variable with a Gaussian distribution 
 is said to be normally distributed and is called a normal deviate. \\
-In the tests performed in this projects, the probability depends on the value 'x - $\mu$'. 'x' is the  value obtained by depth calculations.This difference determines the probability
+In the tests performed in this project, the probability depends on the value 'x - $\mu$'. 'x' is the  value obtained by depth calculations. This difference determines the probability
 whether the obstacle in front of camera is a door or not. When the difference is 0, maximum probability i.e. 1 is obtained. Distribution
 curve behaves in a similar way for both negative and positive difference. Initially, for a certain value, the rate of change or the rate
 of fall of probability is low. As the difference increases, the rate of change increases exponentially. For the purpose of detection of doors, where
@@ -218,9 +216,10 @@ a deviation from ideal value is always expected, this curve is instrumental. \\
 
 This test is similar to the previous test. The width of the door is calculated as shown: \\
 
-\includegraphics[width = 10cm]{Cosine.jpg}
+\includegraphics[width = 12cm]{cosine_modified.jpg}
 
-The field of view of Kinect covers an angle of 57 degrees. The total pixel count in horizontal direction is 640. Suppose we need the width x. We first calculate the ratio at which the pixels are divide. This will be equal to:
+The field of view of Kinect covers an angle of 57 degrees. The total pixel count in horizontal direction is 640. 
+Suppose we need the width x. We first calculate the ratio at which the pixels are divide. This will be equal to:
 \begin{equation}
 P1(x) - \frac{P2(x)}{640}
 \end{equation}
@@ -238,16 +237,22 @@ X = D1^2 + D2^2 - 2*D1*D2*\cos{\alpha}
 
 \textbf{4: Horizontal edge test:} \\
 
-This test can only be applied when a horizontal edge(or the upper edge) of the door is detected. In this test, the depth map numpy array is shifted to a value equal to five times the maximum width of frame viz 640 pixels. This will cause every element to shift by multiple columns. Hence, the difference of original array from this array will give areas where there's a difference in depth. Segregating these areas, contours can be identified where an horizontal edge lies. These edges can again be separated based on whether the edge is an outgoing (negative difference) or a incoming (positive difference) edge.
-
-In this test, a horizontal edge is identified which lies between two vertical edges. The centroid of this horizontal edge is calculated. This must approximately lie at the centre of the centroid of edges. The difference between these two values is the required error. Probability is calculated based on this error.
+This test can only be applied when a horizontal edge(or the upper edge) of the door is detected. 
+In this test, the depth map numpy array is shifted to a value equal to five times the maximum width of 
+frame viz 640 pixels. This will cause every element to shift by multiple columns. Hence, the difference of 
+original array from this array will give areas where there's a difference in depth. Segregating these areas, 
+contours can be identified where an horizontal edge lies. These edges can again be separated based on whether 
+the edge is an outgoing (negative difference) or a incoming (positive difference) edge.
+In this test, a horizontal edge is identified which lies between two vertical edges. The centroid of this 
+horizontal edge is calculated. This must approximately lie at the centre of the centroid of edges. The 
+difference between these two values is the required error. Probability is calculated based on Gaussian Distribution function. \\
 
 \includegraphics[width = 10cm]{horizontal.png}
 
-\chapter{Result and discussion:} 
-The end product consists of a Kinect mounted on FireBird V. It can never be ascertained that the obstacle present in front of
+\chapter{Result and Discussion:} 
+The end product consists of a Kinect mounted on Firebird V. It can never be ascertained that the obstacle present in front of
 the robot is a door or not. For this reason, every such obstacle which is detected as a door is associated with a confidence
-level. This confidence value is a result of weighted sum of the tests. It is used as the basis for determining whether the robot
+value. This confidence level is a result of weighted sum of the tests. It is used as the basis for determining whether the robot
 should exit the door or not.
 
 \section{Weighing of probabilities:}
@@ -262,9 +267,9 @@ Weights given to  different tests:\\
 \pagebreak
 
 Height analysis test: 50 \% \\
-Width analysis test: 40 \%
+Width analysis test: 40 \% \\
 Horizontal edge analysis test: 10 \% \\
-The end product has been tested on various environments. Few of the environments along with the confidence levels are shown as follows:
+The end Firebird V robot with Kinect has been tested on various environments. Few of the environments along with the confidence levels are shown as follows:
 \begin{itemize}
  \item SIC304. Average confidence level - 85\% \\
  \includegraphics[width = 15cm]{confidence_304.png} \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\
@@ -285,8 +290,6 @@ The end product has been tested on various environments. Few of the environments
  \item The method used for calculation of width is not accurate. Sometimes, it may give values very different from the actual value.
 \end{enumerate}
 
-
-
 \chapter{Future Work}
 
 \begin{enumerate}
@@ -295,7 +298,7 @@ The end product has been tested on various environments. Few of the environments
  cannot move. This will also add as a feature of door. A door must start from ground. Hence, another test can be developed
  which will utilize this feature.
  
- \item \textbf{Using different robots}: The whole system can be ported to FireBird VI which will be able to handle heavier objects more efficiently.
+ \item \textbf{Using different robots}: The whole system can be ported to Firebird VI which will be able to handle heavier objects more efficiently.
 \end{enumerate}
 
 \chapter{References}
@@ -309,7 +312,6 @@ The end product has been tested on various environments. Few of the environments
  \item $http://research.ijcaonline.org/volume86/number8/pxc3893182.pdf$
  \item $http://www.intel.com/content/dam/www/public/us/en/documents/guides/bkm-installing-ubunto-os-on-de2i-150-board-guide.pdf$
  \item $https://github.com/amiller/libfreenect-goodies$
- \item $http://blog.jozilla.net/2012/03/29/getting-up-and-running-with-the-kinect-in-ubuntu-12-04/$
 \end{enumerate}
  
 
