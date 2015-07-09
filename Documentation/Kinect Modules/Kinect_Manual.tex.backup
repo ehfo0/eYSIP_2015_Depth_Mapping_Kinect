@@ -21,27 +21,27 @@
      \item The depth frame is retrieved in mm and it is divided by a constant so that it falls in 0 to 255 range.
      \item The frame is passed through a filter and noise is eliminated.
      \item The return value is a 640 * 480 matrix of depth frame.
-     \item textbf{Example Call:} depth\_array = get\_depth()
+     \item \textbf{Example Call:} depth\_array = get\_depth()
     \end{itemize}
   \framebreak
   \subsection{filter\_smooth}
     \textbf{filter\_smooth(depth\_array) : }
     \begin{itemize}
-     \item It takes the original depth frame with noise
+     \item It takes the original noisy depth frame
      \item It masks the noise pixels
-     \item It is than passed through a filter to filter the noise. 
+     \item It is than passed through a filter to remove the noise. 
      \item It is then passed through a bilateral filter for better results
      \item It returns the smoothened image of the frame
-     \item textbf{Example Call:} depth\_array = filter\_smooth(depth\_array)
+     \item \textbf{Example Call:} depth\_array = filter\_smooth(depth\_array)
     \end{itemize}
   \framebreak
   \subsection{filter\_noise}
     \textbf{filter\_noise(depth\_array, noise mask, original image with inverted noise mask, rows, columns) : }
      \begin{itemize}
       \item It takes the original frame as input for processing. It takes noise mask and original frame with noise pixels made white. It takes the number of tiles in a row or a column
-      \item The algorithm takes the mean of the frame in a particular tile and replaces the noise pixels witb those values
-      \item It returns the filtered noise depth frame
-      \item textbf{Example Call:} blur = filter\_noise(depth\_array, mask\_1, masked\_array, 3, 4)
+      \item The algorithm takes the mean of the frame in a particular tile and replaces the noise pixels with those values
+      \item It returns the noise filtered depth frame
+      \item \textbf{Example Call:} blur = filter\_noise(depth\_array, mask\_1, masked\_array, 3, 4)
      \end{itemize}
 \end{frame}
 
@@ -56,7 +56,7 @@
 	  \item Whenever an object is detected in the range the function sends the number of the section in which it is detected
 	  \item If no object is detected in any of the divisions than the robot searches for the wall
 	  \item The robot follows the wall and maps the objects
-	  \item textbf{Example Call:} regular\_movement()
+	  \item \textbf{Example Call:} regular\_movement()
 	\end{itemize}
   \framebreak
   \subsection{door\_movement}
@@ -65,10 +65,10 @@
        \item It takes no input arguments
        \item The frame is divided into 3 regions: left area, middlearea, rightarea.
        \item The mean of all the regions is taken.
-       \item If the middleregions goes below the threshold than left and right area means are checked
+       \item If the middleregions goes below the threshold than left and right area means of pixel values are checked
        \item The region with higher mean is selected and robot turns in that direction as higher value indicates more depth
-       \item So the robot traverses on the intuition of the area mean after door is detected
-       \item textbf{Example Call:} door\_movement()
+       \item So the robot traverses on the intuition of the pixel mean value of the area after door is detected
+       \item \textbf{Example Call:} door\_movement()
       \end{itemize}
   \framebreak
   \subsection{doorway\_movement}
@@ -77,7 +77,7 @@
        \item It takes the midpoint of the width of the door edges as input
        \item If the point is left of the frame than robot turns left so it comes in between and vice versa
        \item The robot therefore orients themselves so that the door is in front of the robot
-       \item textbf{Example Call:} doorway\_movement(200)
+       \item \textbf{Example Call:} doorway\_movement(200)
       \end{itemize}
   \framebreak
   \subsection{back\_movement}
@@ -88,17 +88,17 @@
        \item If the object comes in the blind spot of the Kinect than the robot will move back
        \item Here we have used the disadvantage of the blind spot of Kinect as an advantage because the Kinect cannot determine depth of object close to it and gives 255 value to those pixels
        \item If the number of white pixels crosses a threshold than the robot will move back
-       \item textbf{Example Call:} back\_movement(depth\_array)
+       \item \textbf{Example Call:} back\_movement(depth\_array)
       \end{itemize}
    \framebreak
   \subsection{stuck\_pos\_movement}
     \textbf{stuck\_pos\_movement(void) : }
       \begin{itemize}
        \item It takes no input arguments
-       \item It calculates the mean of the left and right of the frame. 
-       \item The section with higher mean, the robot takes a left or right turn until it comes out of the stuck position
+       \item It calculates the mean of the left and right pixels of the frame. 
+       \item The direction with higher mean is selected and the robot takes a left or right turn until it comes out of the stuck position
        \item This function basically moves the robot out of stuck position
-       \item textbf{Example Call:} stuck\_pos\_movement()
+       \item \textbf{Example Call:} stuck\_pos\_movement()
       \end{itemize}
   \framebreak
   \subsection{search\_wall}
@@ -106,7 +106,7 @@
       \begin{itemize}
        \item It takes only the direction of the wall as input. 0 is left and 1 is right
        \item The robot takes a left or right until the left part of the frame or the right part falls in range of the Kinect
-       \item textbf{Example Call:} search\_wall(0)
+       \item \textbf{Example Call:} search\_wall(0)
       \end{itemize}
 \end{frame}
 
@@ -121,7 +121,7 @@
        \item Now 640 pixels corresponds to 57 degrees and 480 pixels to 430 degrees. SO we find the pixels height to find the angle formed by the line joining the top and bottom points
        \item Using Cosine rule we find the height of the third side of the triangle formed by joining all the points.
        \item Rescaling the height we get the actual height of the left and right edges of the door
-       \item It returns the left and right door edges
+       \item \textbf{Example Call:} left\_height, right\_height = actual\_height\_in\_mm((100,200), (100,100), (200,200), (200,100))
       \end{itemize}
   \framebreak
   \subsection{actual\_width\_in\_mm}
@@ -130,10 +130,9 @@
        \item The input arguments are the co-ordinates of the top and bottom of the left edge and the right edge, the midpoints of the contours of the left and right edges
        \item Using the co-ordinates we choose the area around the edges and using warp perspective we make it a rectangle
        \item We find the minimum of the matrix and find the depth of the left and right edges
-       \item We select the left area for the left edge and right area for the right edge
        \item 640 pixels corresponds to 57 degrees so we find the pixel width using the centroid of the left and right edges
        \item Using the pixel width we find the angle between the two edges and using cosine rule we find the actual width of the door
-       \item We return the actual width of the door from this function
+       \item \textbf{Example Call:} width = actual\_width\_in\_mm((100,200), (100,100), (200,200), (200,100), 200, 100)
       \end{itemize}
   \framebreak
     \subsection{return\_height\_in\_mm}
@@ -142,11 +141,10 @@
        \item The input arguments are the co-ordinates of the left top, left bottom, right top, right bottom points of the door
        \item The function creates a small 10x20 area and finds the minimum pixel value as that will be the depth value of that point
        \item So we get the depth distance of the four points.
-       \item Now 640 pixels corresponds to 57 degrees and 480 pixels to 430 degrees. SO we find the pixels height to find the angle formed by the line joining the top and bottom points
+       \item SO we find the pixels height to find the angle formed by the line joining the top and bottom points
        \item Using Pythagoras theorem we find the actual height of the edge of the door
        \item The assumption is that the depth of the bottom points is in line with the robot and the triangle formed is a right angled triangle
-       \item Rescaling the height we get the actual height of the left and right edges of the door
-       \item It returns the left and right door edges
+       \item \textbf{Example Call:} leftheight, rightheight = return\_height\_in\_mm((100,200), (100,100), (200,200), (200,100), 200, 100)
 	\end{itemize}
   \framebreak
     \subsection{probability}
@@ -156,6 +154,7 @@
 	 \item First we form a gaussian curve from the mean and the standard value
 	 \item The numbers are mapped to 0 to 100 for percentage probability.
 	 \item If the number falls in the range than a probability value is returned and if the value falls out of range it returns a zero probability
+	 \item \textbf{Example Call:} probtop = probability(0, 200, 150)
 	\end{itemize}
 \end{frame}
 
@@ -168,7 +167,7 @@
 	\item The function finds the depth frame in a while loop and calculates the mean of the pixel values in the middle frame
 	\item If the mean goes above threshold the robot moves forward and resumes it normal functioning
 	\item The robot takes a right until the depth is more in the middle frame
-	\item textbf{Example Call:} take_right()
+	\item \textbf{Example Call:} take\_right()
       \end{itemize}
 \framebreak
   \subsection{take\_left}
@@ -178,7 +177,7 @@
 	\item The function finds the depth frame in a while loop and calculates the mean of the pixel values in the middle frame
 	\item If the mean goes above threshold the robot moves forward and resumes it normal functioning
 	\item The robot takes a left until the depth is more in the middle frame
-	\item textbf{Example Call:} take_left()
+	\item \textbf{Example Call:} take\_left()
       \end{itemize}
 \framebreak
   \subsection{take\_right\_near}
@@ -188,7 +187,7 @@
        \item The function finds the depth frame in a while loop and counts the number of pixels of the objects that fall in its range
        \item If the count goes below a threshold than the robot will move forward and resume its movement
        \item The robot takes a right until the objects go out of the Kinect sensor range which we specify
-       \item textbf{Example Call:} take_right_near()
+       \item \textbf{Example Call:} take\_right\_near()
       \end{itemize}
 \framebreak
   \subsection{take\_left\_near}
@@ -198,7 +197,7 @@
        \item The function finds the depth frame in a while loop and counts the number of pixels of the objects that fall in its range
        \item If the count goes below a threshold than the robot will move forward and resume its movement
        \item The robot takes a left until the objects go out of the Kinect sensor range which we specify
-       \item textbf{Example Call:} take_left_near()
+       \item \textbf{Example Call:} take\_left\_near()
       \end{itemize}
 \end{frame}
 
@@ -210,7 +209,7 @@
 	\item It takes two arguments: The left edge height and the right edge height
 	\item It returns the probability percentage of the edges to be door edge. We have sent 1.5m as standard value and 1500 is the variance
 	\item The average of the two probabilities is returned from this function
-	\item textbf{Example Call:} prob_2 = actual_height_test(1000, 1000)
+	\item \textbf{Example Call:} prob\_2 = actual\_height\_test(1000, 1000)
       \end{itemize}
 \framebreak
   \subsection{actual\_width\_test}
@@ -219,7 +218,7 @@
        \item It takes only one argument: the width of the edges
        \item It returns the probability of the width to be a door width. We have set 1m as the standard width and the variance is 1m
        \item The function returns the actual width between the two edges
-       \item textbf{Example Call:} prob_3 = actual_width_test(1000)
+       \item \textbf{Example Call:} prob\_3 = actual\_width\_test(1000)
       \end{itemize}
 \framebreak
   \subsection{rectangle\_door\_test}
@@ -229,7 +228,7 @@
        \item We find the pixel width of the door using the three points of the left and right edges and find the error with the horizontal edge pixel length
        \item The error is probabilistic in three cases and we find the average of the three values
        \item The probability of horizontal edge being a door edge is returned
-       \item textbf{Example Call:} max_prob = rectangle_door_test((100,200), (100,100), (200,200), (200,100), 200, 100, (100,100), (200,100), 150)
+       \item \textbf{Example Call:} max\_prob = rectangle\_door\_test((100,200), (100,100), (200,200), (200,100), 200, 100, (100,100), (200,100), 150)
       \end{itemize}
 \framebreak
   \subsection{is\_door}
@@ -239,7 +238,7 @@
        \item The pixel difference is calculated between the two pixel heights of the edges.
        \item The pixel difference between the centroids should be within range and the difference in door pixel heights should be in range
        \item The function returns a true or a false value based on the intuition of pixel measurements
-       \item textbf{Example Call:} dec = is_door((100,200), (100,100), (200,200), (200,100), 200, 100)
+       \item \textbf{Example Call:} dec = is\_door((100,200), (100,100), (200,200), (200,100), 200, 100)
       \end{itemize}
 \end{frame}
 
@@ -253,7 +252,7 @@
        \item The shifted frame is subtracted with the original so the difference in the pixels are stored as a frame
        \item The more difference is masked in the frame. The masked regions form a contour and thus contours are formed
        \item The function returns all the contours where depth difference is more
-       \item textbf{Example Call:} contour = contours\_return(GLOBAL_DEPTH_MAP, 6400)
+       \item \textbf{Example Call:} contour = contours\_return(GLOBAL\_DEPTH\_MAP, 6400)
       \end{itemize}
 \framebreak
   \subsection{horizontal\_lines}
@@ -262,7 +261,7 @@
        \item The horizontal edge contours are detected by shifting the pixels by 6400 so that the frame is shifted 10 pixels down
        \item The horizontal edges are drawn for the contours and all the horizontal edges data are saved in corresponding lists
        \item the function returns the list of left and right point edge co-ordinates the centroid of the edge and the number of egdes
-       \item textbf{Example Call:} hll, hrl, cxhl, temph = horizontal\_lines()
+       \item \textbf{Example Call:} hll, hrl, cxhl, temph = horizontal\_lines()
       \end{itemize}
 \framebreak
   \subsection{left\_right\_lines}
@@ -272,7 +271,7 @@
        \item The function creates a list of co-ordinates of left and right edges in a list
        \item The data is stored only if the centroid value is not zero
        \item The function returns the list of all the values of co-ordinates of the left and right edges
-       \item textbf{Example Call:} ltl, lbl, cxll, rtl, rbl, cxrl, templ, tempr = left\_right\_lines(contours\_right, contours\_left)
+       \item \textbf{Example Call:} ltl, lbl, cxll, rtl, rbl, cxrl, templ, tempr = left\_right\_lines(contours\_right, contours\_left)
       \end{itemize}
 \framebreak
   \subsection{horizontal\_edge}
@@ -284,7 +283,7 @@
        \item If the difference is more than threshold than it is a potential edge. 
        \item The pixel width is also calculated and if it crosses a threshold than the edge is a potential door edge
        \item The function returns the horizontal edges in the frame
-       \item textbf{Example Call:} height\_left, height\_right, cxh = horizontal\_edge(contours) 
+       \item \textbf{Example Call:} height\_left, height\_right, cxh = horizontal\_edge(contours) 
       \end{itemize}
 \framebreak
   \subsection{potential\_leftedge}
@@ -297,7 +296,7 @@
        \item The pixel height is also calculated and if it crosses a threshold than the edge is a potential door edge
        \item the right area of the edge is taken and using warping the mean of the area is found. If the mean is above threshold than it is potential left edge
        \item The function returns the co-ordinates of left edges in the frame
-       \item textbf{Example Call:} left\_top, left\_bottom, cxl = potential\_leftedge(contours)
+       \item \textbf{Example Call:} left\_top, left\_bottom, cxl = potential\_leftedge(contours)
       \end{itemize}
 \framebreak
   \subsection{potential\_rightedge}
@@ -310,7 +309,7 @@
        \item The pixel height is also calculated and if it crosses a threshold than the edge is a potential door edge
        \item the left area of the edge is taken and using warping the mean of the area is found. If the mean is above threshold than it is potential right edge
        \item The function returns the co-ordinates of right edges in the frame
-       \item textbf{Example Call:} right\_top, right\_bottom, cxr = potential\_rightedge(contours)
+       \item \textbf{Example Call:} right\_top, right\_bottom, cxr = potential\_rightedge(contours)
       \end{itemize}
 \end{frame}
 
@@ -322,7 +321,7 @@
        \item Specifies the area and the distance threshold under which object should be detected
        \item The function masks the frame based on the depth distance given. for eg. If we give 1 m than it will display values only within that distance
        \item The visible pixel count is returned from the function
-       \item textbf{Example Call:} count\_near\_pixels(area, 900)
+       \item \textbf{Example Call:} count\_near\_pixels(area, 900)
       \end{itemize}
 \framebreak
   \subsection{data\_send}
@@ -332,7 +331,7 @@
        \item the mode selection is based on the division in which the object is detected
        \item Based on the mode selected a particular char value is send to the robot which sets the velocity of the two motors of the robot
        \item If the mode is 4,4 than the robot is stuck in a position and a function is called for that movement
-       \item textbf{Example Call:} data\_send(2,0)
+       \item \textbf{Example Call:} data\_send(2,0)
       \end{itemize}
 \end{frame}
 
@@ -347,7 +346,7 @@
        \item If the weighted sum crosses a certain threshold than the frame contains a door.
        \item The graph is plotted simultaneously with the data being given as input
        \item If the door is detected the flag is set to true and the buzzer gives a beeping sound
-       \item textbf{Example Call:} door\_detection(contoursrightnear, contoursleftnear)
+       \item \textbf{Example Call:} door\_detection(contoursrightnear, contoursleftnear)
       \end{itemize}
 \framebreak
   \subsection{start}
@@ -356,7 +355,7 @@
        \item This function runs the actual code for door detection exit and algorithm
        \item The kinect is set to 20 degrees and initial frames are skipped
        \item The program runs after these steps and robot traverses the room and exits room from the door
-       \item textbf{Example Call:} start()
+       \item \textbf{Example Call:} start()
       \end{itemize}
 \end{frame}
 
