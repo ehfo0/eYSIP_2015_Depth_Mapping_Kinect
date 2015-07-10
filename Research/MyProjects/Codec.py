@@ -4,9 +4,8 @@ import freenect
 import cv2
 import numpy as np
 
-kernel = np.ones((5,5),np.uint8)
-
-
+kernel = nfrp.ones((5,5),np.uint8)
+freenect.C
 def grayscale():
     maske = np.zeros((480,640,3))
     a = freenect.sync_get_depth(format=freenect.DEPTH_MM)[0]

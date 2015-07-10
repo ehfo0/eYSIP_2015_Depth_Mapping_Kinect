@@ -25,7 +25,6 @@ global GLOBAL_DEPTH_MAP
 global TEST_CASES
 TEST_CASES = [True, True, True]
 global DIRECTION
-
 def filter_noise(depth_array, mask, masked_array, row, col):
     """
     * Function Name:filter_noise
