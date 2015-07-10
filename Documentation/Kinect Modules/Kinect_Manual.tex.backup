@@ -12,6 +12,20 @@
 	\frame{\titlepage}
 
 \setbeamertemplate{sidebar left}[sidebar theme]
+
+\section{Introduction to Kinect Sensor}
+\begin{frame}{Introduction to Kinect Sensor}
+ \begin{itemize}
+  \item Kinect is a line of motion sensing input devices by Microsoft for Xbox 360
+  \item The device features an RGB camera, depth sensor and multi-array microphone which provide full-body 3D motion capture, facial recognition and voice recognition capabilities.
+  \item The depth sensor consists of an infrared laser projector combined with a monochrome CMOS sensor, which captures video data in 3D under any ambient light conditions.
+  \item The sensor has an angular field of view of 57° horizontally and 43° vertically, while the motorized pivot is capable of tilting the sensor up to 27° either up or down.
+  \item The default RGB video stream uses 8-bit VGA resolution (640 x 480 pixels)
+ \end{itemize}
+\end{frame}
+
+\section{Installation of Kinect API}
+\begin{frame}{Installation of Kinect API}
 \section{Depth Frame}
 \begin{frame}[allowframebreaks]{Depth Frame}
   \subsection{get\_depth}
@@ -97,7 +111,7 @@
        \item It takes no input arguments
        \item It calculates the mean of the left and right pixels of the frame. 
        \item The direction with higher mean is selected and the robot takes a left or right turn until it comes out of the stuck position
-       \item This function basically moves the robot out of stuck position
+       \item This function takes the robot out of a corner position.
        \item \textbf{Example Call:} stuck\_pos\_movement()
       \end{itemize}
   \framebreak
@@ -118,7 +132,7 @@
        \item The input arguments are the co-ordinates of the left top, left bottom, right top, right bottom points of the door
        \item The function creates a small 10x30 area and finds the minimum pixel value as that will be the depth value of that point
        \item So we get the depth distance of the four points.
-       \item Now 640 pixels corresponds to 57 degrees and 480 pixels to 430 degrees. SO we find the pixels height to find the angle formed by the line joining the top and bottom points
+       \item Now 640 pixels corresponds to 57 degrees and 480 pixels to 430 degrees. So we find the pixels height to find the angle formed by the line joining the top and bottom points
        \item Using Cosine rule we find the height of the third side of the triangle formed by joining all the points.
        \item Rescaling the height we get the actual height of the left and right edges of the door
        \item \textbf{Example Call:} left\_height, right\_height = actual\_height\_in\_mm((100,200), (100,100), (200,200), (200,100))
@@ -141,7 +155,7 @@
        \item The input arguments are the co-ordinates of the left top, left bottom, right top, right bottom points of the door
        \item The function creates a small 10x20 area and finds the minimum pixel value as that will be the depth value of that point
        \item So we get the depth distance of the four points.
-       \item SO we find the pixels height to find the angle formed by the line joining the top and bottom points
+       \item So we find the pixels height to find the angle formed by the line joining the top and bottom points
        \item Using Pythagoras theorem we find the actual height of the edge of the door
        \item The assumption is that the depth of the bottom points is in line with the robot and the triangle formed is a right angled triangle
        \item \textbf{Example Call:} leftheight, rightheight = return\_height\_in\_mm((100,200), (100,100), (200,200), (200,100), 200, 100)
@@ -207,7 +221,7 @@
     \textbf{actual\_height\_test(left edge height, right edge height) : }
       \begin{itemize}
 	\item It takes two arguments: The left edge height and the right edge height
-	\item It returns the probability percentage of the edges to be door edge. We have sent 1.5m as standard value and 1500 is the variance
+	\item It returns the probability percentage of the edges to be door edge. We have sent 1.5m as standard value and 1500mm is the variance
 	\item The average of the two probabilities is returned from this function
 	\item \textbf{Example Call:} prob\_2 = actual\_height\_test(1000, 1000)
       \end{itemize}
@@ -327,8 +341,8 @@
   \subsection{data\_send}
     \textbf{data\_send(left motor mode, right motor mode) : }
       \begin{itemize}
-       \item the arguments are the modes of the left and right motor
-       \item the mode selection is based on the division in which the object is detected
+       \item The arguments are the modes of the left and right motor
+       \item The mode selection is based on the division in which the object is detected
        \item Based on the mode selected a particular char value is send to the robot which sets the velocity of the two motors of the robot
        \item If the mode is 4,4 than the robot is stuck in a position and a function is called for that movement
        \item \textbf{Example Call:} data\_send(2,0)

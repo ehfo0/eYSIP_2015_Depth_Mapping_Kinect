@@ -12,6 +12,30 @@
 	\frame{\titlepage}
 
 \setbeamertemplate{sidebar left}[sidebar theme]
+
+\section{Introduction to Kinect Sensor}
+\begin{frame}{Introduction to Kinect Sensor}
+ \begin{itemize}
+  \item Kinect is a line of motion sensing input devices by Microsoft for Xbox 360
+  \item The device features an RGB camera, depth sensor and multi-array microphone which provide full-body 3D motion capture, facial recognition and voice recognition capabilities.
+  \item The depth sensor consists of an infrared laser projector combined with a monochrome CMOS sensor, which captures video data in 3D under any ambient light conditions.
+  \item The sensor has an angular field of view of 57° horizontally and 43° vertically, while the motorized pivot is capable of tilting the sensor up to 27° either up or down.
+  \item The default RGB video stream uses 8-bit VGA resolution (640 x 480 pixels)
+ \end{itemize}
+\end{frame}
+
+\section{Installation of Kinect API}
+\begin{frame}{Installation of Kinect API}
+ \begin{itemize}
+  \item The python wrapper for Kinect API is freenect.
+  \item The prerequisites for using freenect module is to have python version 2.7.6 or higher (For Ubuntu users, Ubuntu 14.04 or higher version of Ubuntu is recommendable)
+  \item To install freenect library from Terminal, enter the following command: \newline \textbf{sudo apt-get install python-freenect}
+  \item To use Kinect functions given in this module you need to install the following libraries: \newline \textbf{opencv, numpy, time, serial, matplotlib, math}
+  \item To use the functions of this module just \textbf{import Kinect} in your code.
+ \end{itemize}
+
+\end{frame}
+
 \section{Depth Frame}
 \begin{frame}[allowframebreaks]{Depth Frame}
   \subsection{get\_depth}
@@ -97,7 +121,7 @@
        \item It takes no input arguments
        \item It calculates the mean of the left and right pixels of the frame. 
        \item The direction with higher mean is selected and the robot takes a left or right turn until it comes out of the stuck position
-       \item This function basically moves the robot out of stuck position
+       \item This function takes the robot out of a corner position.
        \item \textbf{Example Call:} stuck\_pos\_movement()
       \end{itemize}
   \framebreak

@@ -1,40 +1,42 @@
 \beamer@endinputifotherversion {3.24pt}
-\beamer@sectionintoc {1}{Depth Frame}{2}{0}{1}
-\beamer@subsectionintoc {1}{1}{get\_depth}{2}{0}{1}
-\beamer@subsectionintoc {1}{2}{filter\_smooth}{2}{0}{1}
-\beamer@subsectionintoc {1}{3}{filter\_noise}{2}{0}{1}
-\beamer@sectionintoc {2}{Robot Traversing}{5}{0}{2}
-\beamer@subsectionintoc {2}{1}{regular\_movement}{5}{0}{2}
-\beamer@subsectionintoc {2}{2}{door\_movement}{5}{0}{2}
-\beamer@subsectionintoc {2}{3}{doorway\_movement}{5}{0}{2}
-\beamer@subsectionintoc {2}{4}{back\_movement}{5}{0}{2}
-\beamer@subsectionintoc {2}{5}{stuck\_pos\_movement}{5}{0}{2}
-\beamer@subsectionintoc {2}{6}{search\_wall}{5}{0}{2}
-\beamer@sectionintoc {3}{Dimension Calculation}{11}{0}{3}
-\beamer@subsectionintoc {3}{1}{actual\_height\_in\_mm}{11}{0}{3}
-\beamer@subsectionintoc {3}{2}{actual\_width\_in\_mm}{11}{0}{3}
-\beamer@subsectionintoc {3}{3}{return\_height\_in\_mm}{11}{0}{3}
-\beamer@subsectionintoc {3}{4}{probability}{11}{0}{3}
-\beamer@sectionintoc {4}{Left - Right Movements}{15}{0}{4}
-\beamer@subsectionintoc {4}{1}{take\_right}{15}{0}{4}
-\beamer@subsectionintoc {4}{2}{take\_left}{15}{0}{4}
-\beamer@subsectionintoc {4}{3}{take\_right\_near}{15}{0}{4}
-\beamer@subsectionintoc {4}{4}{take\_left\_near}{15}{0}{4}
-\beamer@sectionintoc {5}{Door Tests}{19}{0}{5}
-\beamer@subsectionintoc {5}{1}{actual\_height\_test}{19}{0}{5}
-\beamer@subsectionintoc {5}{2}{actual\_width\_test}{19}{0}{5}
-\beamer@subsectionintoc {5}{3}{rectangle\_door\_test}{19}{0}{5}
-\beamer@subsectionintoc {5}{4}{is\_door}{19}{0}{5}
-\beamer@sectionintoc {6}{Edges and lines}{23}{0}{6}
-\beamer@subsectionintoc {6}{1}{contours\_return}{23}{0}{6}
-\beamer@subsectionintoc {6}{2}{horizontal\_lines}{23}{0}{6}
-\beamer@subsectionintoc {6}{3}{left\_right\_lines}{23}{0}{6}
-\beamer@subsectionintoc {6}{4}{horizontal\_edge}{23}{0}{6}
-\beamer@subsectionintoc {6}{5}{potential\_leftedge}{23}{0}{6}
-\beamer@subsectionintoc {6}{6}{potential\_rightedge}{23}{0}{6}
-\beamer@sectionintoc {7}{Communication and Pixel Count}{29}{0}{7}
-\beamer@subsectionintoc {7}{1}{count\_near\_pixels}{29}{0}{7}
-\beamer@subsectionintoc {7}{2}{data\_send}{29}{0}{7}
-\beamer@sectionintoc {8}{Door Detection}{31}{0}{8}
-\beamer@subsectionintoc {8}{1}{door\_detection}{31}{0}{8}
-\beamer@subsectionintoc {8}{2}{start}{31}{0}{8}
+\beamer@sectionintoc {1}{Introduction to Kinect Sensor}{2}{0}{1}
+\beamer@sectionintoc {2}{Installation of Kinect API}{3}{0}{2}
+\beamer@sectionintoc {3}{Depth Frame}{4}{0}{3}
+\beamer@subsectionintoc {3}{1}{get\_depth}{4}{0}{3}
+\beamer@subsectionintoc {3}{2}{filter\_smooth}{4}{0}{3}
+\beamer@subsectionintoc {3}{3}{filter\_noise}{4}{0}{3}
+\beamer@sectionintoc {4}{Robot Traversing}{7}{0}{4}
+\beamer@subsectionintoc {4}{1}{regular\_movement}{7}{0}{4}
+\beamer@subsectionintoc {4}{2}{door\_movement}{7}{0}{4}
+\beamer@subsectionintoc {4}{3}{doorway\_movement}{7}{0}{4}
+\beamer@subsectionintoc {4}{4}{back\_movement}{7}{0}{4}
+\beamer@subsectionintoc {4}{5}{stuck\_pos\_movement}{7}{0}{4}
+\beamer@subsectionintoc {4}{6}{search\_wall}{7}{0}{4}
+\beamer@sectionintoc {5}{Dimension Calculation}{13}{0}{5}
+\beamer@subsectionintoc {5}{1}{actual\_height\_in\_mm}{13}{0}{5}
+\beamer@subsectionintoc {5}{2}{actual\_width\_in\_mm}{13}{0}{5}
+\beamer@subsectionintoc {5}{3}{return\_height\_in\_mm}{13}{0}{5}
+\beamer@subsectionintoc {5}{4}{probability}{13}{0}{5}
+\beamer@sectionintoc {6}{Left - Right Movements}{17}{0}{6}
+\beamer@subsectionintoc {6}{1}{take\_right}{17}{0}{6}
+\beamer@subsectionintoc {6}{2}{take\_left}{17}{0}{6}
+\beamer@subsectionintoc {6}{3}{take\_right\_near}{17}{0}{6}
+\beamer@subsectionintoc {6}{4}{take\_left\_near}{17}{0}{6}
+\beamer@sectionintoc {7}{Door Tests}{21}{0}{7}
+\beamer@subsectionintoc {7}{1}{actual\_height\_test}{21}{0}{7}
+\beamer@subsectionintoc {7}{2}{actual\_width\_test}{21}{0}{7}
+\beamer@subsectionintoc {7}{3}{rectangle\_door\_test}{21}{0}{7}
+\beamer@subsectionintoc {7}{4}{is\_door}{21}{0}{7}
+\beamer@sectionintoc {8}{Edges and lines}{25}{0}{8}
+\beamer@subsectionintoc {8}{1}{contours\_return}{25}{0}{8}
+\beamer@subsectionintoc {8}{2}{horizontal\_lines}{25}{0}{8}
+\beamer@subsectionintoc {8}{3}{left\_right\_lines}{25}{0}{8}
+\beamer@subsectionintoc {8}{4}{horizontal\_edge}{25}{0}{8}
+\beamer@subsectionintoc {8}{5}{potential\_leftedge}{25}{0}{8}
+\beamer@subsectionintoc {8}{6}{potential\_rightedge}{25}{0}{8}
+\beamer@sectionintoc {9}{Communication and Pixel Count}{31}{0}{9}
+\beamer@subsectionintoc {9}{1}{count\_near\_pixels}{31}{0}{9}
+\beamer@subsectionintoc {9}{2}{data\_send}{31}{0}{9}
+\beamer@sectionintoc {10}{Door Detection}{33}{0}{10}
+\beamer@subsectionintoc {10}{1}{door\_detection}{33}{0}{10}
+\beamer@subsectionintoc {10}{2}{start}{33}{0}{10}
