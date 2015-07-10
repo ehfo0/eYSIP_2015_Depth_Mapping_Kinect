@@ -1,3 +1,4 @@
+
 """
 This module contains code for detection of doors.
 """
@@ -19,11 +20,8 @@ global SERIALDATA
 SERIALDATA = serial.Serial('/dev/ttyUSB0')
 global XAXIS
 global YAXIS
-XAXIS = []
-YAXIS = []
 global GLOBAL_DEPTH_MAP
 global TEST_CASES
-TEST_CASES = [True, True, True]
 global DIRECTION
 
 def filter_noise(depth_array, mask, masked_array, row, col):
@@ -62,9 +60,9 @@ def filter_smooth(depth_array):
     * Input:		Original Depth frame in mm.
     * Output:		Filters the noise from the depth frame
     * Logic:		It creates a mask for the noise. It makes
-                    	all the noise pixels to 255 to send to filter noise.
-                    	The output from filter noise is smoothened using
-                    	bilateral filter
+                    all the noise pixels to 255 to send to filter noise.
+                    The output from filter noise is smoothened using
+                    bilateral filter
     * Example Call:	filter_smooth(a)
     """
     ret, mask = cv2.threshold(depth_array, 10, 255, cv2.THRESH_BINARY_INV)
@@ -85,13 +83,11 @@ def get_depth():
                     to 1 bytes. It then smoothens the frame and returns it.
     * Example Call:	get_depth()
     """
-    global GLOBAL_DEPTH_MAP
     depth_array = freenect.sync_get_depth(format=freenect.DEPTH_MM)[0]
     depth_array = depth_array/30.0
     depth_array = depth_array.astype(np.uint8)
     depth_array = filter_smooth(depth_array)
     depth_array[0:479, 630:639] = depth_array[0:479, 620:629]
-    GLOBAL_DEPTH_MAP = depth_array
     return depth_array
 
 def contours_return(depth_array, num):
@@ -133,7 +129,6 @@ def potential_rightedge(contours):
                     further use
     * Example Call:	potential_rightedge(c)
     """
-    global GLOBAL_DEPTH_MAP
     temp_area = 1000
     thresh_y = 250
     thresh_x = 60
@@ -184,7 +179,6 @@ def potential_leftedge(contours):
                     calculated for further use
     * Example Call:	potential_leftedge(c)
     """
-    global GLOBAL_DEPTH_MAP
     temp_area = 1000
     thresh_y = 250
     thresh_x = 60
@@ -238,7 +232,6 @@ def is_door(left_bottom, left_top, right_bottom, right_top, cxr, cxl):
                     followed.
     * Example Call:	doorway_movement(lb,lt,rb,rt,cxr,cxl)
     """
-    global GLOBAL_DEPTH_MAP
     diffl = left_bottom[1]-left_top[1]
     diffr = right_bottom[1]-right_top[1]
     if abs(diffl - diffr) < 150 and((cxr - cxl) > 50 and(cxr - cxl) < 400):
@@ -290,9 +283,9 @@ def horizontal_lines():
     * Logic:		Analyzes the depth array for any drastic
                     change in vertical DIRECTION. Areas with
                     sudden increase/decrease in depth are marked as edges.
-    * Example Call:	horizontal_lines()
+    * Example Call:	horizontal_line()
     """
-    global GLOBAL_DEPTH_MAP
+
     contour = contours_return(GLOBAL_DEPTH_MAP, 6400)
     temph = 0
     hll = []
@@ -310,16 +303,16 @@ def horizontal_lines():
 def actual_width_in_mm(left_bottom, left_top, right_bottom, right_top,
                        cxr, cxl):
     """
-    * Function Name:	actual_width_in_mm()
+    * Function Name:actual_width_in_mm()
     * Input:		left_bottom: bottom most co-ordinate of the left edge.
-                    	left_top: top most co-ordinate of the right edge.
-                    	right_bottom: Bottom most co-ordinate of the right edge
-                    	right_top: Top most co-ordinate of the right edge
-                    	cxr: Centroid of the right edge.
-                   	cxl: Centroid of the left edge.
+                    left_top: top most co-ordinate of the right edge.
+                    right_bottom: Bottom most co-ordinate of the right edge
+                    right_top: Top most co-ordinate of the right edge
+                    cxr: Centroid of the right edge.
+                    cxl: Centroid of the left edge.
     * Output:		Returns the real width of the obstacle.
     * Logic:		Calculates the real width in mm using
-                    	basic trigonometric calculations.
+                    basic trigonometric calculations.
     * Example Call:	acutal_width_in_mm(10,10,20,20,15,15)
     """
     depth_map = freenect.sync_get_depth(format=freenect.DEPTH_MM)[0]
@@ -440,6 +433,8 @@ def return_height_in_mm(left_bottom, left_top, right_bottom, right_top):
     bound_rect_right[mask] = 8000
     bottom = np.amin(bound_rect_right)
     right_height = math.sqrt(top**2 - bottom **2)
+    cv2.line(GLOBAL_DEPTH_MAP, left_top, left_bottom, (128, 255, 0), 10)
+    cv2.line(GLOBAL_DEPTH_MAP, right_top, right_bottom, (128, 255, 0), 10)
     return left_height, right_height
 
 def rectangle_door_test(left_bottom, left_top, right_bottom,
@@ -535,8 +530,6 @@ def door_detection(contours_right, contours_left):
     global DOOR_COUNT
     global DOOR_FLAG
     global AXIS_PLOT
-    global XAXIS
-    global YAXIS
     prob_1 = 0
     weighted_probability = 0
     ltl, lbl, cxll, rtl, rbl, cxrl, templ, tempr = \
@@ -600,7 +593,6 @@ def take_right():
                     the threshold value
     * Example Call:	take_right()
     """
-    global GLOBAL_DEPTH_MAP
     while True:
         GLOBAL_DEPTH_MAP = get_depth()
         back_movement(GLOBAL_DEPTH_MAP)
@@ -621,7 +613,6 @@ def take_left():
                     threshold value
     * Example Call:	take_left()
     """
-    global GLOBAL_DEPTH_MAP
     while True:
         GLOBAL_DEPTH_MAP = get_depth()
         back_movement(GLOBAL_DEPTH_MAP)
@@ -642,7 +633,6 @@ def take_right_near():
                     until it is out of its sight
     * Example Call:	take_right_near()
     """
-    global GLOBAL_DEPTH_MAP
     while True:
         GLOBAL_DEPTH_MAP = get_depth()
         back_movement(GLOBAL_DEPTH_MAP)
@@ -665,7 +655,6 @@ def take_left_near():
                     until it is out of its sight
     * Example Call:	take_left_near()
     """
-    global GLOBAL_DEPTH_MAP
     while True:
         GLOBAL_DEPTH_MAP = get_depth()
         middlearea = GLOBAL_DEPTH_MAP[0:479, 240:399]
@@ -688,7 +677,6 @@ def stuck_pos_movement():
                     mean is the preferable area to go.
     * Example Call:	stuck_pos_movement()
     """
-    global GLOBAL_DEPTH_MAP
     GLOBAL_DEPTH_MAP = get_depth()
     leftarea = GLOBAL_DEPTH_MAP[0:479, 0:200]
     rightarea = GLOBAL_DEPTH_MAP[0:479, 439:639]
@@ -791,7 +779,6 @@ def door_movement():
                     appears to be free.
     * Example Call: door_movement(global_depth)
     """
-    global GLOBAL_DEPTH_MAP
     middlearea = GLOBAL_DEPTH_MAP[200:479, 200:439]
     middleval = count_near_pixels(middlearea, 900)
     leftarea = GLOBAL_DEPTH_MAP[0:479, 0:100]
@@ -819,7 +806,6 @@ def search_wall(directionwall):
                     than the robot moves left until it is detected
     * Example Call:	search_wall(0)
     """
-    global GLOBAL_DEPTH_MAP
     if directionwall == 0:
         while True:
             GLOBAL_DEPTH_MAP = get_depth()
@@ -854,7 +840,6 @@ def regular_movement():
     speed_right variable
     * Example Call:	regular_movement(original)
     """
-    global GLOBAL_DEPTH_MAP
     temp_x = 320
     speed = 4
     for i in xrange(4):
@@ -890,7 +875,6 @@ def horizontal_edge(contours):
                     if they lie above a threshold
     * Example Call:	horizontal_edge(contours)
     """
-    global GLOBAL_DEPTH_MAP
     area = 500
     thresh_y = 50
     thresh_x = 100
@@ -939,7 +923,7 @@ def doorway_movement(mid_point):
             data_send(2, 0)
         time.sleep(0.1)
 
-def back_movement(global_depth_map_back):
+def back_movement(GLOBAL_DEPTH_MAP):
     """
     * Function Name:back_movement
     * Input:		depth map
@@ -948,9 +932,9 @@ def back_movement(global_depth_map_back):
                     is noisy than the robot will turn back
     * Example Call:	back_movement(depth_map)
     """
-    if global_depth_map_back[0:479, 200:439].mean()\
-            > 200 or global_depth_map_back[0:479, 0:199].mean()\
-            > 200 or global_depth_map_back[0:479, 440:639].mean() > 200:
+    if GLOBAL_DEPTH_MAP[0:479, 200:439].mean()\
+            > 200 or GLOBAL_DEPTH_MAP[0:479, 0:199].mean()\
+            > 200 or GLOBAL_DEPTH_MAP[0:479, 440:639].mean() > 200:
         SERIALDATA.write('\x50')
         time.sleep(3)
 
@@ -962,10 +946,14 @@ def start():
     global GLOBAL_DEPTH_MAP
     plt.ion()
     plt.figure()
+    XAXIS = []
+    YAXIS = []
     ctx = freenect.init()
     dev = freenect.open_device(ctx, freenect.num_devices(ctx) - 1)
+
     freenect.set_tilt_degs(dev, 20)
     freenect.close_device(dev)
+    TEST_CASES = [True, True, True]
     DIRECTION = 0
     for i in xrange(5):
         initial_map = get_depth()

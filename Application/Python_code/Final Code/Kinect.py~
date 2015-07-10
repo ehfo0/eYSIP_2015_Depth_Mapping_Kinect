@@ -290,7 +290,7 @@ def horizontal_lines():
     * Logic:		Analyzes the depth array for any drastic
                     change in vertical DIRECTION. Areas with
                     sudden increase/decrease in depth are marked as edges.
-    * Example Call:	horizontal_lines()
+    * Example Call:	horizontal_line()
     """
     global GLOBAL_DEPTH_MAP
     contour = contours_return(GLOBAL_DEPTH_MAP, 6400)
