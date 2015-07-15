@@ -1,4 +1,4 @@
-\beamer@endinputifotherversion {3.24pt}
+\beamer@endinputifotherversion {3.33pt}
 \beamer@sectionintoc {1}{Introduction to Kinect Sensor}{2}{0}{1}
 \beamer@sectionintoc {2}{Installation of Kinect API}{3}{0}{2}
 \beamer@sectionintoc {3}{Depth Frame}{4}{0}{3}

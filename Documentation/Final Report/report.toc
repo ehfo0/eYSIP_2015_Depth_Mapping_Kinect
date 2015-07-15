@@ -5,8 +5,9 @@
 \contentsline {section}{\numberline {3.2}Task 2 - Develop a code for Firebird V movement}{5}
 \contentsline {section}{\numberline {3.3}Task 3 - Creation of a depth map of room using Kinect}{8}
 \contentsline {section}{\numberline {3.4}Task - 4: Decison making about exiting the room based on depth map}{13}
-\contentsline {chapter}{\numberline {4}Result and Discussion:}{18}
-\contentsline {section}{\numberline {4.1}Weighing of probabilities:}{18}
-\contentsline {chapter}{\numberline {5}Issues}{22}
-\contentsline {chapter}{\numberline {6}Future Work}{23}
-\contentsline {chapter}{\numberline {7}References}{24}
+\contentsline {section}{\numberline {3.5}Weighing of probabilities:}{19}
+\contentsline {section}{\numberline {3.6}Determination of Confidence value:}{19}
+\contentsline {chapter}{\numberline {4}Result and Discussion:}{21}
+\contentsline {chapter}{\numberline {5}Issues}{26}
+\contentsline {chapter}{\numberline {6}Future Work}{27}
+\contentsline {chapter}{\numberline {7}References}{28}

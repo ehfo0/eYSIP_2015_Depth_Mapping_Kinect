@@ -74,8 +74,8 @@ The following work has been done in each task.
 
 The robot will move forward till it can deduce that it is at a sufficient distance from a wall. 
 This will be decided by taking the mean of the pixels in a particular space. After this, the robot
-will move along the wall and detect doors in the given space. It will map and keep a record of all the objects that look 
-like a door. One can never be sure whether a rectangular object detected is a door or not. Hence, 
+will move along the wall and detect doors in the given space. It will map all the objects that look 
+like a door by analyzing the stream. One can never be sure whether a rectangular object detected is a door or not. Hence, 
 every such object will be associated with a probability. If this probability is above a threshold 
 value, then the robot will decide that the obstacle detected is a door and will exit through it. 
 If not, then it will scan the rest of the arena.
@@ -135,7 +135,8 @@ depth = freenect.sync_get_depth(format=freenect.DEPTH_MM)
 
 The depth feed is a numpy array and contains values ranging from 0 to 8000mm: the value '0' represents unknown distance. Unknown distance may be 
 obtained due to any reflective surface like mirrors or glasses. These values can be fit into the range 0-255 by converting it 
-into grayscale image and ignoring few lower bits. Results of ignoring different number of lower bits are shown below: \pagebreak
+into grayscale image, ignoring few lower bits, and optionally fitting the values in 0-255 range if required. All the pixels which
+have value above 255 are assigned value equal to 255. This is known as clipping. Results of ignoring different number of lower bits are shown below: \pagebreak
 \\
 Image after ignoring lower 4 bits: \\
 \includegraphics[width = 10cm]{d_4bit.png} \\
@@ -169,15 +170,19 @@ First, the image feed is retrieved from Kinect and noise is removed using steps 
  the edges of obstacles. These edges can be retrieved by thresholding and taking contours of the 
  resultatnt image. Note: Right or left edge depends on which array is subtracted from which array. 
  Subtracting the final array from the initial array will give all the left vertical edges of obstacles. 
- All contours in this resultant image are calculated. Every contour having area less than a threshold value are ignored. After filtering objects with respect to 
+ All contours in this resultant image are calculated. Every contour having area less than a threshold value are ignored. \\
+ 
+ The original image: \\
+ \includegraphics[width = 10cm]{reference.jpg} \\
+After filtering objects with respect to 
  height, the resultant image is obtained: \\
-
 \includegraphics[width = 10cm]{result.jpg} \\
 
 The co-ordinates for contours of bigger obstacles are processed again. If a left edge (outgoing) 
 appears before a right edge (incoming edge), then the object can be considered as a door. If a right 
 edge appears  before the left edge, then the obstacle is something other than a door, probably a
 cupboard.
+\pagebreak
 
 \textbf{Test 2: Height analysis:} \\
 The height of obstacles are calculated using trigonometric operation.
@@ -248,37 +253,64 @@ horizontal edge is calculated. This must approximately lie at the centre of the 
 difference between these two values is the required error. Probability is calculated based on Gaussian Distribution function. \\
 
 \includegraphics[width = 10cm]{horizontal.png}
-
-\chapter{Result and Discussion:} 
-The end product consists of a Kinect mounted on Firebird V. It can never be ascertained that the obstacle present in front of
-the robot is a door or not. For this reason, every such obstacle which is detected as a door is associated with a confidence
-value. This confidence level is a result of weighted sum of the tests. It is used as the basis for determining whether the robot
-should exit the door or not.
+\pagebreak
 
 \section{Weighing of probabilities:}
 
-This project contains four tests as mentioned in section 3. The first test only detects presence of a door like object. A probability
-value cannot be obtained from the first test. The remaining three tests return a probability value. \\
+This project contains four tests. The first test only detects presence of a door like object. A probability
+value cannot be obtained from the first test. The remaining three tests return a probability value.\\
 Through experiments, it was found that
 if the robot is close to the door, a horizontal edge may not be detected. For this reason, the weight of the fourth test is lower than the weight of second and third test.
 Also, by experiments, it was observed that the calculations of height are more accurate than the width calculation. For this reason, the weight of
 second test is slightly greater than that of third test.\\
 Weights given to  different tests:\\
-\pagebreak
-
 Height analysis test: 50 \% \\
 Width analysis test: 40 \% \\
 Horizontal edge analysis test: 10 \% \\
-The end Firebird V robot with Kinect has been tested on various environments. Few of the environments along with the confidence levels are shown as follows:
+\section{Determination of Confidence value:}
+In real world, it can never be ascertained that the obstacle present in front of
+the robot is a door or not. For this reason, every such obstacle which is detected as a door is associated with a confidence
+value. This confidence value is a result of weighted sum of the proabilities from the tests. It is used as the basis for determining whether the robot
+should exit the door or not. If a detected door has a confidence value above 60 percent, then it is considered as a door and robot
+exits through the door.
+\pagebreak
+
+The following image shows the variation in confidence value when the robot is kept in front of a door: \\ \\
+\includegraphics[width = 15cm]{graph_2.png} \\
+
+\pagebreak
+
+\chapter{Result and Discussion:} 
+The end product consists of a Kinect mounted on Firebird V. This setup is capable of detecting and exiting doors in
+almost all the cases.
+The Firebird V robot with Kinect has been tested on various environments. Few of the 
+environments along with the confidence levels are shown in the following images:
+\pagebreak
+
 \begin{itemize}
- \item SIC304. Average confidence level - 85\% \\
- \includegraphics[width = 15cm]{confidence_304.png} \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\
- \item SIC204. Average confidence level - 86\% \\ 
+ \item SIC304.\\
+ Original image: \\ \\
+ \includegraphics[width = 14cm]{reference.jpg} \\
+ confidence level - 85\% \\
+ \includegraphics[width = 14cm]{confidence_304.png} \\
+ 
+ \item SIC204. \\
+ Original image: \\ \\
+ \includegraphics[width = 5cm]{SIC204.jpg} \\
+ confidence level - 86\% \\ 
  \includegraphics[width = 15cm]{confidence_204.png} \\
- \item Elevator door. Average confidence level - 70\% \\
+ 
+ \item Elevator door. \\
+  Original image: \\ \\
+ \includegraphics[width = 5cm]{Elevator.jpg} \\
+ Average confidence level - 70\% \\
  \includegraphics[width = 15cm]{lift.png} \\
- \item ERTS labs. Average confidence level - 65 \% \\
- \includegraphics[width = 15cm]{erts_lab_confidence.png} \\
+ 
+ \item ERTS labs. \\
+  Original image: \\ \\
+ \includegraphics[width = 5cm]{Erts_labs.jpg} \\
+ Average confidence level - 65 \% \\
+ \includegraphics[width = 15cm]{erts_lab_confidence.png} 
 
 \end{itemize}
 
